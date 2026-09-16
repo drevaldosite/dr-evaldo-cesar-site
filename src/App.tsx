@@ -24,7 +24,7 @@ const locations = [
   {
     name: 'Executive Lake Center',
     subtitle: 'Clínica Rhinus',
-    logo: '/logos/clinica-rhinus.png',
+    logo: '/logos/locais-logo-clinica-rhinus.png',
     logoAlt: 'Logotipo da Clínica Rhinus',
     address: 'R. das Andirobas, 10 – sala 405\nJardim Renascença, São Luís – MA\nCEP 65075-040',
     reference: 'Próximo à Lagoa da Jansen.',
@@ -34,7 +34,7 @@ const locations = [
   {
     name: 'Unidade Medical Center Jaracaty',
     subtitle: 'UDI Hospital',
-    logo: '/logos/udi.svg',
+    logo: '/logos/locais-logo-udi-hospital.svg',
     logoAlt: 'Logotipo da UDI Hospital',
     address: 'Av. Professor Carlos Cunha, 1\nMedical Center Jaracaty – 2º andar\nJaracaty, São Luís – MA · CEP 65076-820',
     reference: '',
@@ -44,19 +44,19 @@ const locations = [
 ] as const
 
 function NoseIcon() {
-  return <span className="nose-icon" aria-hidden="true"><img src="/images/icone-nariz.svg" alt="" /></span>
+  return <span className="nose-icon" aria-hidden="true"><img src="/images/especialidades-icone-nariz.svg" alt="" /></span>
 }
 
 function DizzinessIcon() {
-  return <img className="dizziness-icon" src="/images/icone-tontura-cabeca.svg" alt="" aria-hidden="true" />
+  return <img className="dizziness-icon" src="/images/especialidades-icone-tontura.svg" alt="" aria-hidden="true" />
 }
 
 function ThroatIcon() {
-  return <img className="throat-icon" src="/images/icone-dor-garganta.svg" alt="" aria-hidden="true" />
+  return <img className="throat-icon" src="/images/especialidades-icone-garganta.svg" alt="" aria-hidden="true" />
 }
 
 function BabyIcon() {
-  return <img className="baby-icon" src="/images/icone-bebe-azul.svg" alt="" aria-hidden="true" />
+  return <img className="baby-icon" src="/images/especialidades-icone-infantil.svg" alt="" aria-hidden="true" />
 }
 
 function InstagramIcon() {
@@ -366,8 +366,8 @@ export default function App() {
             <div className="hero-proof">
               <div className="hero-trust"><span><ShieldCheck size={18} /> Cuidado responsável</span><span><HeartHandshake size={18} /> Atendimento humanizado</span></div>
               <div className="hero-certifications" aria-label="Certificações profissionais">
-                <img className="hero-residency-seal" src="/images/credentials/selo-residencia-medica-nota-a.webp" alt="Residência Médica Nota A — UNICAMP" width="1254" height="1254" loading="lazy" />
-                <img className="hero-aborl-seal" src="/images/credentials/aborl-titulo-especialista.webp" alt="Título de Especialista — ABORL-CCF" width="2048" height="788" loading="lazy" />
+                <img className="hero-residency-seal" src="/images/inicio-selo-residencia-unicamp-nota-a.webp" alt="Residência Médica Nota A — UNICAMP" width="1254" height="1254" loading="lazy" />
+                <img className="hero-aborl-seal" src="/images/inicio-selo-titulo-especialista-aborl.webp" alt="Título de Especialista — ABORL-CCF" width="2048" height="788" loading="lazy" />
               </div>
             </div>
           </div>
@@ -408,23 +408,21 @@ export default function App() {
       <section className="section about" id="sobre">
         <div className="container about-grid">
           <div className="about-visual reveal">
-            <div className="about-image"><img src={siteConfig.assets.about} alt="Dr. Evaldo César Macau com equipamento de avaliação otorrinolaringológica" width="1080" height="1620" loading="lazy" /></div>
-            <div className="about-card"><Stethoscope size={24} /><div><strong>Otorrinolaringologia</strong><span>Ouvidos · Nariz · Garganta</span></div></div>
+            <div className="about-image"><img src={siteConfig.assets.about} alt="Retrato profissional do Dr. Evaldo César Macau" width="1080" height="1620" loading="lazy" /></div>
             <span className="about-dot dot-a" /><span className="about-dot dot-b" />
           </div>
           <div className="about-copy reveal">
             <span className="eyebrow">Sobre o especialista</span>
             <h2>Conheça o Dr. Evaldo Macau</h2>
-            <p>Sou médico otorrinolaringologista, graduado em Medicina pela Universidade Federal do Maranhão — UFMA, com residência médica em Otorrinolaringologia pela Universidade Estadual de Campinas — UNICAMP.</p>
-            <p>Possuo Título de Especialista em Otorrinolaringologia pela ABORL-CCF e realizei estágio especializado em Otoneurologia na Universidade de Lisboa, em Portugal.</p>
+            <p>Sou médico otorrinolaringologista, graduado em Medicina pela Universidade Federal do Maranhão (UFMA), com Residência Médica em Otorrinolaringologia pela Universidade Estadual de Campinas (UNICAMP) e Título de Especialista pela ABORL-CCF.</p>
+            <p>Minha atuação é dedicada especialmente à Otoneurologia, com foco na investigação e tratamento de tontura, vertigem, desequilíbrio, zumbido e alterações do ouvido interno, além da atuação em cirurgia otorrinolaringológica, incluindo procedimentos de amígdalas e adenoide com tecnologia Coblation, quando indicada.</p>
             <details className="about-more">
               <summary>Ver trajetória e abordagem completas</summary>
               <div>
-                <p>Atuo no atendimento de adultos e crianças, realizando consultas, exames e avaliações cirúrgicas. Tenho dedicação especial às cirurgias nasais e faríngeas na infância e ao acompanhamento de pacientes com tontura, vertigem, perda auditiva e zumbido.</p>
-                <p>Procuro explicar cada etapa de maneira clara e oferecer um atendimento acolhedor e individualizado. Seja bem-vindo.</p>
+                <p>Realizei aperfeiçoamento em Otoneurologia na Universidade de Lisboa, em Portugal, complementando minha formação na avaliação especializada dos distúrbios do equilíbrio e da audição.</p>
               </div>
             </details>
-            <ul className="check-list"><li><Check /> CRM-MA 10415</li><li><Check /> RQE 3698</li><li><Check /> Atendimento para adultos e crianças</li></ul>
+            <ul className="check-list"><li><Check /> CRM-MA 10415 | RQE 3698</li><li><Check /> Título de Especialista pela ABORL-CCF</li><li><Check /> Otorrinolaringologia e Otoneurologia</li></ul>
             <WhatsAppLink source="about">Agendar uma consulta <ArrowRight size={19} /></WhatsAppLink>
           </div>
         </div>
