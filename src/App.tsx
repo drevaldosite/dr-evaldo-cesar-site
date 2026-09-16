@@ -357,8 +357,8 @@ export default function App() {
           <div className="hero-copy reveal visible">
             <span className="eyebrow"><MapPin size={15} /> Otorrinolaringologista em São Luís</span>
             <div className="hero-doctor"><strong>Dr. Evaldo César Macau</strong><span>CRM-MA 10415 · RQE 3698</span></div>
-            <h1>Cuidado especializado para <em>ouvido, nariz e garganta</em></h1>
-            <p>Avaliação de dor de ouvido, zumbido, perda auditiva, rinite, sinusite, tontura e vertigem, com escuta atenta para adultos e crianças.</p>
+            <h1>Cuidado especializado para <em>tontura, zumbido, audição, ouvido, nariz e garganta</em></h1>
+            <p>Avaliação especializada de tontura, vertigem, desequilíbrio, zumbido e perda auditiva, além das principais doenças do ouvido, nariz e garganta, em adultos e crianças.</p>
             <div className="hero-actions">
               <WhatsAppLink source="hero">Agendar consulta pelo WhatsApp <MessageCircle size={19} /></WhatsAppLink>
               <a className="hero-location-link" href="#locais"><MapPin size={18} /> Ver locais de atendimento <ArrowRight size={18} /></a>
