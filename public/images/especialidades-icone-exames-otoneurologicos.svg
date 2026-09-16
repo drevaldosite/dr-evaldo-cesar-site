@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Instrumento para exame otoneurológico</title>
+  <desc id="desc">Ícone de um instrumento médico usado como referência visual para exames otoneurológicos.</desc>
+  <g fill="#063FA0" transform="rotate(-45 256 256)">
+    <rect x="220" y="356" width="72" height="62" rx="14"/>
+    <rect x="208" y="278" width="96" height="60" rx="12"/>
+    <rect x="228" y="226" width="56" height="58" rx="10"/>
+    <path d="M190 106h106c8 0 14 3 20 9l25 25-25 25h-26l43 82c5 10 1 22-9 28l-20 12-79-44c-8-5-12-13-12-22v-34h-23c-9 0-16-7-16-16v-49c0-9 7-16 16-16Z"/>
+    <path d="M326 139h30c6 0 11 3 14 8l22 42-23 19-43-26Z"/>
+  </g>
+</svg>
