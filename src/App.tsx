@@ -24,7 +24,7 @@ const locations = [
   {
     name: 'Executive Lake Center',
     subtitle: 'Clínica Rhinus',
-    logo: '/logos/clinica-rhinus.png',
+    logo: '/logos/locais-logo-clinica-rhinus.png',
     logoAlt: 'Logotipo da Clínica Rhinus',
     address: 'R. das Andirobas, 10 – sala 405\nJardim Renascença, São Luís – MA\nCEP 65075-040',
     reference: 'Próximo à Lagoa da Jansen.',
@@ -34,7 +34,7 @@ const locations = [
   {
     name: 'Unidade Medical Center Jaracaty',
     subtitle: 'UDI Hospital',
-    logo: '/logos/udi.svg',
+    logo: '/logos/locais-logo-udi-hospital.svg',
     logoAlt: 'Logotipo da UDI Hospital',
     address: 'Av. Professor Carlos Cunha, 1\nMedical Center Jaracaty – 2º andar\nJaracaty, São Luís – MA · CEP 65076-820',
     reference: '',
@@ -44,19 +44,19 @@ const locations = [
 ] as const
 
 function NoseIcon() {
-  return <span className="nose-icon" aria-hidden="true"><img src="/images/icone-nariz.svg" alt="" /></span>
+  return <span className="nose-icon" aria-hidden="true"><img src="/images/especialidades-icone-nariz.svg" alt="" /></span>
 }
 
 function DizzinessIcon() {
-  return <img className="dizziness-icon" src="/images/icone-tontura-cabeca.svg" alt="" aria-hidden="true" />
+  return <img className="dizziness-icon" src="/images/especialidades-icone-tontura.svg" alt="" aria-hidden="true" />
 }
 
 function ThroatIcon() {
-  return <img className="throat-icon" src="/images/icone-dor-garganta.svg" alt="" aria-hidden="true" />
+  return <img className="throat-icon" src="/images/especialidades-icone-garganta.svg" alt="" aria-hidden="true" />
 }
 
 function BabyIcon() {
-  return <img className="baby-icon" src="/images/icone-bebe-azul.svg" alt="" aria-hidden="true" />
+  return <img className="baby-icon" src="/images/especialidades-icone-infantil.svg" alt="" aria-hidden="true" />
 }
 
 function InstagramIcon() {
@@ -366,8 +366,8 @@ export default function App() {
             <div className="hero-proof">
               <div className="hero-trust"><span><ShieldCheck size={18} /> Cuidado responsável</span><span><HeartHandshake size={18} /> Atendimento humanizado</span></div>
               <div className="hero-certifications" aria-label="Certificações profissionais">
-                <img className="hero-residency-seal" src="/images/credentials/selo-residencia-medica-nota-a.webp" alt="Residência Médica Nota A — UNICAMP" width="1254" height="1254" loading="lazy" />
-                <img className="hero-aborl-seal" src="/images/credentials/aborl-titulo-especialista.webp" alt="Título de Especialista — ABORL-CCF" width="2048" height="788" loading="lazy" />
+                <img className="hero-residency-seal" src="/images/inicio-selo-residencia-unicamp-nota-a.webp" alt="Residência Médica Nota A — UNICAMP" width="1254" height="1254" loading="lazy" />
+                <img className="hero-aborl-seal" src="/images/inicio-selo-titulo-especialista-aborl.webp" alt="Título de Especialista — ABORL-CCF" width="2048" height="788" loading="lazy" />
               </div>
             </div>
           </div>

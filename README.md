@@ -35,9 +35,9 @@ Depois de definir o domínio, substitua `https://SEU-DOMINIO.com.br` também em 
 
 ## Imagens e logos
 
-As fotografias oficiais ficam em `public/images/webp/` e os logos em `public/logos/`. Para trocar as imagens principais, altere os caminhos em `src/config.ts`, preservando arquivos WebP e textos alternativos descritivos.
+As fotografias oficiais ficam em `public/images/` e os logos em `public/logos/`. Para trocar as imagens principais, altere os caminhos em `src/config.ts`, preservando arquivos WebP e textos alternativos descritivos.
 
-O card social fica em `public/og.png` e está conectado às metatags Open Graph e Twitter Card.
+O card social fica em `public/og-dr-evaldo.png` e está conectado às metatags Open Graph e Twitter Card.
 
 ## SEO e acessibilidade
 
