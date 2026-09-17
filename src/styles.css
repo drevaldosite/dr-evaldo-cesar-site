@@ -99,26 +99,26 @@ main { display: flex; flex-direction: column; }
 .quality-copy p:nth-of-type(3) { display: none; }
 .quality-copy .button { width: 100%; margin-top: 8px; }
 .specialties { order: 2; }
-.specialty-grid { display: grid; gap: 16px; }
-.specialty-card { position: relative; overflow: hidden; display: flex; flex-direction: column; padding: 22px; border: 1px solid var(--line); border-radius: 22px; background: #fff; box-shadow: 0 12px 28px rgba(0,27,98,.06); transition: transform .3s, box-shadow .3s, border-color .3s; }
-.specialty-card::before { content: ''; position: absolute; width: 150px; height: 150px; right: -55px; top: -55px; border-radius: 50%; background: rgba(0,146,199,.06); }
+.specialty-grid { display: grid; gap: 18px; align-items: stretch; }
+.specialty-card { position: relative; overflow: hidden; display: flex; flex-direction: column; min-height: 394px; padding: 25px 32px 28px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 28px rgba(0,27,98,.06); transition: transform .3s, box-shadow .3s, border-color .3s; }
+.specialty-card::before { content: ''; position: absolute; width: 154px; height: 154px; right: -54px; top: -58px; border-radius: 50%; background: #eff9fd; }
 .specialty-card:hover { transform: translateY(-7px); border-color: rgba(0,146,199,.3); box-shadow: var(--shadow); }
 .specialty-icon { width: 58px; height: 58px; display: grid; place-items: center; color: var(--vivid); border-radius: 18px; background: linear-gradient(145deg, #eaf8fd, #ddecff); }
-.specialty-icon svg { width: 32px; height: 32px; }
-.nose-icon { width: 38px; height: 38px; overflow: hidden; display: block; border-radius: 10px; }
-.nose-icon img { width: 91px; max-width: none; height: 91px; display: block; transform: translate(-27px, -23px); }
-.dizziness-icon { width: 64px; height: 64px; object-fit: contain; }
-.throat-icon { width: 48px; height: 48px; object-fit: contain; }
-.baby-icon { width: 66px; height: 66px; object-fit: contain; }
+.specialty-icon svg { width: 40px; height: 40px; }
+.dizziness-icon { width: 52px; height: 52px; object-fit: contain; }
+.otoneurology-exam-icon { width: 42px; height: 42px; object-fit: contain; }
+.ear-nose-throat-icon { width: 46px; height: 46px; object-fit: contain; }
+.surgery-tool-icon { width: 44px; height: 44px; object-fit: contain; }
+.throat-icon { width: 44px; height: 44px; object-fit: contain; }
 @media (max-width: 899px) {
-  .dizziness-icon { width: 52px; height: 52px; }
+  .dizziness-icon { width: 50px; height: 50px; }
   .throat-icon { width: 42px; height: 42px; }
-  .baby-icon { width: 52px; height: 52px; }
 }
-.card-number { position: absolute; right: 26px; top: 27px; color: #bac7dc; font-weight: 800; }
-.specialty-card h3 { margin: 20px 0 8px; font-size: 1.22rem; }
-.specialty-card p { margin: 0; font-size: .94rem; line-height: 1.6; }
-.specialty-card a { display: none; gap: 8px; align-items: center; margin-top: auto; color: var(--vivid); font-weight: 800; font-size: .88rem; }
+.card-number { position: absolute; z-index: 1; right: 27px; top: 28px; color: #b7c9df; font-size: .95rem; font-weight: 800; }
+.specialty-card h3 { margin: 25px 0 9px; font-size: 1.22rem; line-height: 1.35; }
+.specialty-card p { flex: 1; margin: 0; font-size: .91rem; line-height: 1.6; }
+.specialty-card a { display: none; gap: 8px; align-items: center; margin-top: 16px; color: var(--vivid); font-weight: 800; font-size: .88rem; }
+.specialty-card a svg { width: 17px; height: 17px; }
 .center-action { text-align: center; margin-top: 28px; }
 .center-action .button { width: 100%; }
 
@@ -350,14 +350,16 @@ main { display: flex; flex-direction: column; }
   .quality-copy p:nth-of-type(3) { display: block; }
   .quality-copy .button, .center-action .button, .contact-copy .button { width: auto; }
   .specialty-grid { grid-template-columns: repeat(3, 1fr); }
-  .specialty-card { min-height: 355px; padding: 25px; border-radius: var(--radius); }
+  .specialty-card { min-height: 394px; padding: 25px 25px 28px; border-radius: var(--radius); }
   .specialty-icon { width: 72px; height: 72px; border-radius: 22px; }
-  .specialty-icon svg { width: 38px; height: 38px; }
-  .dizziness-icon { width: 64px; height: 64px; }
-  .throat-icon { width: 48px; height: 48px; }
-  .baby-icon { width: 66px; height: 66px; }
-  .specialty-card h3 { margin: 25px 0 10px; font-size: 1.4rem; }
-  .specialty-card p { font-size: .91rem; }
+  .specialty-icon svg { width: 42px; height: 42px; }
+  .dizziness-icon { width: 56px; height: 56px; }
+  .otoneurology-exam-icon { width: 44px; height: 44px; }
+  .ear-nose-throat-icon { width: 48px; height: 48px; }
+  .surgery-tool-icon { width: 48px; height: 48px; }
+  .throat-icon { width: 46px; height: 46px; }
+  .specialty-card h3 { margin: 25px 0 10px; font-size: 1.4rem; line-height: 1.3; }
+  .specialty-card p { font-size: .91rem; line-height: 1.58; }
   .specialty-card a { display: flex; }
   .about-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 85px; }
   .about-copy { display: block; }
