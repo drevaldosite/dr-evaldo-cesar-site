@@ -105,11 +105,15 @@ main { display: flex; flex-direction: column; }
 .specialty-card:hover { transform: translateY(-7px); border-color: rgba(0,146,199,.3); box-shadow: var(--shadow); }
 .specialty-icon { width: 58px; height: 58px; display: grid; place-items: center; color: var(--vivid); border-radius: 18px; background: linear-gradient(145deg, #eaf8fd, #ddecff); }
 .specialty-icon svg { width: 32px; height: 32px; }
-.dizziness-icon { width: 52px; height: 52px; object-fit: contain; }
-.balance-exams-icon { width: 52px; height: 52px; object-fit: contain; }
-@media (min-width: 900px) {
-  .dizziness-icon { width: 64px; height: 64px; }
-  .balance-exams-icon { width: 64px; height: 64px; }
+.nose-icon { width: 38px; height: 38px; overflow: hidden; display: block; border-radius: 10px; }
+.nose-icon img { width: 91px; max-width: none; height: 91px; display: block; transform: translate(-27px, -23px); }
+.dizziness-icon { width: 64px; height: 64px; object-fit: contain; }
+.throat-icon { width: 48px; height: 48px; object-fit: contain; }
+.baby-icon { width: 66px; height: 66px; object-fit: contain; }
+@media (max-width: 899px) {
+  .dizziness-icon { width: 52px; height: 52px; }
+  .throat-icon { width: 42px; height: 42px; }
+  .baby-icon { width: 52px; height: 52px; }
 }
 .card-number { position: absolute; right: 26px; top: 27px; color: #bac7dc; font-weight: 800; }
 .specialty-card h3 { margin: 20px 0 8px; font-size: 1.22rem; }
@@ -352,6 +356,9 @@ main { display: flex; flex-direction: column; }
   .specialty-card { min-height: 355px; padding: 25px; border-radius: var(--radius); }
   .specialty-icon { width: 72px; height: 72px; border-radius: 22px; }
   .specialty-icon svg { width: 38px; height: 38px; }
+  .dizziness-icon { width: 64px; height: 64px; }
+  .throat-icon { width: 48px; height: 48px; }
+  .baby-icon { width: 66px; height: 66px; }
   .specialty-card h3 { margin: 25px 0 10px; font-size: 1.4rem; }
   .specialty-card p { font-size: .91rem; }
   .specialty-card a { display: flex; }

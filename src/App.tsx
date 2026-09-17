@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import {
   ArrowRight, CalendarCheck, Check, ChevronDown, ChevronLeft, ChevronRight, CircleAlert, Clock3,
-  Ear, HeartHandshake, MapPin, Menu, MessageCircle, PhoneCall, Scissors, ShieldCheck,
-  Sparkles, Stethoscope, UserRoundCheck, X, Zap, type LucideIcon,
+  Ear, HeartHandshake, MapPin, Menu, MessageCircle,
+  PhoneCall, ShieldCheck, Sparkles, Stethoscope, UserRoundCheck, X,
 } from 'lucide-react'
 import { contactText, siteConfig, trackEvent, whatsappUrl } from './config'
 
@@ -11,24 +11,14 @@ const navItems = [
   ['Locais', '#locais'], ['Dúvidas', '#duvidas'], ['Contato', '#contato'],
 ] as const
 
-type SpecialtyIcon = LucideIcon | 'dizziness' | 'balance-exams'
-
-const specialties: Array<{ icon: SpecialtyIcon; title: string; text: string; className: string }> = [
-  { icon: 'dizziness', title: 'Otoneurologia: tontura, vertigem e equilíbrio', text: 'Avaliação para pessoas que sentem tontura, vertigem, sensação de desequilíbrio ou instabilidade. A consulta busca entender a causa desses sintomas e, quando necessário, podem ser solicitados exames específicos do equilíbrio.', className: 'balance' },
-  { icon: Ear, title: 'Zumbido e alterações auditivas', text: 'Avaliação de sintomas como zumbido, diminuição da audição, sensação de ouvido tampado ou pressão no ouvido. O objetivo é investigar o que pode estar causando essas alterações e orientar o tratamento adequado.', className: 'ear' },
-  { icon: 'balance-exams', title: 'Exames otoneurológicos', text: 'Exames que ajudam a avaliar o funcionamento do sistema responsável pelo equilíbrio. Podem ser utilizados testes como a videonistagmoscopia infravermelha e o vHIT para ajudar a identificar alterações relacionadas à tontura, vertigem e desequilíbrio.', className: 'balance-exams' },
-  { icon: Zap, title: 'Cirurgia de amígdalas e adenoide com Coblation', text: 'Cirurgia indicada em casos de aumento das amígdalas ou da adenoide, que podem causar dificuldade para respirar, roncos, infecções frequentes ou outros problemas. Em casos selecionados, pode ser utilizada a tecnologia Coblation durante o procedimento.', className: 'coblation' },
-  { icon: Scissors, title: 'Cirurgia otorrinolaringológica', text: 'Avaliação de problemas do nariz, seios da face, garganta e ouvido que podem precisar de tratamento cirúrgico. Cada caso é analisado individualmente para definir se a cirurgia é necessária e qual é a opção mais adequada.', className: 'surgery' },
-  { icon: Stethoscope, title: 'Otorrinolaringologia geral', text: 'Atendimento para adultos e crianças com problemas como rinite, sinusite, nariz entupido, infecções de ouvido, dores ou alterações na garganta e outras condições relacionadas ao ouvido, nariz e garganta.', className: 'general-ent' },
-]
-
-function DizzinessIcon() {
-  return <img className="dizziness-icon" src="/images/especialidades-icone-tontura.svg" alt="" aria-hidden="true" />
-}
-
-function BalanceExamsIcon() {
-  return <img className="balance-exams-icon" src="/images/especialidades-icone-exames-otoneurologicos.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" />
-}
+const specialties = [
+  { icon: 'nose', title: 'Nariz e respiração', text: 'Avaliação de rinite, sinusite, obstrução nasal, desvio de septo e outras alterações que podem dificultar a respiração.', className: 'nose' },
+  { icon: Ear, title: 'Ouvido e audição', text: 'Investigação de dores no ouvido, infecções, perda auditiva, sensação de ouvido entupido e outras alterações auditivas.', className: 'ear' },
+  { icon: 'dizziness', title: 'Otoneuro: tontura, vertigem e zumbido', text: 'Atendimento em otoneuro para avaliação de sintomas relacionados ao equilíbrio e à audição, como tontura, vertigem, labirintite e zumbido.', className: 'balance' },
+  { icon: 'throat', title: 'Garganta, amígdalas e adenoide', text: 'Acompanhamento de amigdalites, alterações da garganta, aumento das adenoides, ronco e dificuldades respiratórias.', className: 'throat' },
+  { icon: 'baby', title: 'Otorrinolaringologia infantil', text: 'Atendimento cuidadoso para crianças com problemas respiratórios, infecções recorrentes, alterações auditivas, amígdalas ou adenoides.', className: 'kids' },
+  { icon: Stethoscope, title: 'Avaliação cirúrgica', text: 'Avaliação para cirurgias otorrinolaringológicas, com orientações sobre indicação, preparação e acompanhamento do procedimento.', className: 'surgery' },
+] as const
 
 const locations = [
   {
@@ -52,6 +42,22 @@ const locations = [
     whatsappMessage: 'Olá! Gostaria de agendar uma consulta com o Dr. Evaldo César Macau na Unidade Medical Center Jaracaty.',
   },
 ] as const
+
+function NoseIcon() {
+  return <span className="nose-icon" aria-hidden="true"><img src="/images/especialidades-icone-nariz.svg" alt="" /></span>
+}
+
+function DizzinessIcon() {
+  return <img className="dizziness-icon" src="/images/especialidades-icone-tontura.svg" alt="" aria-hidden="true" />
+}
+
+function ThroatIcon() {
+  return <img className="throat-icon" src="/images/especialidades-icone-garganta.svg" alt="" aria-hidden="true" />
+}
+
+function BabyIcon() {
+  return <img className="baby-icon" src="/images/especialidades-icone-infantil.svg" alt="" aria-hidden="true" />
+}
 
 function InstagramIcon() {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z" /><path d="M17.5 6.5h.01" /></svg>
@@ -380,7 +386,7 @@ export default function App() {
           <SectionTitle eyebrow="Ouvidos, nariz e garganta" title="Áreas de atendimento" text="Avaliação especializada para adultos e crianças, respeitando as necessidades de cada fase da vida." centered />
           <div className="specialty-grid">
             {specialties.map(({ icon: Icon, title, text, className }, i) => <article className={`specialty-card ${className} reveal`} style={{ '--delay': `${i * 90}ms` } as React.CSSProperties} key={title}>
-              <div className="specialty-icon">{Icon === 'dizziness' ? <DizzinessIcon /> : Icon === 'balance-exams' ? <BalanceExamsIcon /> : <Icon strokeWidth={1.7} aria-hidden="true" />}</div><span className="card-number">0{i + 1}</span><h3>{title}</h3><p>{text}</p><a href="#sintomas">Saiba mais <ArrowRight size={18} /></a>
+              <div className="specialty-icon">{Icon === 'nose' ? <NoseIcon /> : Icon === 'dizziness' ? <DizzinessIcon /> : Icon === 'throat' ? <ThroatIcon /> : Icon === 'baby' ? <BabyIcon /> : <Icon strokeWidth={1.7} />}</div><span className="card-number">0{i + 1}</span><h3>{title}</h3><p>{text}</p><a href="#sintomas">Saiba mais <ArrowRight size={18} /></a>
             </article>)}
           </div>
           <div className="center-action reveal"><WhatsAppLink source="after-specialties">Quero agendar uma avaliação <MessageCircle size={19} /></WhatsAppLink></div>
