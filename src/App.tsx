@@ -7,7 +7,7 @@ import {
 import { contactText, siteConfig, trackEvent, whatsappUrl } from './config'
 
 const navItems = [
-  ['Início', '#inicio'], ['Sobre', '#sobre'], ['Especialidades', '#especialidades'],
+  ['Início', '#inicio'], ['Especialidades', '#especialidades'], ['Procedimentos', '#procedimentos'], ['Sobre', '#sobre'],
   ['Locais', '#locais'], ['Dúvidas', '#duvidas'], ['Contato', '#contato'],
 ] as const
 
@@ -18,6 +18,84 @@ const specialties = [
   { icon: 'throat', title: 'Cirurgia de amígdalas e adenoide com Coblation', text: 'Cirurgia indicada em casos de aumento das amígdalas ou da adenoide, que podem causar dificuldade para respirar, roncos, infecções frequentes ou outros problemas. Em casos selecionados, pode ser utilizada a tecnologia Coblation durante o procedimento.', className: 'throat' },
   { icon: 'surgery-tool', title: 'Cirurgia otorrinolaringológica', text: 'Avaliação de problemas do nariz, seios da face, garganta e ouvido que podem precisar de tratamento cirúrgico. Cada caso é analisado individualmente para definir se a cirurgia é necessária e qual é a opção mais adequada.', className: 'kids' },
   { icon: 'ear-nose-throat', title: 'Otorrinolaringologia geral', text: 'Atendimento para adultos e crianças com problemas como rinite, sinusite, nariz entupido, infecções de ouvido, dores ou alterações na garganta e outras condições relacionadas ao ouvido, nariz e garganta.', className: 'surgery' },
+] as const
+
+const examChapters = [
+  {
+    eyebrow: 'Equilíbrio e otoneurologia',
+    title: 'Exames otorrinolaringológicos',
+    intro: '',
+    image: '/images/procedimentos-avaliacao-otoneurologica-sao-luis.webp',
+    imageAlt: 'Dr. Evaldo realiza avaliação otoneurológica em paciente em São Luís',
+    imagePosition: '48% center',
+    items: [
+      ['Videonistagmoscopia infravermelha', 'Exame que observa os movimentos dos olhos para ajudar a identificar alterações relacionadas à tontura e à vertigem. Ele permite avaliar como o sistema responsável pelo equilíbrio está funcionando.'],
+      ['VHIT – Video Head Impulse Test', 'Exame que avalia como os olhos e o ouvido interno trabalham juntos para manter a visão estável durante os movimentos da cabeça. Ele ajuda a identificar alterações no sistema responsável pelo equilíbrio.'],
+    ],
+  },
+  {
+    eyebrow: 'Nariz, garganta e voz',
+    title: 'Exames com imagem para uma avaliação detalhada',
+    intro: '',
+    image: '/images/procedimentos-videoendoscopia-nasossinusal-sao-luis.webp',
+    imageAlt: 'Dr. Evaldo realiza videoendoscopia nasossinusal durante atendimento',
+    imagePosition: '75% 32%',
+    items: [
+      ['Videoendoscopia nasossinusal', 'Exame realizado com uma pequena câmera que permite visualizar por dentro do nariz e avaliar regiões que não podem ser vistas facilmente em um exame comum. Ajuda a investigar problemas como obstrução nasal, sinusite e outras alterações nasais.'],
+      ['Videolaringoscopia', 'Exame realizado com uma pequena câmera para observar a garganta, a laringe e as cordas vocais. É utilizado para investigar sintomas como rouquidão, alterações na voz, tosse persistente, engasgos e desconfortos na garganta.'],
+    ],
+  },
+  {
+    eyebrow: 'Tratamentos no consultório',
+    title: 'Procedimentos para vertigem e alterações do ouvido interno',
+    intro: '',
+    image: '/images/procedimentos-avaliacao-otoneurologica-sao-luis.webp',
+    imageAlt: 'Avaliação do equilíbrio realizada pelo Dr. Evaldo no consultório',
+    imagePosition: '58% center',
+    items: [
+      ['Posturografia', 'Exame que avalia como o seu corpo mantém o equilíbrio em diferentes situações. Ele ajuda a identificar dificuldades de equilíbrio e também pode auxiliar na escolha do tratamento ou da reabilitação mais adequada.'],
+      ['Manobras de reposicionamento para vertigem posicional (VPPB)', 'São movimentos realizados pelo médico para tratar um tipo específico de vertigem que costuma surgir ao mudar a posição da cabeça, como ao deitar, levantar ou virar na cama. As manobras ajudam a reposicionar pequenas partículas dentro do ouvido que podem estar causando a tontura.'],
+      ['Aplicação intratimpânica de medicamentos', 'Procedimento em que o medicamento é aplicado diretamente no ouvido através do tímpano, permitindo que ele atue mais próximo da região que precisa ser tratada. Pode ser indicado em situações específicas, como alguns casos de perda auditiva súbita, doença de Ménière e outras alterações do ouvido interno.'],
+    ],
+  },
+] as const
+
+const surgeryChapters = [
+  {
+    eyebrow: 'Respiração nasal',
+    title: 'Cirurgias otorrinolaringológicas',
+    intro: '',
+    image: '/images/procedimentos-cirurgia-otorrinolaringologica-maranhao.webp',
+    imageAlt: 'Detalhe de cirurgia otorrinolaringológica realizada pelo Dr. Evaldo',
+    imagePosition: '50% 24%',
+    items: [
+      ['Septoplastia', 'Cirurgia realizada para corrigir o desvio do septo, que é a estrutura que separa os dois lados do nariz. O objetivo é melhorar a passagem do ar e facilitar a respiração pelo nariz.'],
+      ['Cirurgia dos cornetos nasais', 'Cirurgia indicada quando os cornetos, estruturas localizadas dentro do nariz, estão aumentados e dificultam a passagem do ar. O procedimento busca reduzir o tamanho dessas estruturas para melhorar a respiração nasal.'],
+    ],
+  },
+  {
+    eyebrow: 'Nariz e seios da face',
+    title: 'Cirurgia endoscópica nasossinusal',
+    intro: '',
+    image: '/images/procedimentos-cirurgia-otorrino-sao-luis.webp',
+    imageAlt: 'Dr. Evaldo durante procedimento cirúrgico otorrinolaringológico',
+    imagePosition: '50% 20%',
+    items: [
+      ['Cirurgia endoscópica nasossinusal', 'Cirurgia realizada por dentro do nariz, com o auxílio de uma pequena câmera, sem necessidade de cortes externos na maioria dos casos. Pode ser indicada para tratar problemas como sinusite crônica, pólipos nasais e outras alterações que causam obstrução ou inflamação persistente.'],
+    ],
+  },
+  {
+    eyebrow: 'Garganta, amígdalas e voz',
+    title: 'Cirurgias da garganta e da laringe',
+    intro: '',
+    image: '/images/procedimentos-cirurgia-otorrinolaringologica-maranhao.webp',
+    imageAlt: 'Procedimento cirúrgico de otorrinolaringologia realizado pelo Dr. Evaldo',
+    imagePosition: '50% 34%',
+    items: [
+      ['Cirurgia de amígdalas e adenoide com Coblation®', 'Cirurgia indicada para remover ou reduzir as amígdalas e a adenoide quando elas estão aumentadas e podem causar dificuldade para respirar, roncos, problemas no sono ou infecções frequentes. A técnica Coblation® utiliza uma tecnologia que trabalha em temperaturas mais baixas, causando menor agressão aos tecidos ao redor e podendo favorecer uma recuperação mais confortável.'],
+      ['Microcirurgia da laringe', 'Cirurgia realizada para avaliar e tratar alterações na laringe e nas cordas vocais, como pólipos, cistos e outras lesões. O procedimento busca remover ou tratar essas alterações preservando ao máximo a voz e o funcionamento das cordas vocais.'],
+    ],
+  },
 ] as const
 
 const locations = [
@@ -189,6 +267,174 @@ function WhatsAppLink({ children, className = 'button primary', source, message 
       {children}
     </a>
   )
+}
+
+type NarrativeChapter = {
+  readonly eyebrow: string
+  readonly title: string
+  readonly intro: string
+  readonly image: string
+  readonly imageAlt: string
+  readonly imagePosition: string
+  readonly items: readonly (readonly [string, string])[]
+}
+
+function ProcedureNarrative({ id, variant, chapters, message }: {
+  id: string
+  variant: 'exams' | 'surgeries'
+  chapters: readonly NarrativeChapter[]
+  message: string
+}) {
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section || window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return
+
+    const layout = section.querySelector<HTMLElement>('.procedure-narrative__layout')
+    const stage = section.querySelector<HTMLElement>('.procedure-narrative__stage')
+    const figure = section.querySelector<HTMLElement>('.procedure-narrative__figure')
+    const chapterElements = Array.from(section.querySelectorAll<HTMLElement>('.procedure-narrative__chapter'))
+    const imageElements = Array.from(section.querySelectorAll<HTMLElement>('.procedure-narrative__image'))
+    if (!layout || !stage || !figure || chapterElements.length < 2) return
+
+    const desktopQuery = window.matchMedia('(min-width: 900px)')
+    let activeIndex = 0
+    let animationFrame = 0
+    let inView = true
+    let measuredWidth = window.innerWidth
+    const clamp = (value: number) => Math.max(0, Math.min(1, value))
+
+    const measure = () => {
+      if (desktopQuery.matches) {
+        section.style.removeProperty('--narrative-copy-height')
+        section.classList.remove('is-flow')
+        return
+      }
+
+      section.classList.add('is-measuring')
+      const tallestChapter = Math.max(...chapterElements.map((chapter) => chapter.offsetHeight))
+      section.classList.remove('is-measuring')
+      section.style.setProperty('--narrative-copy-height', `${Math.ceil(tallestChapter)}px`)
+
+      const stickyTop = Number.parseFloat(getComputedStyle(layout).top) || 16
+      const gap = Number.parseFloat(getComputedStyle(layout).rowGap) || 16
+      const minimumPhoto = 124
+      const mobileCtaClearance = 78
+      const fits = stickyTop + minimumPhoto + gap + tallestChapter + mobileCtaClearance <= window.innerHeight
+      section.classList.toggle('is-flow', !fits)
+    }
+
+    const paint = () => {
+      animationFrame = 0
+      if (!inView) return
+
+      const desktop = desktopQuery.matches
+      const flowing = section.classList.contains('is-flow')
+      const sectionRect = section.getBoundingClientRect()
+      const sectionStyle = getComputedStyle(section)
+      const paddingTop = Number.parseFloat(sectionStyle.paddingTop) || 0
+      const paddingBottom = Number.parseFloat(sectionStyle.paddingBottom) || 0
+      const stickyElement = desktop ? stage : layout
+      const stickyTop = Number.parseFloat(getComputedStyle(stickyElement).top) || 0
+      const range = Math.max(1, section.offsetHeight - paddingTop - paddingBottom - stickyElement.offsetHeight)
+      const progress = clamp((stickyTop - (sectionRect.top + paddingTop)) / range)
+
+      let nextIndex = 0
+      if (desktop || flowing) {
+        const readingLine = window.innerHeight * .56
+        chapterElements.forEach((chapter, index) => {
+          if (chapter.getBoundingClientRect().top <= readingLine) nextIndex = index
+        })
+      } else {
+        const rawScene = progress * chapterElements.length
+        if (rawScene >= activeIndex + 1.1) nextIndex = Math.min(chapterElements.length - 1, activeIndex + 1)
+        else if (rawScene < activeIndex - .1) nextIndex = Math.max(0, activeIndex - 1)
+        else nextIndex = activeIndex
+      }
+
+      const reveal = desktop
+        ? progress
+        : clamp((window.innerHeight - figure.getBoundingClientRect().top) / (window.innerHeight * .62))
+      section.style.setProperty('--narrative-progress', progress.toFixed(3))
+      figure.style.setProperty('--narrative-reveal', reveal.toFixed(3))
+
+      if (nextIndex === activeIndex && section.dataset.ready === 'true') return
+      activeIndex = nextIndex
+      section.dataset.ready = 'true'
+      chapterElements.forEach((chapter, index) => {
+        chapter.classList.toggle('is-active', index === activeIndex)
+        chapter.classList.toggle('is-read', index < activeIndex)
+      })
+      imageElements.forEach((image, index) => image.classList.toggle('is-active', index === activeIndex))
+    }
+
+    const schedulePaint = () => {
+      if (!animationFrame) animationFrame = window.requestAnimationFrame(paint)
+    }
+    const remeasure = () => {
+      measure()
+      paint()
+    }
+    const onResize = () => {
+      if (window.innerWidth === measuredWidth) {
+        schedulePaint()
+        return
+      }
+      measuredWidth = window.innerWidth
+      remeasure()
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      inView = entries[0]?.isIntersecting ?? false
+      if (inView) schedulePaint()
+    }, { rootMargin: '160px 0px' })
+
+    section.classList.add('is-cold', 'is-enhanced')
+    measure()
+    paint()
+    observer.observe(section)
+    window.addEventListener('scroll', schedulePaint, { passive: true })
+    window.addEventListener('resize', onResize, { passive: true })
+    desktopQuery.addEventListener('change', remeasure)
+    window.requestAnimationFrame(() => window.requestAnimationFrame(() => section.classList.remove('is-cold')))
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('scroll', schedulePaint)
+      window.removeEventListener('resize', onResize)
+      desktopQuery.removeEventListener('change', remeasure)
+      if (animationFrame) window.cancelAnimationFrame(animationFrame)
+    }
+  }, [chapters.length])
+
+  return <section ref={sectionRef} className={`section procedure-narrative procedure-narrative--${variant}`} id={id} aria-labelledby={`${id}-title`} style={{ '--narrative-scenes': chapters.length } as React.CSSProperties}>
+    <div className="container">
+      <div className="procedure-narrative__layout">
+        <div className="procedure-narrative__stage">
+          <figure className="procedure-narrative__figure">
+            {chapters.map((chapter, index) => <picture className={`procedure-narrative__image ${index === 0 ? 'is-active' : ''}`} key={`${chapter.title}-${chapter.image}`}>
+              <img src={chapter.image} alt={chapter.imageAlt} width={variant === 'exams' ? 1440 : 1006} height={variant === 'exams' ? 1080 : 1788} loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />
+            </picture>)}
+          </figure>
+        </div>
+
+        <div className="procedure-narrative__chapters">
+          {chapters.map((chapter, index) => <article className={`procedure-narrative__chapter ${index === 0 ? 'is-active' : ''}`} key={chapter.title}>
+            {index === 0 ? <h2 id={`${id}-title`}>{chapter.title}</h2> : <h3>{chapter.title}</h3>}
+            {chapter.intro && <p className="procedure-narrative__intro">{chapter.intro}</p>}
+            <ul className="procedure-narrative__items">
+              {chapter.items.map(([name, description]) => <li key={name}><strong>{name}</strong><span>{description}</span></li>)}
+            </ul>
+          </article>)}
+        </div>
+      </div>
+
+      <div className="procedure-narrative__footer">
+        <WhatsAppLink source={variant === 'exams' ? 'exam-procedures' : 'surgeries'} message={message}>{variant === 'exams' ? 'Tirar dúvidas sobre exames' : 'Tirar dúvidas sobre cirurgias'} <MessageCircle size={19} /></WhatsAppLink>
+      </div>
+    </div>
+  </section>
 }
 
 function LocationsSection() {
@@ -397,17 +643,19 @@ export default function App() {
         </div>
       </section>
 
-      <section className="section quality-life">
-        <div className="container quality-grid">
-          <div className="quality-heading reveal"><span className="eyebrow">Saúde e bem-estar</span><h2>Cuidar da sua saúde também é cuidar da sua qualidade de vida</h2></div>
-          <div className="quality-copy reveal">
-            <p>Dificuldades para respirar, dores no ouvido, infecções recorrentes, tontura, zumbido e alterações na audição podem afetar o sono, a comunicação e o bem-estar.</p>
-            <p>A avaliação com um otorrinolaringologista ajuda a investigar esses sintomas e identificar a conduta mais adequada para cada caso.</p>
-            <p>Aqui, cada paciente é recebido com atenção, respeito e informações claras durante todas as etapas do atendimento.</p>
-            <WhatsAppLink source="quality-life">Quero agendar uma avaliação <ArrowRight size={19} /></WhatsAppLink>
-          </div>
-        </div>
-      </section>
+      <ProcedureNarrative
+        id="procedimentos"
+        variant="exams"
+        chapters={examChapters}
+        message="Olá! Gostaria de informações sobre exames e procedimentos otorrinolaringológicos."
+      />
+
+      <ProcedureNarrative
+        id="cirurgias"
+        variant="surgeries"
+        chapters={surgeryChapters}
+        message="Olá! Gostaria de informações sobre cirurgias otorrinolaringológicas."
+      />
 
       <section className="section about" id="sobre">
         <div className="container about-grid">
