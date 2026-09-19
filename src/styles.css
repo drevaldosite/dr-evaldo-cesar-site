@@ -360,6 +360,19 @@ main { display: flex; flex-direction: column; }
   .procedure-narrative.is-flow .procedure-narrative__chapter.is-read { opacity: 1; }
   .procedure-narrative.is-flow .procedure-narrative__chapters::after { transform: none; }
   .procedure-narrative.is-flow .procedure-narrative__footer { margin-top: 0; }
+
+  /* iPhone SE and similarly compact screens: retain the visual narrative
+     while allowing the longer medical explanations to scroll naturally. */
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__layout { display: block; position: relative; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__stage { position: sticky; z-index: 3; top: 12px; display: flex; justify-content: flex-end; height: 0; pointer-events: none; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__figure { width: 112px; height: 112px; aspect-ratio: 1 / 1; border-radius: 16px; box-shadow: 0 14px 30px rgba(0,27,98,.16); }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapters { padding-left: 0; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapters::before,
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapters::after { display: none; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter { padding: 132px 0 32px; scroll-margin-top: 132px; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter::before { display: none; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__figure { transition: opacity .2s ease, transform .2s cubic-bezier(.22,1,.36,1), box-shadow .2s ease; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow.is-compact-image-resting .procedure-narrative__figure { opacity: 0; transform: translateY(-8px) scale(.94); box-shadow: none; }
 }
 
 @media (min-width: 360px) and (max-width: 599px) {

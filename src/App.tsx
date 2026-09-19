@@ -323,6 +323,7 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
       const mobileCtaClearance = 78
       const fits = stickyTop + minimumPhoto + gap + tallestChapter + mobileCtaClearance <= window.innerHeight
       section.classList.toggle('is-flow', !fits)
+      section.classList.toggle('is-compact-flow', !fits && window.innerWidth <= 420 && window.innerHeight <= 700)
     }
 
     const paint = () => {
@@ -342,7 +343,7 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
 
       let nextIndex = 0
       if (desktop || flowing) {
-        const readingLine = window.innerHeight * .56
+        const readingLine = window.innerHeight * (section.classList.contains('is-compact-flow') ? .38 : .56)
         chapterElements.forEach((chapter, index) => {
           if (chapter.getBoundingClientRect().top <= readingLine) nextIndex = index
         })
@@ -358,6 +359,11 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
         : clamp((window.innerHeight - figure.getBoundingClientRect().top) / (window.innerHeight * .62))
       section.style.setProperty('--narrative-progress', progress.toFixed(3))
       figure.style.setProperty('--narrative-reveal', reveal.toFixed(3))
+
+      const compactScene = section.classList.contains('is-compact-flow')
+        ? chapterElements[nextIndex].getBoundingClientRect()
+        : null
+      section.classList.toggle('is-compact-image-resting', Boolean(compactScene && compactScene.top < 120))
 
       if (nextIndex === activeIndex && section.dataset.ready === 'true') return
       activeIndex = nextIndex
