@@ -289,7 +289,7 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
 
   useEffect(() => {
     const section = sectionRef.current
-    if (!section || window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return
+    if (!section || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     const layout = section.querySelector<HTMLElement>('.procedure-narrative__layout')
     const stage = section.querySelector<HTMLElement>('.procedure-narrative__stage')
@@ -301,7 +301,6 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
     const desktopQuery = window.matchMedia('(min-width: 900px)')
     let activeIndex = 0
     let animationFrame = 0
-    let inView = true
     let measuredWidth = window.innerWidth
     const clamp = (value: number) => Math.max(0, Math.min(1, value))
 
@@ -323,15 +322,14 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
       const mobileCtaClearance = 78
       const fits = stickyTop + minimumPhoto + gap + tallestChapter + mobileCtaClearance <= window.innerHeight
       section.classList.toggle('is-flow', !fits)
-      section.classList.toggle('is-compact-flow', !fits && window.innerWidth <= 420 && window.innerHeight <= 700)
+      section.classList.toggle('is-compact-flow', !fits && window.innerWidth < 600)
     }
 
     const paint = () => {
       animationFrame = 0
-      if (!inView) return
-
       const desktop = desktopQuery.matches
       const flowing = section.classList.contains('is-flow')
+      const compactFlow = section.classList.contains('is-compact-flow')
       const sectionRect = section.getBoundingClientRect()
       const sectionStyle = getComputedStyle(section)
       const paddingTop = Number.parseFloat(sectionStyle.paddingTop) || 0
@@ -340,6 +338,18 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
       const stickyTop = Number.parseFloat(getComputedStyle(stickyElement).top) || 0
       const range = Math.max(1, section.offsetHeight - paddingTop - paddingBottom - stickyElement.offsetHeight)
       const progress = clamp((stickyTop - (sectionRect.top + paddingTop)) / range)
+
+      if (compactFlow) {
+        const revealLine = Math.min(window.innerHeight * .74, 550)
+        chapterElements.forEach((chapter) => {
+          const figureBottom = chapter.querySelector('.procedure-narrative__inline-figure')?.getBoundingClientRect().bottom ?? chapter.getBoundingClientRect().top
+          const items = Array.from(chapter.querySelectorAll<HTMLElement>('.procedure-narrative__items li'))
+          const lastItemBottom = items.at(-1)?.getBoundingClientRect().bottom ?? figureBottom
+          const chapterProgress = clamp((revealLine - figureBottom) / Math.max(1, lastItemBottom - figureBottom))
+          chapter.style.setProperty('--chapter-progress', chapterProgress.toFixed(3))
+          items.forEach((item) => item.classList.toggle('is-reached', item.getBoundingClientRect().top <= revealLine))
+        })
+      }
 
       let nextIndex = 0
       if (desktop || flowing) {
@@ -386,22 +396,15 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
       remeasure()
     }
 
-    const observer = new IntersectionObserver((entries) => {
-      inView = entries[0]?.isIntersecting ?? false
-      if (inView) schedulePaint()
-    }, { rootMargin: '160px 0px' })
-
     section.classList.add('is-cold', 'is-enhanced')
     measure()
     paint()
-    observer.observe(section)
     window.addEventListener('scroll', schedulePaint, { passive: true })
     window.addEventListener('resize', onResize, { passive: true })
     desktopQuery.addEventListener('change', remeasure)
     window.requestAnimationFrame(() => window.requestAnimationFrame(() => section.classList.remove('is-cold')))
 
     return () => {
-      observer.disconnect()
       window.removeEventListener('scroll', schedulePaint)
       window.removeEventListener('resize', onResize)
       desktopQuery.removeEventListener('change', remeasure)

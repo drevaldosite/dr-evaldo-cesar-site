@@ -366,12 +366,21 @@ main { display: flex; flex-direction: column; }
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__layout { display: block; position: relative; }
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__stage { display: none; }
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapters { padding-left: 16px; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapters::before,
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapters::after { display: none; }
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter { padding: 0 0 56px; scroll-margin-top: 24px; }
-  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter::before { display: none; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter::before,
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter::after { content: ''; position: absolute; display: block; top: calc(var(--narrative-photo-size) + 24px); bottom: 56px; left: -16px; width: 2px; height: auto; border: 0; border-radius: 2px; box-shadow: none; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter::before { background: rgba(0,27,98,.1); }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter::after { background: var(--cyan); transform: scaleY(var(--chapter-progress, 0)); transform-origin: top; }
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__inline-figure { display: block; overflow: hidden; width: min(72vw, 248px); aspect-ratio: 1 / 1; margin: 0 auto 24px; border-radius: 20px; background: #d8e5f1; box-shadow: 0 24px 55px rgba(0,27,98,.14); opacity: .72; transform: translateY(12px) scale(.96); transition: opacity .45s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1); }
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter.is-active .procedure-narrative__inline-figure,
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter.is-read .procedure-narrative__inline-figure { opacity: 1; transform: none; }
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__inline-figure img { width: 100%; height: 100%; object-fit: cover; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__items li { position: relative; padding-left: 22px; opacity: .32; transform: translateY(6px); transition: opacity .38s ease, transform .38s cubic-bezier(.22,1,.36,1); }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__items li.is-reached { opacity: 1; transform: none; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__items li::before { content: ''; position: absolute; top: 19px; left: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); opacity: .5; transition: opacity .38s ease; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__items li.is-reached::before { opacity: 1; }
 }
 
 @media (min-width: 360px) and (max-width: 599px) {
