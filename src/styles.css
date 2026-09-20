@@ -126,6 +126,7 @@ main { display: flex; flex-direction: column; }
 .procedure-narrative__image { position: absolute; inset: 0; display: block; opacity: 0; }
 .procedure-narrative__image.is-active { opacity: 1; }
 .procedure-narrative__image img { width: 100%; height: 100%; object-fit: cover; }
+.procedure-narrative__inline-figure { display: none; }
 .procedure-narrative__chapters { position: relative; padding-left: 28px; }
 .procedure-narrative__chapters::before, .procedure-narrative__chapters::after { content: ''; position: absolute; top: 4px; bottom: 4px; left: 0; width: 2px; border-radius: 2px; }
 .procedure-narrative__chapters::before { background: rgba(0,27,98,.1); }
@@ -361,18 +362,16 @@ main { display: flex; flex-direction: column; }
   .procedure-narrative.is-flow .procedure-narrative__chapters::after { transform: none; }
   .procedure-narrative.is-flow .procedure-narrative__footer { margin-top: 0; }
 
-  /* iPhone SE and similarly compact screens: retain the visual narrative
-     while allowing the longer medical explanations to scroll naturally. */
+  /* Compact screens show a full-size image before each flowing chapter. */
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__layout { display: block; position: relative; }
-  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__stage { position: sticky; z-index: 3; top: 12px; display: flex; justify-content: flex-end; height: 0; pointer-events: none; }
-  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__figure { width: 112px; height: 112px; aspect-ratio: 1 / 1; border-radius: 16px; box-shadow: 0 14px 30px rgba(0,27,98,.16); }
-  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapters { padding-left: 0; }
-  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapters::before,
-  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapters::after { display: none; }
-  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter { padding: 132px 0 32px; scroll-margin-top: 132px; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__stage { display: none; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapters { padding-left: 16px; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter { padding: 0 0 56px; scroll-margin-top: 24px; }
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter::before { display: none; }
-  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__figure { transition: opacity .2s ease, transform .2s cubic-bezier(.22,1,.36,1), box-shadow .2s ease; }
-  .procedure-narrative.is-enhanced.is-flow.is-compact-flow.is-compact-image-resting .procedure-narrative__figure { opacity: 0; transform: translateY(-8px) scale(.94); box-shadow: none; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__inline-figure { display: block; overflow: hidden; width: min(72vw, 248px); aspect-ratio: 1 / 1; margin: 0 auto 24px; border-radius: 20px; background: #d8e5f1; box-shadow: 0 24px 55px rgba(0,27,98,.14); opacity: .72; transform: translateY(12px) scale(.96); transition: opacity .45s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1); }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter.is-active .procedure-narrative__inline-figure,
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter.is-read .procedure-narrative__inline-figure { opacity: 1; transform: none; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__inline-figure img { width: 100%; height: 100%; object-fit: cover; }
 }
 
 @media (min-width: 360px) and (max-width: 599px) {

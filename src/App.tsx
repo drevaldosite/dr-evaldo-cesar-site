@@ -360,11 +360,6 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
       section.style.setProperty('--narrative-progress', progress.toFixed(3))
       figure.style.setProperty('--narrative-reveal', reveal.toFixed(3))
 
-      const compactScene = section.classList.contains('is-compact-flow')
-        ? chapterElements[nextIndex].getBoundingClientRect()
-        : null
-      section.classList.toggle('is-compact-image-resting', Boolean(compactScene && compactScene.top < 120))
-
       if (nextIndex === activeIndex && section.dataset.ready === 'true') return
       activeIndex = nextIndex
       section.dataset.ready = 'true'
@@ -427,6 +422,9 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
 
         <div className="procedure-narrative__chapters">
           {chapters.map((chapter, index) => <article className={`procedure-narrative__chapter ${index === 0 ? 'is-active' : ''}`} key={chapter.title}>
+            <figure className="procedure-narrative__inline-figure" aria-hidden="true">
+              <img src={chapter.image} alt="" loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />
+            </figure>
             {index === 0 ? <h2 id={`${id}-title`}>{chapter.title}</h2> : <h3>{chapter.title}</h3>}
             {chapter.intro && <p className="procedure-narrative__intro">{chapter.intro}</p>}
             <ul className="procedure-narrative__items">
