@@ -340,6 +340,7 @@ main { display: flex; flex-direction: column; }
   }
   .procedure-narrative.is-enhanced:not(.is-flow) .procedure-narrative__stage { display: flex; justify-content: center; }
   .procedure-narrative.is-enhanced:not(.is-flow) .procedure-narrative__figure { width: var(--narrative-photo-size); aspect-ratio: 1 / 1; border-radius: 20px; }
+  #cirurgias.is-enhanced .procedure-narrative__figure { aspect-ratio: 4 / 5; }
   .procedure-narrative.is-enhanced:not(.is-flow) .procedure-narrative__chapters { height: var(--narrative-copy-height, 420px); padding-left: 21px; }
   .procedure-narrative.is-enhanced:not(.is-flow) .procedure-narrative__chapter { position: absolute; inset: 0 0 0 21px; padding: 0 0 76px; opacity: 0; visibility: hidden; transform: translateY(14px); pointer-events: none; }
   .procedure-narrative.is-enhanced:not(.is-flow) .procedure-narrative__chapter.is-active { opacity: 1; visibility: visible; transform: none; transition: opacity .22s cubic-bezier(.22,1,.36,1) .03s, transform .22s cubic-bezier(.22,1,.36,1) .03s; }
@@ -362,24 +363,35 @@ main { display: flex; flex-direction: column; }
   .procedure-narrative.is-flow .procedure-narrative__chapters::after { transform: none; }
   .procedure-narrative.is-flow .procedure-narrative__footer { margin-top: 0; }
 
-  /* Compact screens show a full-size image before each flowing chapter. */
+  /* Every phone uses the same scroll-driven chapter layout. */
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow {
+    --compact-photo-size: clamp(210px, 66vw, 300px);
+    --compact-photo-height: var(--compact-photo-size);
+    --compact-photo-gap: clamp(18px, 6vw, 26px);
+    --compact-line-inset: clamp(14px, 4vw, 20px);
+    --compact-chapter-gap: clamp(42px, 12vw, 58px);
+  }
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__layout { display: block; position: relative; }
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__stage { display: none; }
-  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapters { padding-left: 16px; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapters { padding-left: var(--compact-line-inset); }
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapters::before,
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapters::after { display: none; }
-  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter { padding: 0 0 56px; scroll-margin-top: 24px; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter { padding: 0 0 var(--compact-chapter-gap); scroll-margin-top: var(--compact-photo-gap); }
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter::before,
-  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter::after { content: ''; position: absolute; display: block; top: calc(var(--narrative-photo-size) + 24px); bottom: 56px; left: -16px; width: 2px; height: auto; border: 0; border-radius: 2px; box-shadow: none; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter::after { content: ''; position: absolute; display: block; top: calc(var(--compact-photo-height) + var(--compact-photo-gap)); bottom: var(--compact-chapter-gap); left: calc(-1 * var(--compact-line-inset)); width: 2px; height: auto; border: 0; border-radius: 2px; box-shadow: none; }
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter::before { background: rgba(0,27,98,.1); }
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter::after { background: var(--cyan); transform: scaleY(var(--chapter-progress, 0)); transform-origin: top; }
-  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__inline-figure { display: block; overflow: hidden; width: min(72vw, 248px); aspect-ratio: 1 / 1; margin: 0 auto 24px; border-radius: 20px; background: #d8e5f1; box-shadow: 0 24px 55px rgba(0,27,98,.14); opacity: .72; transform: translateY(12px) scale(.96); transition: opacity .45s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1); }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__inline-figure { display: block; overflow: hidden; width: min(100%, var(--compact-photo-size)); aspect-ratio: 1 / 1; margin: 0 auto var(--compact-photo-gap); border-radius: 20px; background: #d8e5f1; box-shadow: 0 24px 55px rgba(0,27,98,.14); opacity: .72; transform: translateY(.75em) scale(.96); transition: opacity .45s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1); }
+  #cirurgias.is-enhanced.is-flow.is-compact-flow {
+    --compact-photo-height: calc(var(--compact-photo-size) * 1.25);
+  }
+  #cirurgias.is-enhanced.is-flow.is-compact-flow .procedure-narrative__inline-figure { aspect-ratio: 4 / 5; }
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter.is-active .procedure-narrative__inline-figure,
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__chapter.is-read .procedure-narrative__inline-figure { opacity: 1; transform: none; }
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__inline-figure img { width: 100%; height: 100%; object-fit: cover; }
-  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__items li { position: relative; padding-left: 22px; opacity: .32; transform: translateY(6px); transition: opacity .38s ease, transform .38s cubic-bezier(.22,1,.36,1); }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__items li { position: relative; padding-left: clamp(18px, 5vw, 24px); opacity: .32; transform: translateY(.4em); transition: opacity .38s ease, transform .38s cubic-bezier(.22,1,.36,1); }
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__items li.is-reached { opacity: 1; transform: none; }
-  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__items li::before { content: ''; position: absolute; top: 19px; left: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); opacity: .5; transition: opacity .38s ease; }
+  .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__items li::before { content: ''; position: absolute; top: 1.2em; left: .25em; width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); opacity: .5; transition: opacity .38s ease; }
   .procedure-narrative.is-enhanced.is-flow.is-compact-flow .procedure-narrative__items li.is-reached::before { opacity: 1; }
 }
 

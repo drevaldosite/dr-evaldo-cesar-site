@@ -49,9 +49,9 @@ const examChapters = [
     eyebrow: 'Tratamentos no consultório',
     title: 'Procedimentos para vertigem e alterações do ouvido interno',
     intro: '',
-    image: '/images/procedimentos-avaliacao-otoneurologica-sao-luis.webp',
-    imageAlt: 'Avaliação do equilíbrio realizada pelo Dr. Evaldo no consultório',
-    imagePosition: '58% center',
+    image: '/images/procedimentos-avaliacao-equilibrio-tv-52pol.webp',
+    imageAlt: 'Dr. Evaldo orienta paciente durante avaliação do equilíbrio com plataforma no consultório',
+    imagePosition: '58% 30%',
     items: [
       ['Posturografia', 'Exame que avalia como o seu corpo mantém o equilíbrio em diferentes situações. Ele ajuda a identificar dificuldades de equilíbrio e também pode auxiliar na escolha do tratamento ou da reabilitação mais adequada.'],
       ['Manobras de reposicionamento para vertigem posicional (VPPB)', 'São movimentos realizados pelo médico para tratar um tipo específico de vertigem que costuma surgir ao mudar a posição da cabeça, como ao deitar, levantar ou virar na cama. As manobras ajudam a reposicionar pequenas partículas dentro do ouvido que podem estar causando a tontura.'],
@@ -65,9 +65,9 @@ const surgeryChapters = [
     eyebrow: 'Respiração nasal',
     title: 'Cirurgias otorrinolaringológicas',
     intro: '',
-    image: '/images/procedimentos-cirurgia-otorrinolaringologica-maranhao.webp',
-    imageAlt: 'Detalhe de cirurgia otorrinolaringológica realizada pelo Dr. Evaldo',
-    imagePosition: '50% 24%',
+    image: '/images/procedimentos-ambiente-cirurgico.webp',
+    imageAlt: 'Dr. Evaldo realiza cirurgia em ambiente cirúrgico',
+    imagePosition: '50% 38%',
     items: [
       ['Septoplastia', 'Cirurgia realizada para corrigir o desvio do septo, que é a estrutura que separa os dois lados do nariz. O objetivo é melhorar a passagem do ar e facilitar a respiração pelo nariz.'],
       ['Cirurgia dos cornetos nasais', 'Cirurgia indicada quando os cornetos, estruturas localizadas dentro do nariz, estão aumentados e dificultam a passagem do ar. O procedimento busca reduzir o tamanho dessas estruturas para melhorar a respiração nasal.'],
@@ -302,15 +302,24 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
     let activeIndex = 0
     let animationFrame = 0
     let measuredWidth = window.innerWidth
+    const getViewportHeight = () => window.visualViewport?.height ?? window.innerHeight
+    let measuredHeight = getViewportHeight()
     const clamp = (value: number) => Math.max(0, Math.min(1, value))
 
     const measure = () => {
       if (desktopQuery.matches) {
         section.style.removeProperty('--narrative-copy-height')
-        section.classList.remove('is-flow')
+        section.classList.remove('is-flow', 'is-compact-flow')
         return
       }
 
+      if (window.innerWidth < 600) {
+        section.style.removeProperty('--narrative-copy-height')
+        section.classList.add('is-flow', 'is-compact-flow')
+        return
+      }
+
+      section.classList.remove('is-compact-flow')
       section.classList.add('is-measuring')
       const tallestChapter = Math.max(...chapterElements.map((chapter) => chapter.offsetHeight))
       section.classList.remove('is-measuring')
@@ -320,9 +329,8 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
       const gap = Number.parseFloat(getComputedStyle(layout).rowGap) || 16
       const minimumPhoto = 124
       const mobileCtaClearance = 78
-      const fits = stickyTop + minimumPhoto + gap + tallestChapter + mobileCtaClearance <= window.innerHeight
+      const fits = stickyTop + minimumPhoto + gap + tallestChapter + mobileCtaClearance <= getViewportHeight()
       section.classList.toggle('is-flow', !fits)
-      section.classList.toggle('is-compact-flow', !fits && window.innerWidth < 600)
     }
 
     const paint = () => {
@@ -340,7 +348,8 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
       const progress = clamp((stickyTop - (sectionRect.top + paddingTop)) / range)
 
       if (compactFlow) {
-        const revealLine = Math.min(window.innerHeight * .74, 550)
+        const viewportHeight = getViewportHeight()
+        const revealLine = viewportHeight * .72
         chapterElements.forEach((chapter) => {
           const figureBottom = chapter.querySelector('.procedure-narrative__inline-figure')?.getBoundingClientRect().bottom ?? chapter.getBoundingClientRect().top
           const items = Array.from(chapter.querySelectorAll<HTMLElement>('.procedure-narrative__items li'))
@@ -353,7 +362,8 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
 
       let nextIndex = 0
       if (desktop || flowing) {
-        const readingLine = window.innerHeight * (section.classList.contains('is-compact-flow') ? .38 : .56)
+        const viewportHeight = getViewportHeight()
+        const readingLine = viewportHeight * (section.classList.contains('is-compact-flow') ? .38 : .56)
         chapterElements.forEach((chapter, index) => {
           if (chapter.getBoundingClientRect().top <= readingLine) nextIndex = index
         })
@@ -366,7 +376,7 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
 
       const reveal = desktop
         ? progress
-        : clamp((window.innerHeight - figure.getBoundingClientRect().top) / (window.innerHeight * .62))
+        : clamp((getViewportHeight() - figure.getBoundingClientRect().top) / (getViewportHeight() * .62))
       section.style.setProperty('--narrative-progress', progress.toFixed(3))
       figure.style.setProperty('--narrative-reveal', reveal.toFixed(3))
 
@@ -388,11 +398,13 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
       paint()
     }
     const onResize = () => {
-      if (window.innerWidth === measuredWidth) {
+      const viewportHeight = getViewportHeight()
+      if (window.innerWidth === measuredWidth && viewportHeight === measuredHeight) {
         schedulePaint()
         return
       }
       measuredWidth = window.innerWidth
+      measuredHeight = viewportHeight
       remeasure()
     }
 
@@ -401,18 +413,25 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
     paint()
     window.addEventListener('scroll', schedulePaint, { passive: true })
     window.addEventListener('resize', onResize, { passive: true })
+    window.visualViewport?.addEventListener('resize', onResize, { passive: true })
     desktopQuery.addEventListener('change', remeasure)
     window.requestAnimationFrame(() => window.requestAnimationFrame(() => section.classList.remove('is-cold')))
 
     return () => {
       window.removeEventListener('scroll', schedulePaint)
       window.removeEventListener('resize', onResize)
+      window.visualViewport?.removeEventListener('resize', onResize)
       desktopQuery.removeEventListener('change', remeasure)
       if (animationFrame) window.cancelAnimationFrame(animationFrame)
     }
   }, [chapters.length])
 
-  return <section ref={sectionRef} className={`section procedure-narrative procedure-narrative--${variant}`} id={id} aria-labelledby={`${id}-title`} style={{ '--narrative-scenes': chapters.length } as React.CSSProperties}>
+  const narrativeStyle = {
+    '--narrative-scenes': chapters.length,
+    ...(variant === 'surgeries' ? { '--compact-photo-height': 'calc(var(--compact-photo-size) * 1.25)' } : {}),
+  } as React.CSSProperties
+
+  return <section ref={sectionRef} className={`section procedure-narrative procedure-narrative--${variant}`} id={id} aria-labelledby={`${id}-title`} style={narrativeStyle}>
     <div className="container">
       <div className="procedure-narrative__layout">
         <div className="procedure-narrative__stage">
@@ -425,7 +444,7 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
 
         <div className="procedure-narrative__chapters">
           {chapters.map((chapter, index) => <article className={`procedure-narrative__chapter ${index === 0 ? 'is-active' : ''}`} key={chapter.title}>
-            <figure className="procedure-narrative__inline-figure" aria-hidden="true">
+            <figure className="procedure-narrative__inline-figure" aria-hidden="true" style={variant === 'surgeries' ? { aspectRatio: '4 / 5' } : undefined}>
               <img src={chapter.image} alt="" loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />
             </figure>
             {index === 0 ? <h2 id={`${id}-title`}>{chapter.title}</h2> : <h3>{chapter.title}</h3>}
