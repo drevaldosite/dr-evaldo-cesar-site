@@ -460,6 +460,7 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
     <div className="container">
       <div className="procedure-narrative__layout">
         <div className="procedure-narrative__stage">
+          {chapters.length === 1 && <div className="procedure-narrative__media-title" aria-hidden="true">{chapters[0].title}</div>}
           <figure className="procedure-narrative__figure">
             {chapters.map((chapter, index) => chapter.video ? <video
               className={`procedure-narrative__image ${index === 0 ? 'is-active' : ''}`}
@@ -484,10 +485,7 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
         <div className="procedure-narrative__chapters">
           {chapters.map((chapter, index) => <article className={`procedure-narrative__chapter ${index === 0 ? 'is-active' : ''}`} key={chapter.title}>
             <figure className="procedure-narrative__inline-figure" aria-hidden="true" style={variant === 'surgeries' ? { aspectRatio: '4 / 5' } : undefined}>
-              {chapter.video ? <video autoPlay muted loop playsInline preload="metadata" poster={chapter.image} style={{ objectPosition: chapter.imagePosition }}>
-                <source src={chapter.video.webm} type="video/webm" />
-                <source src={chapter.video.mp4} type="video/mp4" />
-              </video> : <img src={chapter.image} alt="" loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />}
+              <img src={chapter.image} alt="" loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />
             </figure>
             {index === 0 ? <h2 id={`${id}-title`}>{chapter.title}</h2> : <h3>{chapter.title}</h3>}
             {chapter.intro.length > 0 && <div className="procedure-narrative__intro">{chapter.intro.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div>}
@@ -704,7 +702,7 @@ export default function App() {
           <SectionTitle eyebrow="Ouvidos, nariz e garganta" title="Áreas de atendimento" text="Avaliação especializada para adultos e crianças, respeitando as necessidades de cada fase da vida." centered />
           <div className="specialty-grid">
             {specialties.map(({ icon: Icon, title, text, className }, i) => <article className={`specialty-card ${className} reveal`} style={{ '--delay': `${i * 90}ms` } as React.CSSProperties} key={title}>
-              <div className="specialty-icon">{Icon === 'ear-nose-throat' ? <EarNoseThroatIcon /> : Icon === 'surgery-tool' ? <SurgeryToolIcon /> : Icon === 'otoneurology-exam' ? <OtoneurologyExamIcon /> : Icon === 'dizziness' ? <DizzinessIcon /> : Icon === 'throat' ? <ThroatIcon /> : <Icon strokeWidth={1.7} />}</div><span className="card-number">0{i + 1}</span><h3>{title}</h3><p>{text}</p><a href="#sintomas">Saiba mais <ArrowRight size={18} /></a>
+              <div className="specialty-icon">{Icon === 'ear-nose-throat' ? <EarNoseThroatIcon /> : Icon === 'surgery-tool' ? <SurgeryToolIcon /> : Icon === 'otoneurology-exam' ? <OtoneurologyExamIcon /> : Icon === 'dizziness' ? <DizzinessIcon /> : Icon === 'throat' ? <ThroatIcon /> : <Icon strokeWidth={1.7} />}</div><span className="card-number">0{i + 1}</span><h3>{title}</h3><p>{text}</p><a href={className === 'throat' ? '#procedimentos' : '#sintomas'}>{className === 'throat' ? 'Conheça a técnica Coblation®' : 'Saiba mais'} <ArrowRight size={18} /></a>
             </article>)}
           </div>
           <div className="center-action reveal"><WhatsAppLink source="after-specialties">Quero agendar uma avaliação <MessageCircle size={19} /></WhatsAppLink></div>
