@@ -24,7 +24,7 @@ const examChapters = [
   {
     eyebrow: 'Equilíbrio e otoneurologia',
     title: 'Exames otorrinolaringológicos',
-    intro: '',
+    intro: [],
     image: '/images/procedimentos-avaliacao-otoneurologica-sao-luis.webp',
     imageAlt: 'Dr. Evaldo realiza avaliação otoneurológica em paciente em São Luís',
     imagePosition: '48% center',
@@ -36,7 +36,7 @@ const examChapters = [
   {
     eyebrow: 'Nariz, garganta e voz',
     title: 'Exames com imagem para uma avaliação detalhada',
-    intro: '',
+    intro: [],
     image: '/images/procedimentos-videoendoscopia-nasossinusal-sao-luis.webp',
     imageAlt: 'Dr. Evaldo realiza videoendoscopia nasossinusal durante atendimento',
     imagePosition: '75% 32%',
@@ -48,7 +48,7 @@ const examChapters = [
   {
     eyebrow: 'Tratamentos no consultório',
     title: 'Procedimentos para vertigem e alterações do ouvido interno',
-    intro: '',
+    intro: [],
     image: '/images/procedimentos-avaliacao-equilibrio-tv-52pol.webp',
     imageAlt: 'Dr. Evaldo orienta paciente durante avaliação do equilíbrio com plataforma no consultório',
     imagePosition: '58% 30%',
@@ -60,11 +60,33 @@ const examChapters = [
   },
 ] as const
 
+const coblationChapters = [
+  {
+    eyebrow: 'Tecnologia para amígdalas e adenoide',
+    title: 'Coblation®: tecnologia moderna para cirurgias de amígdalas e adenoide',
+    intro: [
+      'A Coblation® é uma tecnologia utilizada em procedimentos de otorrinolaringologia para tratar tecidos das amígdalas e da adenoide. O método utiliza energia de radiofrequência combinada com uma solução salina, formando um campo de plasma capaz de atuar de maneira controlada na área tratada.',
+      'Por trabalhar em temperaturas mais baixas do que algumas técnicas convencionais, a Coblation® foi desenvolvida para proporcionar maior precisão e reduzir a propagação de calor nos tecidos próximos. Ela pode ser utilizada em procedimentos como amigdalectomia, adenoidectomia e adenotonsilectomia, conforme a indicação médica.',
+      'A cirurgia pode ser considerada em casos de amígdalas ou adenoide aumentadas, amigdalite recorrente, ronco, dificuldade para respirar, respiração pela boca e apneia obstrutiva do sono. A avaliação individualizada é essencial para definir se há indicação cirúrgica e qual tratamento é mais adequado.',
+      'O Dr. Evaldo atua em otorrinolaringologia e avalia pacientes que desejam conhecer a técnica Coblation® em São Luís, incluindo quem busca cirurgia de amígdalas, cirurgia de adenoide ou investigação de ronco e problemas respiratórios durante o sono.',
+      'Agende uma consulta para saber se essa tecnologia pode ser indicada para o seu caso.',
+    ],
+    image: '/images/procedimentos-coblation-amigdalas-adenoide-sao-luis.webp',
+    imageAlt: 'Dr. Evaldo, otorrinolaringologista em São Luís, com instrumento utilizado em procedimentos de Coblation®',
+    imagePosition: '50% 35%',
+    video: {
+      webm: '/videos/coblation-dr-evaldo.webm',
+      mp4: '/videos/coblation-dr-evaldo.mp4',
+    },
+    items: [],
+  },
+] as const
+
 const surgeryChapters = [
   {
     eyebrow: 'Respiração nasal',
     title: 'Cirurgias otorrinolaringológicas',
-    intro: '',
+    intro: [],
     image: '/images/procedimentos-ambiente-cirurgico.webp',
     imageAlt: 'Dr. Evaldo realiza cirurgia em ambiente cirúrgico',
     imagePosition: '50% 38%',
@@ -76,7 +98,7 @@ const surgeryChapters = [
   {
     eyebrow: 'Nariz e seios da face',
     title: 'Cirurgia endoscópica nasossinusal',
-    intro: '',
+    intro: [],
     image: '/images/procedimentos-cirurgia-otorrino-sao-luis.webp',
     imageAlt: 'Dr. Evaldo durante procedimento cirúrgico otorrinolaringológico',
     imagePosition: '50% 20%',
@@ -87,12 +109,11 @@ const surgeryChapters = [
   {
     eyebrow: 'Garganta, amígdalas e voz',
     title: 'Cirurgias da garganta e da laringe',
-    intro: '',
+    intro: [],
     image: '/images/procedimentos-cirurgia-otorrinolaringologica-maranhao.webp',
     imageAlt: 'Procedimento cirúrgico de otorrinolaringologia realizado pelo Dr. Evaldo',
     imagePosition: '50% 34%',
     items: [
-      ['Cirurgia de amígdalas e adenoide com Coblation®', 'Cirurgia indicada para remover ou reduzir as amígdalas e a adenoide quando elas estão aumentadas e podem causar dificuldade para respirar, roncos, problemas no sono ou infecções frequentes. A técnica Coblation® utiliza uma tecnologia que trabalha em temperaturas mais baixas, causando menor agressão aos tecidos ao redor e podendo favorecer uma recuperação mais confortável.'],
       ['Microcirurgia da laringe', 'Cirurgia realizada para avaliar e tratar alterações na laringe e nas cordas vocais, como pólipos, cistos e outras lesões. O procedimento busca remover ou tratar essas alterações preservando ao máximo a voz e o funcionamento das cordas vocais.'],
     ],
   },
@@ -272,10 +293,14 @@ function WhatsAppLink({ children, className = 'button primary', source, message 
 type NarrativeChapter = {
   readonly eyebrow: string
   readonly title: string
-  readonly intro: string
+  readonly intro: readonly string[]
   readonly image: string
   readonly imageAlt: string
   readonly imagePosition: string
+  readonly video?: {
+    readonly webm: string
+    readonly mp4: string
+  }
   readonly items: readonly (readonly [string, string])[]
 }
 
@@ -436,7 +461,21 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
       <div className="procedure-narrative__layout">
         <div className="procedure-narrative__stage">
           <figure className="procedure-narrative__figure">
-            {chapters.map((chapter, index) => <picture className={`procedure-narrative__image ${index === 0 ? 'is-active' : ''}`} key={`${chapter.title}-${chapter.image}`}>
+            {chapters.map((chapter, index) => chapter.video ? <video
+              className={`procedure-narrative__image ${index === 0 ? 'is-active' : ''}`}
+              key={`${chapter.title}-${chapter.video.webm}`}
+              aria-label={chapter.imageAlt}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              poster={chapter.image}
+              style={{ objectPosition: chapter.imagePosition }}
+            >
+              <source src={chapter.video.webm} type="video/webm" />
+              <source src={chapter.video.mp4} type="video/mp4" />
+            </video> : <picture className={`procedure-narrative__image ${index === 0 ? 'is-active' : ''}`} key={`${chapter.title}-${chapter.image}`}>
               <img src={chapter.image} alt={chapter.imageAlt} width={variant === 'exams' ? 1440 : 1006} height={variant === 'exams' ? 1080 : 1788} loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />
             </picture>)}
           </figure>
@@ -445,13 +484,16 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
         <div className="procedure-narrative__chapters">
           {chapters.map((chapter, index) => <article className={`procedure-narrative__chapter ${index === 0 ? 'is-active' : ''}`} key={chapter.title}>
             <figure className="procedure-narrative__inline-figure" aria-hidden="true" style={variant === 'surgeries' ? { aspectRatio: '4 / 5' } : undefined}>
-              <img src={chapter.image} alt="" loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />
+              {chapter.video ? <video autoPlay muted loop playsInline preload="metadata" poster={chapter.image} style={{ objectPosition: chapter.imagePosition }}>
+                <source src={chapter.video.webm} type="video/webm" />
+                <source src={chapter.video.mp4} type="video/mp4" />
+              </video> : <img src={chapter.image} alt="" loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />}
             </figure>
             {index === 0 ? <h2 id={`${id}-title`}>{chapter.title}</h2> : <h3>{chapter.title}</h3>}
-            {chapter.intro && <p className="procedure-narrative__intro">{chapter.intro}</p>}
-            <ul className="procedure-narrative__items">
+            {chapter.intro.length > 0 && <div className="procedure-narrative__intro">{chapter.intro.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div>}
+            {chapter.items.length > 0 && <ul className="procedure-narrative__items">
               {chapter.items.map(([name, description]) => <li key={name}><strong>{name}</strong><span>{description}</span></li>)}
-            </ul>
+            </ul>}
           </article>)}
         </div>
       </div>
@@ -671,6 +713,13 @@ export default function App() {
 
       <ProcedureNarrative
         id="procedimentos"
+        variant="surgeries"
+        chapters={coblationChapters}
+        message="Olá! Gostaria de informações sobre a técnica Coblation® para cirurgia de amígdalas e adenoide."
+      />
+
+      <ProcedureNarrative
+        id="exames"
         variant="exams"
         chapters={examChapters}
         message="Olá! Gostaria de informações sobre exames e procedimentos otorrinolaringológicos."
