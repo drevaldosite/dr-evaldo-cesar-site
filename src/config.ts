@@ -17,7 +17,7 @@ export const siteConfig = {
     logoLight: '/logos/dr-evaldo-logo-cabecalho.webp',
     logoDark: '/logos/dr-evaldo-logo-rodape.webp',
     hero: '/images/inicio-retrato-profissional-dr-evaldo.webp',
-    about: '/images/webp/IMG-20230530-WA0121.jpg.webp',
+    about: '/images/sobre-especialista-dr-evaldo.webp',
     clinical: '/images/atendimento-avaliacao-ouvido.webp',
   },
 } as const

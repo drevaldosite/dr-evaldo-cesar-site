@@ -136,11 +136,6 @@ main { display: flex; flex-direction: column; }
 .about-visual { position: relative; width: min(100%, 490px); margin-inline: auto; }
 .about-image { overflow: hidden; height: clamp(340px, 108vw, 430px); border-radius: 24px 68px 24px 24px; box-shadow: var(--shadow); background: #dce7f3; }
 .about-image img { width: 100%; height: 100%; object-fit: cover; object-position: 52% 16%; }
-.about-card { position: absolute; bottom: -22px; right: -7px; max-width: 255px; display: flex; gap: 12px; align-items: center; padding: 16px; border-radius: 17px; color: #fff; background: var(--navy); box-shadow: 0 15px 32px rgba(0,27,98,.25); }
-.about-card svg { color: #5cd7f0; flex: 0 0 auto; }
-.about-card strong, .about-card span { display: block; }
-.about-card strong { font-size: .82rem; }
-.about-card span { color: #bed0ea; margin-top: 3px; font-size: .67rem; }
 .about-dot { position: absolute; border-radius: 50%; background: var(--cyan); }
 .dot-a { width: 18px; height: 18px; top: 12%; left: -9px; }
 .dot-b { width: 9px; height: 9px; top: 17%; left: -21px; opacity: .5; }

@@ -412,23 +412,21 @@ export default function App() {
       <section className="section about" id="sobre">
         <div className="container about-grid">
           <div className="about-visual reveal">
-            <div className="about-image"><img src={siteConfig.assets.about} alt="Dr. Evaldo César Macau com equipamento de avaliação otorrinolaringológica" width="1080" height="1620" loading="lazy" /></div>
-            <div className="about-card"><Stethoscope size={24} /><div><strong>Otorrinolaringologia</strong><span>Ouvidos · Nariz · Garganta</span></div></div>
+            <div className="about-image"><img src={siteConfig.assets.about} alt="Retrato profissional do Dr. Evaldo César Macau" width="1080" height="1620" loading="lazy" /></div>
             <span className="about-dot dot-a" /><span className="about-dot dot-b" />
           </div>
           <div className="about-copy reveal">
             <span className="eyebrow">Sobre o especialista</span>
             <h2>Conheça o Dr. Evaldo Macau</h2>
-            <p>Sou médico otorrinolaringologista, graduado em Medicina pela Universidade Federal do Maranhão — UFMA, com residência médica em Otorrinolaringologia pela Universidade Estadual de Campinas — UNICAMP.</p>
-            <p>Possuo Título de Especialista em Otorrinolaringologia pela ABORL-CCF e realizei estágio especializado em Otoneurologia na Universidade de Lisboa, em Portugal.</p>
+            <p>Sou médico otorrinolaringologista, graduado em Medicina pela Universidade Federal do Maranhão (UFMA), com Residência Médica em Otorrinolaringologia pela Universidade Estadual de Campinas (UNICAMP) e Título de Especialista pela ABORL-CCF.</p>
+            <p>Minha atuação é dedicada especialmente à Otoneurologia, com foco na investigação e tratamento de tontura, vertigem, desequilíbrio, zumbido e alterações do ouvido interno, além da atuação em cirurgia otorrinolaringológica, incluindo procedimentos de amígdalas e adenoide com tecnologia Coblation, quando indicada.</p>
             <details className="about-more">
               <summary>Ver trajetória e abordagem completas</summary>
               <div>
-                <p>Atuo no atendimento de adultos e crianças, realizando consultas, exames e avaliações cirúrgicas. Tenho dedicação especial às cirurgias nasais e faríngeas na infância e ao acompanhamento de pacientes com tontura, vertigem, perda auditiva e zumbido.</p>
-                <p>Procuro explicar cada etapa de maneira clara e oferecer um atendimento acolhedor e individualizado. Seja bem-vindo.</p>
+                <p>Realizei aperfeiçoamento em Otoneurologia na Universidade de Lisboa, em Portugal, complementando minha formação na avaliação especializada dos distúrbios do equilíbrio e da audição.</p>
               </div>
             </details>
-            <ul className="check-list"><li><Check /> CRM-MA 10415</li><li><Check /> RQE 3698</li><li><Check /> Atendimento para adultos e crianças</li></ul>
+            <ul className="check-list"><li><Check /> CRM-MA 10415 | RQE 3698</li><li><Check /> Título de Especialista pela ABORL-CCF</li><li><Check /> Otorrinolaringologia e Otoneurologia</li></ul>
             <WhatsAppLink source="about">Agendar uma consulta <ArrowRight size={19} /></WhatsAppLink>
           </div>
         </div>
