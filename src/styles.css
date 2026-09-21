@@ -156,8 +156,11 @@ main { display: flex; flex-direction: column; }
 .credentials-grid { display: grid; gap: 30px; }
 .credentials-intro h2 { margin: 14px 0; font-size: clamp(1.75rem, 7vw, 2.15rem); line-height: 1.12; }
 .credential-list { display: grid; gap: 10px; list-style: none; margin: 0; padding: 0; }
-.credential-list li { display: grid; grid-template-columns: 30px 1fr; align-items: center; gap: 11px; padding: 14px; color: #32415a; border: 1px solid var(--line); border-radius: 15px; background: var(--pale); font-size: .86rem; font-weight: 700; line-height: 1.5; }
+.credential-list li { display: grid; grid-template-columns: 30px 1fr; align-items: start; gap: 12px; padding: 16px; color: #32415a; border: 1px solid var(--line); border-radius: 15px; background: var(--pale); line-height: 1.5; }
 .credential-list svg { width: 26px; height: 26px; padding: 6px; color: #fff; background: var(--cyan); border-radius: 50%; }
+.credential-list li > div { min-width: 0; }
+.credential-list h3 { margin: 0; color: var(--navy); font-size: .92rem; line-height: 1.35; }
+.credential-list p { margin: 4px 0 0; color: #5f6d83; font-size: .86rem; font-weight: 600; line-height: 1.5; }
 .all-ages { order: 8; background: var(--pale); }
 .all-ages-grid { display: grid; gap: 38px; }
 .all-ages-image { height: clamp(330px, 104vw, 420px); overflow: hidden; border-radius: 24px 64px 24px 24px; box-shadow: var(--shadow); background: #e4ebf4; }

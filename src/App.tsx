@@ -436,14 +436,13 @@ export default function App() {
 
       <section className="section credentials">
         <div className="container credentials-grid">
-          <div className="credentials-intro reveal"><span className="eyebrow">Formação e experiência</span><h2>Conhecimento técnico a serviço de um cuidado próximo</h2><p>Formação médica e atuação profissional dedicadas à Otorrinolaringologia.</p></div>
+          <div className="credentials-intro reveal"><span className="eyebrow">Formação e experiência</span><h2>Formação e atuação especializada em Otorrinolaringologia</h2><p>Formação médica e atuação profissional dedicadas à Otorrinolaringologia, com ênfase em Otoneurologia e cirurgia.</p></div>
           <ul className="credential-list reveal">
-            <li><Check /><span>Graduação em Medicina pela Universidade Federal do Maranhão — UFMA</span></li>
-            <li><Check /><span>Residência Médica em Otorrinolaringologia pela UNICAMP</span></li>
-            <li><Check /><span>Título de Especialista em Otorrinolaringologia pela ABORL-CCF</span></li>
-            <li><Check /><span>Estágio especializado em Otoneurologia pela Universidade de Lisboa</span></li>
-            <li><Check /><span>Médico assistente do Hospital Universitário da UFMA</span></li>
-            <li><Check /><span>Integrante do corpo clínico da Clínica Rhinus</span></li>
+            <li><Check /><div><h3>Graduação em Medicina</h3><p>Universidade Federal do Maranhão (UFMA)</p></div></li>
+            <li><Check /><div><h3>Residência Médica em Otorrinolaringologia</h3><p>Universidade Estadual de Campinas (UNICAMP)</p></div></li>
+            <li><Check /><div><h3>Título de Especialista em Otorrinolaringologia</h3><p>ABORL-CCF</p></div></li>
+            <li><Check /><div><h3>Aperfeiçoamento em Otoneurologia</h3><p>Universidade de Lisboa, Portugal</p></div></li>
+            <li><Check /><div><h3>Atuação profissional</h3><p>Médico assistente do Hospital Universitário da UFMA (HU-UFMA) e responsável pelo Ambulatório de Otoneurologia</p></div></li>
           </ul>
         </div>
       </section>
