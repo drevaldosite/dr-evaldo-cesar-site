@@ -191,12 +191,34 @@ main { display: flex; flex-direction: column; }
 .credential-list { display: grid; gap: 10px; list-style: none; margin: 0; padding: 0; }
 .credential-list li { display: grid; grid-template-columns: 30px 1fr; align-items: center; gap: 11px; padding: 14px; color: #32415a; border: 1px solid var(--line); border-radius: 15px; background: var(--pale); font-size: .86rem; font-weight: 700; line-height: 1.5; }
 .credential-list svg { width: 26px; height: 26px; padding: 6px; color: #fff; background: var(--cyan); border-radius: 50%; }
-.all-ages { order: 9; background: var(--pale); }
-.all-ages-grid { display: grid; gap: 38px; }
-.all-ages-image { height: clamp(330px, 104vw, 420px); overflow: hidden; border-radius: 24px 64px 24px 24px; box-shadow: var(--shadow); background: #e4ebf4; }
-.all-ages-image img { width: 100%; height: 100%; object-fit: cover; object-position: 62% center; }
-.all-ages-copy h2 { margin: 14px 0; font-size: clamp(1.75rem, 7vw, 2.15rem); line-height: 1.12; }
-.all-ages-copy p { margin-bottom: 13px; }
+.instagram-feed { order: 9; background: var(--pale); }
+.instagram-heading { display: grid; gap: 24px; margin-bottom: 32px; }
+.instagram-heading .eyebrow svg { width: 15px; height: 15px; }
+.instagram-heading h2 { max-width: 680px; margin: 14px 0 12px; font-size: clamp(1.75rem, 7vw, 2.15rem); line-height: 1.12; }
+.instagram-heading p { max-width: 650px; margin: 0; }
+.instagram-profile-link { width: fit-content; display: inline-flex; align-items: center; gap: 8px; color: var(--vivid); font-size: .86rem; font-weight: 800; }
+.instagram-profile-link > svg:first-child { width: 20px; height: 20px; }
+.instagram-track { --instagram-card-width: min(76vw, 300px); width: calc(100% + 32px); display: flex; gap: 14px; overflow-x: auto; margin-left: -16px; padding: 3px calc((100vw - var(--instagram-card-width)) / 2) 22px; scroll-padding-inline: calc((100vw - var(--instagram-card-width)) / 2); scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(0,61,145,.28) transparent; overscroll-behavior-inline: contain; touch-action: pan-x pan-y pinch-zoom; cursor: grab; }
+.instagram-track.is-dragging { scroll-snap-type: none; cursor: grabbing; user-select: none; }
+.instagram-card { flex: 0 0 var(--instagram-card-width); scroll-snap-align: center; overflow: hidden; border: 1px solid rgba(0,27,98,.1); border-radius: 24px; background: #fff; box-shadow: 0 14px 36px rgba(0,27,98,.08); }
+.instagram-card__media { position: relative; display: block; overflow: hidden; aspect-ratio: 4 / 5; background: #dce8f6; }
+.instagram-card__media img, .instagram-card__media video { width: 100%; height: 100%; object-fit: cover; transition: transform .45s cubic-bezier(.22,1,.36,1); }
+.instagram-card:hover .instagram-card__media img, .instagram-card:hover .instagram-card__media video { transform: scale(1.025); }
+.instagram-video-play { position: absolute; z-index: 2; top: 50%; left: 50%; width: 52px; height: 52px; display: grid; place-items: center; padding: 0; color: var(--navy); background: #fff; border: 0; border-radius: 50%; box-shadow: 0 12px 26px rgba(0,0,0,.16); transform: translate(-50%, -50%); cursor: pointer; }
+.instagram-video-play:hover { transform: translate(-50%, -50%) scale(1.04); }
+.instagram-video-play svg { width: 21px; height: 21px; margin-left: 3px; }
+.instagram-card__pending { position: relative; isolation: isolate; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; padding: 26px; color: #fff; background: linear-gradient(150deg, #001b62 10%, #174fa4 60%, #00a0ce 130%); }
+.instagram-card__pending::before, .instagram-card__pending::after { content: ''; position: absolute; z-index: -1; border: 1px solid rgba(255,255,255,.18); border-radius: 50%; }
+.instagram-card__pending::before { width: 220px; height: 220px; right: -92px; top: -62px; }
+.instagram-card__pending::after { width: 150px; height: 150px; right: -48px; top: -26px; }
+.instagram-card__pending > span:not(.instagram-card__play) { font-size: 1.15rem; font-weight: 800; letter-spacing: -.025em; }
+.instagram-card__pending small { max-width: 23ch; margin-top: 7px; color: #ccecf6; line-height: 1.45; }
+.instagram-card__play { width: 52px; height: 52px; display: grid; place-items: center; margin-bottom: 18px; color: var(--navy); background: #fff; border-radius: 50%; box-shadow: 0 12px 26px rgba(0,0,0,.16); }
+.instagram-card__play svg { width: 21px; height: 21px; margin-left: 3px; }
+.instagram-card__body { min-height: 236px; display: flex; flex-direction: column; padding: 22px 20px 20px; }
+.instagram-card__body h3 { margin: 0 0 10px; font-size: 1.08rem; line-height: 1.25; letter-spacing: -.025em; }
+.instagram-card__body p { margin: 0 0 20px; font-size: .85rem; line-height: 1.6; white-space: pre-line; }
+.instagram-card__body > a { display: inline-flex; align-items: center; gap: 7px; margin-top: auto; color: var(--vivid); font-size: .8rem; font-weight: 800; }
 
 .locations { order: 11; background: #fff; }
 .locations-grid { display: grid; gap: 18px; }
@@ -257,11 +279,12 @@ main { display: flex; flex-direction: column; }
 .patient-review blockquote { margin: 20px 0; color: #263752; font-size: .91rem; line-height: 1.7; }
 .patient-review footer { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 9px 14px; margin-top: auto; padding-top: 14px; border-top: 1px solid var(--line); color: #68758a; font-size: .84rem; }
 .patient-review footer a { display: inline-flex; align-items: center; gap: 5px; color: var(--vivid); font-weight: 800; }
-.reviews-carousel-controls { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 4px; }
-.reviews-carousel-controls button { width: 44px; height: 44px; display: grid; place-items: center; padding: 0; color: var(--navy); border: 1px solid var(--line); border-radius: 50%; background: #fff; cursor: pointer; }
-.reviews-carousel-controls button:disabled { opacity: .4; cursor: default; }
-.reviews-carousel-controls button svg { width: 20px; }
-.reviews-carousel-controls span { min-width: 52px; color: var(--muted); text-align: center; font-size: .84rem; font-weight: 800; }
+.reviews-carousel-controls, .instagram-carousel-controls { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 4px; }
+.reviews-carousel-controls button, .instagram-carousel-controls button { width: 44px; height: 44px; display: grid; place-items: center; padding: 0; color: var(--navy); border: 1px solid var(--line); border-radius: 50%; background: #fff; cursor: pointer; transition: color .22s, border-color .22s, transform .22s, box-shadow .22s; }
+.instagram-carousel-controls button:not(:disabled):hover { color: var(--vivid); border-color: rgba(0,146,199,.35); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,27,98,.1); }
+.reviews-carousel-controls button:disabled, .instagram-carousel-controls button:disabled { opacity: .4; cursor: default; }
+.reviews-carousel-controls button svg, .instagram-carousel-controls button svg { width: 20px; }
+.reviews-carousel-controls span, .instagram-carousel-controls span { min-width: 52px; color: var(--muted); text-align: center; font-size: .84rem; font-weight: 800; }
 
 .faq { order: 13; }
 .faq-grid { display: grid; gap: 32px; }
@@ -513,7 +536,7 @@ main { display: flex; flex-direction: column; }
   .floating-card { padding: 13px 15px; }.floating-card strong { font-size: .77rem; }.floating-card small { font-size: .62rem; }
   .floating-badge { right: -20px; }
   .scroll-cue { position: absolute; left: 50%; bottom: 22px; display: flex; flex-direction: column; align-items: center; gap: 3px; color: #5d6b81; font-size: .61rem; text-transform: uppercase; font-weight: 800; letter-spacing: .08em; }
-  .credentials-intro h2, .all-ages-copy h2 { font-size: clamp(2rem, 4.2vw, 3.35rem); line-height: 1.08; }
+  .credentials-intro h2, .instagram-heading h2 { font-size: clamp(2rem, 4.2vw, 3.35rem); line-height: 1.08; }
   .center-action .button, .contact-copy .button { width: auto; }
   .specialty-grid { grid-template-columns: repeat(3, 1fr); }
   .specialty-card { min-height: 394px; padding: 25px 25px 28px; border-radius: var(--radius); }
@@ -545,8 +568,10 @@ main { display: flex; flex-direction: column; }
   .procedure-narrative__items span { font-size: .94rem; }
   .procedure-narrative__footer { display: flex; justify-content: flex-end; align-items: center; margin-top: 44px; }
   .procedure-narrative__footer .button { width: auto; white-space: nowrap; }
-  .credentials-grid, .all-ages-grid { grid-template-columns: 1fr 1fr; align-items: center; gap: 80px; }
-  .all-ages-image { height: 610px; }
+  .credentials-grid { grid-template-columns: 1fr 1fr; align-items: center; gap: 80px; }
+  .instagram-heading { grid-template-columns: 1fr auto; align-items: end; margin-bottom: 42px; }
+  .instagram-track { --instagram-card-width: 342px; width: 100%; gap: 22px; margin-left: 0; padding: 3px calc((100% - var(--instagram-card-width)) / 2) 28px; scroll-padding-inline: calc((100% - var(--instagram-card-width)) / 2); }
+  .instagram-card__body { min-height: 230px; padding: 24px 22px 22px; }
   .locations-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
   .location-card { padding: 32px; }
   .location-actions { grid-template-columns: 1fr 1.25fr; }
