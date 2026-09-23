@@ -5,4 +5,9 @@
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
+  <url><loc>https://SEU-DOMINIO.com.br/conteudos/enxaqueca-vestibular.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://SEU-DOMINIO.com.br/conteudos/labirintite-e-tontura.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://SEU-DOMINIO.com.br/conteudos/rinite-vasomotora.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://SEU-DOMINIO.com.br/conteudos/ouvido-interno-e-equilibrio.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://SEU-DOMINIO.com.br/conteudos/tontura-e-diagnostico.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 </urlset>

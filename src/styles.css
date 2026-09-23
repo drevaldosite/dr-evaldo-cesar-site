@@ -24,7 +24,7 @@ h1, h2, h3 { color: var(--navy); letter-spacing: -.04em; }
 .section[id] { scroll-margin-top: 76px; }
 .section-title { max-width: 730px; margin-bottom: 28px; }
 .section-title.centered { text-align: left; margin-inline: 0; }
-.section-title h2, .about-copy h2, .symptoms-intro h2, .faq-intro h2 { margin: 14px 0; font-size: clamp(1.75rem, 7vw, 2.15rem); line-height: 1.12; }
+.section-title h2, .about-copy h2, .faq-intro h2 { margin: 14px 0; font-size: clamp(1.75rem, 7vw, 2.15rem); line-height: 1.12; }
 .section-title p { margin: 0; font-size: .96rem; }
 main { display: flex; flex-direction: column; }
 .skip-link { position: fixed; z-index: 9999; left: 16px; top: -70px; background: #fff; color: var(--navy); padding: 12px 18px; border-radius: 10px; box-shadow: var(--shadow); }
@@ -200,13 +200,16 @@ main { display: flex; flex-direction: column; }
 .instagram-profile-link > svg:first-child { width: 20px; height: 20px; }
 .instagram-track { --instagram-card-width: min(76vw, 300px); width: calc(100% + 32px); display: flex; gap: 14px; overflow-x: auto; margin-left: -16px; padding: 3px calc((100vw - var(--instagram-card-width)) / 2) 22px; scroll-padding-inline: calc((100vw - var(--instagram-card-width)) / 2); scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(0,61,145,.28) transparent; overscroll-behavior-inline: contain; touch-action: pan-x pan-y pinch-zoom; cursor: grab; }
 .instagram-track.is-dragging { scroll-snap-type: none; cursor: grabbing; user-select: none; }
-.instagram-card { flex: 0 0 var(--instagram-card-width); scroll-snap-align: center; overflow: hidden; border: 1px solid rgba(0,27,98,.1); border-radius: 24px; background: #fff; box-shadow: 0 14px 36px rgba(0,27,98,.08); }
+.instagram-card { flex: 0 0 var(--instagram-card-width); display: flex; flex-direction: column; scroll-snap-align: center; overflow: hidden; border: 1px solid rgba(0,27,98,.1); border-radius: 24px; background: #fff; box-shadow: 0 14px 36px rgba(0,27,98,.08); }
 .instagram-card__media { position: relative; display: block; overflow: hidden; aspect-ratio: 4 / 5; background: #dce8f6; }
 .instagram-card__media img, .instagram-card__media video { width: 100%; height: 100%; object-fit: cover; transition: transform .45s cubic-bezier(.22,1,.36,1); }
 .instagram-card:hover .instagram-card__media img, .instagram-card:hover .instagram-card__media video { transform: scale(1.025); }
 .instagram-video-play { position: absolute; z-index: 2; top: 50%; left: 50%; width: 52px; height: 52px; display: grid; place-items: center; padding: 0; color: var(--navy); background: #fff; border: 0; border-radius: 50%; box-shadow: 0 12px 26px rgba(0,0,0,.16); transform: translate(-50%, -50%); cursor: pointer; }
 .instagram-video-play:hover { transform: translate(-50%, -50%) scale(1.04); }
 .instagram-video-play svg { width: 21px; height: 21px; margin-left: 3px; }
+.instagram-video-play.is-playing { opacity: 0; transition: opacity .2s ease, transform .2s ease; }
+.instagram-card__media:hover .instagram-video-play.is-playing, .instagram-video-play.is-playing:focus-visible { opacity: 1; }
+@media (max-width: 899px) { .instagram-video-play.is-playing { opacity: .8; } }
 .instagram-card__pending { position: relative; isolation: isolate; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; padding: 26px; color: #fff; background: linear-gradient(150deg, #001b62 10%, #174fa4 60%, #00a0ce 130%); }
 .instagram-card__pending::before, .instagram-card__pending::after { content: ''; position: absolute; z-index: -1; border: 1px solid rgba(255,255,255,.18); border-radius: 50%; }
 .instagram-card__pending::before { width: 220px; height: 220px; right: -92px; top: -62px; }
@@ -215,9 +218,11 @@ main { display: flex; flex-direction: column; }
 .instagram-card__pending small { max-width: 23ch; margin-top: 7px; color: #ccecf6; line-height: 1.45; }
 .instagram-card__play { width: 52px; height: 52px; display: grid; place-items: center; margin-bottom: 18px; color: var(--navy); background: #fff; border-radius: 50%; box-shadow: 0 12px 26px rgba(0,0,0,.16); }
 .instagram-card__play svg { width: 21px; height: 21px; margin-left: 3px; }
-.instagram-card__body { min-height: 236px; display: flex; flex-direction: column; padding: 22px 20px 20px; }
+.instagram-card__body { flex: 1; min-height: 236px; display: flex; flex-direction: column; padding: 22px 20px 20px; }
 .instagram-card__body h3 { margin: 0 0 10px; font-size: 1.08rem; line-height: 1.25; letter-spacing: -.025em; }
-.instagram-card__body p { margin: 0 0 20px; font-size: .85rem; line-height: 1.6; white-space: pre-line; }
+.instagram-card__body h3 a { color: inherit; text-decoration: none; }
+.instagram-card__body h3 a:hover { color: var(--vivid); }
+.instagram-card__body p { height: 16em; overflow: hidden; margin: 0 0 20px; font-size: .85rem; line-height: 1.6; white-space: pre-line; }
 .instagram-card__body > a { display: inline-flex; align-items: center; gap: 7px; margin-top: auto; color: var(--vivid); font-size: .8rem; font-weight: 800; }
 
 .locations { order: 11; background: #fff; }
@@ -232,34 +237,6 @@ main { display: flex; flex-direction: column; }
 .location-actions { display: grid; gap: 10px; margin-top: auto; padding-top: 25px; }
 .location-actions .button { width: 100%; }
 
-.symptoms { order: 8; color: #fff; background: var(--navy); }
-.symptoms h2, .symptoms p { color: #fff; }
-.symptoms-grid { display: grid; gap: 36px; }
-.symptoms .eyebrow { color: #8edff2; background: rgba(255,255,255,.1); }
-.symptoms-intro > p { color: #c7d4ea; }
-.medical-note { display: flex; align-items: flex-start; gap: 12px; margin-top: 26px; padding: 16px; border: 1px solid rgba(255,255,255,.12); border-radius: 16px; background: rgba(255,255,255,.06); }
-.medical-note svg { width: 20px; flex: 0 0 auto; color: #61daf2; }
-.medical-note p { margin: 0; color: #c9d5e8; font-size: .875rem; line-height: 1.55; }
-.symptom-list { display: grid; gap: 9px; list-style: none; padding: 0; margin: 0; }
-.symptom-list li { min-height: 60px; display: grid; grid-template-columns: 30px 1fr 25px; align-items: center; gap: 8px; padding: 10px 13px; border: 1px solid rgba(255,255,255,.1); border-radius: 14px; background: rgba(255,255,255,.06); }
-.symptom-list li > span { color: #5ed9f0; font-size: .71rem; font-weight: 800; }
-.symptom-list li p { margin: 0; font-size: .88rem; line-height: 1.4; }
-.symptom-list li svg { width: 22px; height: 22px; padding: 5px; color: var(--navy); background: #75dff3; border-radius: 50%; }
-
-.differentials { order: 7; background: #fff; }
-.differential-grid { display: grid; gap: 12px; }
-.differential-card { display: grid; grid-template-columns: 46px 1fr; column-gap: 14px; padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: #fff; }
-.differential-card > svg { width: 42px; height: 42px; padding: 10px; color: var(--cyan); background: #e9f8fd; border-radius: 13px; }
-.differential-card h3 { align-self: center; margin: 0; font-size: 1rem; letter-spacing: -.02em; }
-.differential-card p { grid-column: 2; margin: 7px 0 0; font-size: .88rem; line-height: 1.55; }
-
-.journey { order: 12; background: var(--pale); }
-.journey-grid { position: relative; display: grid; gap: 14px; }
-.journey-step { position: relative; padding: 23px; border-radius: 22px; background: #fff; box-shadow: 0 10px 25px rgba(0,27,98,.06); }
-.step-number { position: absolute; right: 20px; top: 18px; color: #d1d9e8; font-weight: 800; }
-.step-icon { width: 48px; height: 48px; display: grid; place-items: center; color: #fff; background: linear-gradient(145deg, var(--cyan), var(--vivid)); border-radius: 14px; }
-.journey-step h3 { margin: 20px 0 8px; font-size: 1.1rem; }
-.journey-step p { margin: 0; font-size: .875rem; }
 .reviews { order: 10; padding-top: 68px; }
 .reviews-card { display: grid; gap: 30px; padding: 30px 24px; color: #fff; border-radius: 28px; background: linear-gradient(135deg, #001b62, #003d91); box-shadow: var(--shadow); }
 .reviews-card h2 { margin: 14px 0 12px; color: #fff; font-size: clamp(1.75rem, 7vw, 2.15rem); line-height: 1.12; }
@@ -493,7 +470,6 @@ main { display: flex; flex-direction: column; }
   .hero-actions { display: flex; justify-content: center; }
   .hero-actions .button { min-width: 220px; }
   .specialty-grid { grid-template-columns: repeat(2, 1fr); }
-  .differential-grid { grid-template-columns: repeat(2, 1fr); }
   .patient-review { flex-basis: calc((100% - 16px) / 2); }
   .contact-card { padding: 45px; }
   .footer-grid { grid-template-columns: 1.6fr 1fr 1fr; }
@@ -504,7 +480,7 @@ main { display: flex; flex-direction: column; }
   .section { padding: 120px 0; }
   .section-title { margin-bottom: 36px; }
   .section-title.centered { text-align: center; margin-inline: auto; }
-  .section-title h2, .about-copy h2, .symptoms-intro h2, .faq-intro h2 { margin: 16px 0; font-size: clamp(2rem, 4.2vw, 3.4rem); line-height: 1.08; }
+  .section-title h2, .about-copy h2, .faq-intro h2 { margin: 16px 0; font-size: clamp(2rem, 4.2vw, 3.4rem); line-height: 1.08; }
   .site-header { height: 96px; background: transparent; border: 0; }
   .nav-wrap { height: 88px; }
   .brand { width: 210px; height: 54px; }
@@ -556,7 +532,6 @@ main { display: flex; flex-direction: column; }
   .about-image { height: 620px; }
   .about-more summary { display: none; }
   .about-more > div { display: block !important; padding-top: 0; }
-  .symptoms-grid { grid-template-columns: .86fr 1.14fr; align-items: start; gap: 80px; }
   .procedure-narrative__layout { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); align-items: start; gap: clamp(48px, 6vw, 88px); }
   .procedure-narrative__stage { position: sticky; top: 30px; align-self: start; }
   .procedure-narrative__figure { aspect-ratio: 4 / 5; }
@@ -575,13 +550,6 @@ main { display: flex; flex-direction: column; }
   .locations-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
   .location-card { padding: 32px; }
   .location-actions { grid-template-columns: 1fr 1.25fr; }
-  .symptoms-intro { position: sticky; top: 130px; }
-  .symptom-list { grid-template-columns: repeat(2, 1fr); }
-  .differential-grid { grid-template-columns: repeat(4, 1fr); }
-  .differential-card { display: block; padding: 28px 22px; border-radius: 20px; }
-  .differential-card h3 { margin: 18px 0 8px; font-size: .96rem; }
-  .differential-card p { margin: 0; font-size: .75rem; }
-  .journey-grid { grid-template-columns: repeat(3, 1fr); }
   .faq-grid { grid-template-columns: .78fr 1.22fr; gap: 85px; }
   .reviews-card { grid-template-columns: 1.25fr .75fr; align-items: center; padding: 52px 58px; }
   .reviews-card h2 { font-size: clamp(2rem, 4vw, 3rem); }
@@ -592,8 +560,6 @@ main { display: flex; flex-direction: column; }
   .patient-review { flex-basis: calc((100% - 40px) / 3); }
   .contact-card { grid-template-columns: 1.1fr .9fr; align-items: center; padding: 58px 62px; }
   .contact-copy h2 { font-size: clamp(2rem, 4vw, 3rem); }
-  .medical-note p { font-size: .75rem; }
-  .journey-step p { font-size: .82rem; }
   .faq-answer p { font-size: .84rem; }
   .contact-info small { font-size: .66rem; }
   .contact-info strong { font-size: .77rem; }
@@ -616,8 +582,6 @@ main { display: flex; flex-direction: column; }
 @media (min-width: 1280px) {
   .hero-grid { gap: 90px; }
   .specialty-card { padding: 32px; }
-  .differential-card { padding: 28px 22px; }
-  .journey-step { padding: 30px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

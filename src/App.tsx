@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import {
-  ArrowRight, CalendarCheck, Check, ChevronDown, ChevronLeft, ChevronRight, CircleAlert, Clock3,
+  ArrowRight, CalendarCheck, Check, ChevronDown, ChevronLeft, ChevronRight,
   Ear, HeartHandshake, MapPin, Menu, MessageCircle,
-  PhoneCall, Play, ShieldCheck, Sparkles, Stethoscope, UserRoundCheck, X,
+  PhoneCall, Pause, Play, ShieldCheck, Sparkles, X,
 } from 'lucide-react'
 import { contactText, siteConfig, trackEvent, whatsappUrl } from './config'
 
@@ -166,19 +166,6 @@ function InstagramIcon() {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z" /><path d="M17.5 6.5h.01" /></svg>
 }
 
-const symptoms = [
-  'Dificuldade para respirar pelo nariz', 'Rinite ou sinusite recorrente', 'Dores de ouvido',
-  'Zumbido', 'Redução da audição', 'Tonturas ou alterações de equilíbrio',
-  'Rouquidão persistente', 'Dor ou dificuldade para engolir', 'Ronco ou alterações do sono',
-]
-
-const differentials = [
-  { icon: HeartHandshake, title: 'Escuta cuidadosa', text: 'A consulta começa com atenção às suas queixas, dúvidas e histórico de saúde.' },
-  { icon: Stethoscope, title: 'Explicações claras', text: 'Informações acessíveis sobre sintomas, exames e possibilidades de acompanhamento.' },
-  { icon: UserRoundCheck, title: 'Cuidado individualizado', text: 'Cada conduta é definida conforme as necessidades e características do paciente.' },
-  { icon: ShieldCheck, title: 'Formação especializada', text: 'Experiência direcionada ao cuidado do ouvido, nariz, garganta, respiração, audição e equilíbrio.' },
-]
-
 const patientReviews = [
   {
     name: 'Cynthia Amaral', verified: 'Opinião verificada', date: '9 de agosto de 2024', location: 'Clínica Rhinus',
@@ -292,57 +279,136 @@ Na prática, o que mais aparece são outras causas, como:
 🔹 Enxaqueca vestibular
 🔹 Neurite vestibular`,
     video: '/instagram/nem-toda-tontura-e-labirintite.mp4',
+    videoWebm: '/instagram/nem-toda-tontura-e-labirintite.webm',
+    videoPoster: '/instagram/nem-toda-tontura-e-labirintite-poster.webp',
+    page: '/conteudos/labirintite-e-tontura.html',
     videoAriaLabel: 'Vídeo explicando que nem toda tontura é labirintite',
-    url: 'https://www.instagram.com/reel/DVw1LcIgG8p/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA==',
+    url: 'https://www.instagram.com/reel/DVw1LcIgG8p/?utm_source=ig_web_copy_link&stkn=NTc4MTIwNjQ2YQ==',
   },
   {
     title: 'Estação chuvosa e rinite vasomotora',
-    description: 'Com a estação chuvosa, sintomas como nariz entupido, coriza e espirros podem ficar mais frequentes.',
+    description: `🌧️ Chegou a estação chuvosa… e com ela, as crises de rinite vasomotora!
+
+Nariz entupido, escorrendo, espirros e aquela sensação constante de congestão — sem alergia envolvida.
+Isso é rinite vasomotora.
+
+👉 Diferente da rinite alérgica, aqui o problema é a hiper-reatividade dos vasos do nariz.
+Mudanças bruscas de temperatura, aumento da umidade, mofo, cheiros fortes e até o ar-condicionado viram gatilhos clássicos — exatamente o combo da época das chuvas.`,
     url: 'https://www.instagram.com/p/DUBeG0vAO5E/',
     image: '/instagram/rinite-estacao-chuvosa.webp',
     imageAlt: 'Publicação do Dr. Evaldo sobre rinite vasomotora na estação chuvosa',
+    page: '/conteudos/rinite-vasomotora.html',
   },
   {
     title: '“Labirintite”? Você tem certeza?',
-    description: 'Tontura, desequilíbrio e sensação de cabeça pesada podem ter causas diferentes e precisam de avaliação.',
+    description: `🌀 “LABIRINTITE”? VOCÊ TEM CERTEZA?
+
+Você sente tontura ao levantar da cama?
+Sensação de cabeça pesada, desequilíbrio, vista escurecendo, insegurança ao andar ou um “barato” estranho na cabeça?
+
+⚠️ Pode não ser labirintite!
+
+Muita gente chama qualquer tontura de labirintite, mas isso é só um nome genérico. Na verdade, existem várias causas diferentes para esse problema, e cada uma exige um tratamento específico.`,
     url: 'https://www.instagram.com/p/DWCqMoSEe74/',
     image: '/instagram/tontura-nao-e-labirintite.webp',
     imageAlt: 'Publicação do Dr. Evaldo explicando que nem toda tontura é labirintite',
+    page: '/conteudos/labirintite-e-tontura.html',
   },
   {
-    title: 'Reel em atualização',
-    description: 'O vídeo será adicionado a este card assim que o arquivo estiver disponível.',
+    title: 'Tontura NÃO é tudo “labirintite”',
+    description: `Existe uma causa MUITO comum e pouco diagnosticada:
+👉 Enxaqueca Vestibular
+
+📌 Pode dar:
+• tontura
+• enjoo 🤢
+• sensibilidade à luz 💡
+• e às vezes NEM vem com dor de cabeça
+
+⏱️ Crises de minutos a horas
+⚠️ Piora com estresse, sono ruim e jejum
+
+Resultado? A tontura continua — e você perde tempo.
+
+💬 Já passou por isso? Comenta aqui
+📲 Envia pra quem vive com tontura`,
+    video: '/instagram/enxaqueca-vestibular.mp4',
+    videoWebm: '/instagram/enxaqueca-vestibular.webm',
+    videoPoster: '/instagram/enxaqueca-vestibular-poster.webp',
+    page: '/conteudos/enxaqueca-vestibular.html',
+    videoAriaLabel: 'Vídeo explicando os sintomas da enxaqueca vestibular',
     url: 'https://www.instagram.com/reel/DVexR90gPy8/',
   },
   {
-    title: 'Reel em atualização',
-    description: 'O vídeo será adicionado a este card assim que o arquivo estiver disponível.',
+    title: 'O ouvido não serve apenas para ouvir',
+    description: `Dentro dele existe uma estrutura chamada labirinto, responsável por perceber movimento, aceleração e a posição da cabeça.
+
+Esse sistema trabalha junto com a visão e os sensores do corpo (pés, pernas e coluna) para manter o equilíbrio.
+
+Quando essas informações não se entendem, o resultado pode ser:
+
+⚠️ tontura
+⚠️ instabilidade
+⚠️ sensação de chão mole
+⚠️ cabeça “flutuando”`,
+    video: '/instagram/ouvido-equilibrio-labirinto.mp4',
+    videoWebm: '/instagram/ouvido-equilibrio-labirinto.webm',
+    videoPoster: '/instagram/ouvido-equilibrio-labirinto-poster.webp',
+    page: '/conteudos/ouvido-interno-e-equilibrio.html',
+    videoAriaLabel: 'Vídeo explicando como o ouvido e o labirinto participam do equilíbrio',
     url: 'https://www.instagram.com/reel/DWhkB1zgHo6/',
   },
   {
     title: 'Tontura no supermercado',
-    description: 'Veja a publicação completa no Instagram e entenda melhor esse tipo de desconforto.',
+    description: `Você sente tontura ou mal-estar ao entrar em supermercados, shoppings ou locais muito iluminados?
+Essa sensação comum pode não ser “labirintite” como muitos pensam… Pode ser enxaqueca vestibular, também conhecida como a enxaqueca do labirinto.
+
+📍Luzes fluorescentes, corredores longos, muitos estímulos visuais e sons podem desencadear crises de tontura, visão embaralhada ou sensação de desequilíbrio — mesmo sem dor de cabeça!`,
     url: 'https://www.instagram.com/p/DVrTUEAkQu3/',
     image: '/instagram/tontura-supermercado.webp',
     imageAlt: 'Publicação do Dr. Evaldo sobre episódios de tontura no supermercado',
+    page: '/conteudos/enxaqueca-vestibular.html',
   },
   {
     title: 'Se sua tontura não melhora, pare agora',
-    description: 'A tontura é um sintoma e pode estar relacionada a diferentes causas. O vídeo será adicionado em breve.',
+    description: `Você pode estar tomando Labirin, Betaserc ou similares há meses…
+👉 e isso não resolve a maioria das tonturas
+
+🚨 O erro não é o remédio. É tratar sem diagnóstico certo.`,
+    video: '/instagram/se-sua-tontura-nao-melhora.mp4',
+    videoWebm: '/instagram/se-sua-tontura-nao-melhora.webm',
+    videoPoster: '/instagram/se-sua-tontura-nao-melhora-poster.webp',
+    page: '/conteudos/tontura-e-diagnostico.html',
+    videoAriaLabel: 'Vídeo alertando sobre o tratamento de tontura sem diagnóstico correto',
     url: 'https://www.instagram.com/reel/DXhreRuEdB5/',
   },
 ] as const
 
-function InstagramVideo({ src, ariaLabel, tabIndex }: { src: string; ariaLabel?: string; tabIndex?: number }) {
+function InstagramVideo({ src, webm, poster, ariaLabel, tabIndex, loadVideo }: { src: string; webm: string; poster: string; ariaLabel?: string; tabIndex?: number; loadVideo: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const playTimerRef = useRef<number | null>(null)
+  const manuallyPausedRef = useRef(false)
+  const playAfterLoadRef = useRef(false)
   const [isPlaying, setIsPlaying] = useState(false)
+  const [manuallyRequested, setManuallyRequested] = useState(false)
+  const hasSource = loadVideo || manuallyRequested
+
+  useEffect(() => {
+    if (!loadVideo) setManuallyRequested(false)
+  }, [loadVideo])
+
+  useEffect(() => {
+    if (!hasSource || !playAfterLoadRef.current) return
+    playAfterLoadRef.current = false
+    void videoRef.current?.play().catch(() => undefined)
+  }, [hasSource])
 
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
     const track = video.closest('.instagram-track')
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const mobileScreen = window.matchMedia('(max-width: 899px)')
     let isVisible = false
     let lastTrackScrollLeft = track?.scrollLeft ?? 0
 
@@ -354,9 +420,9 @@ function InstagramVideo({ src, ariaLabel, tabIndex }: { src: string; ariaLabel?:
 
     const schedulePlayback = () => {
       clearPlayTimer()
-      if (!isVisible || document.hidden || reducedMotion.matches) return
+      if (!mobileScreen.matches || !isVisible || document.hidden || reducedMotion.matches || manuallyPausedRef.current) return
       playTimerRef.current = window.setTimeout(() => {
-        if (!isVisible || document.hidden) return
+        if (!mobileScreen.matches || !isVisible || document.hidden || reducedMotion.matches || manuallyPausedRef.current) return
         void video.play().catch(() => undefined)
       }, 7000)
     }
@@ -370,6 +436,7 @@ function InstagramVideo({ src, ariaLabel, tabIndex }: { src: string; ariaLabel?:
     const handleHorizontalMovement = () => {
       if (!track || Math.abs(track.scrollLeft - lastTrackScrollLeft) < 1) return
       lastTrackScrollLeft = track.scrollLeft
+      manuallyPausedRef.current = false
       resetToThumbnail()
       schedulePlayback()
     }
@@ -383,48 +450,83 @@ function InstagramVideo({ src, ariaLabel, tabIndex }: { src: string; ariaLabel?:
       schedulePlayback()
     }
 
-    const observer = new IntersectionObserver(([entry]) => {
-      isVisible = entry.isIntersecting && entry.intersectionRatio >= .6
-      resetToThumbnail()
+    const handleScreenChange = () => {
+      if (!mobileScreen.matches) resetToThumbnail()
       schedulePlayback()
+    }
+
+    const observer = new IntersectionObserver(([entry]) => {
+      const wasVisible = isVisible
+      isVisible = entry.isIntersecting && entry.intersectionRatio >= .6
+      if (!isVisible) {
+        manuallyPausedRef.current = false
+        resetToThumbnail()
+        clearPlayTimer()
+      } else if (!wasVisible) {
+        schedulePlayback()
+      }
     }, { threshold: [0, .6] })
 
     observer.observe(video)
     track?.addEventListener('scroll', handleHorizontalMovement, { passive: true })
     document.addEventListener('visibilitychange', handleVisibilityChange)
+    mobileScreen.addEventListener('change', handleScreenChange)
+    reducedMotion.addEventListener('change', schedulePlayback)
 
     return () => {
       observer.disconnect()
       track?.removeEventListener('scroll', handleHorizontalMovement)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
+      mobileScreen.removeEventListener('change', handleScreenChange)
+      reducedMotion.removeEventListener('change', schedulePlayback)
       clearPlayTimer()
       video.pause()
     }
-  }, [src])
+  }, [src, hasSource])
 
   const handlePlayClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
     event.stopPropagation()
+    if (playTimerRef.current !== null) {
+      window.clearTimeout(playTimerRef.current)
+      playTimerRef.current = null
+    }
     const video = videoRef.current
     if (!video) return
+    if (!hasSource) {
+      playAfterLoadRef.current = true
+      setManuallyRequested(true)
+      return
+    }
     if (video.paused) {
+      manuallyPausedRef.current = false
       void video.play().catch(() => undefined)
       return
     }
+    manuallyPausedRef.current = true
     video.pause()
-    video.currentTime = 0
+  }
+
+  const showFirstFrame = () => {
+    const video = videoRef.current
+    if (!video || video.readyState < HTMLMediaElement.HAVE_METADATA || video.duration <= 0) return
+    video.currentTime = Math.min(0.1, video.duration)
   }
 
   return <>
-    <video ref={videoRef} src={src} aria-label={ariaLabel} muted loop playsInline preload="metadata" onPlay={() => setIsPlaying(true)} onPause={() => setIsPlaying(false)} />
-    {!isPlaying && <button type="button" className="instagram-video-play" tabIndex={tabIndex} aria-label="Reproduzir vídeo" onPointerDown={(event) => event.stopPropagation()} onClick={handlePlayClick}><Play fill="currentColor" /></button>}
+    <video key={hasSource ? src : poster} ref={videoRef} aria-label={ariaLabel} muted loop playsInline preload="metadata" poster={poster} onLoadedMetadata={showFirstFrame} onPlay={() => setIsPlaying(true)} onPause={() => setIsPlaying(false)}>
+      {hasSource && <><source src={webm} type="video/webm" /><source src={src} type="video/mp4" /></>}
+    </video>
+    <button type="button" className={`instagram-video-play${isPlaying ? ' is-playing' : ''}`} tabIndex={tabIndex} aria-label={isPlaying ? 'Pausar vídeo' : 'Reproduzir vídeo'} onPointerDown={(event) => event.stopPropagation()} onClick={handlePlayClick}>{isPlaying ? <Pause fill="currentColor" /> : <Play fill="currentColor" />}</button>
   </>
 }
 
 function InstagramCarousel() {
-  const firstRealIndex = 1
-  const lastRealIndex = instagramPosts.length
-  const trailingCloneIndex = instagramPosts.length + 1
+  const cloneCount = Math.min(instagramPosts.length, 3)
+  const firstRealIndex = cloneCount
+  const lastRealIndex = cloneCount + instagramPosts.length - 1
+  const firstTrailingCloneIndex = lastRealIndex + 1
+  const lastTrackIndex = lastRealIndex + cloneCount
   const trackRef = useRef<HTMLDivElement>(null)
   const currentTrackIndexRef = useRef(firstRealIndex)
   const scrollEndTimerRef = useRef<number | null>(null)
@@ -433,19 +535,21 @@ function InstagramCarousel() {
   const suppressClickRef = useRef(false)
   const [currentIndex, setCurrentIndex] = useState(0)
   const carouselPosts = [
-    { post: instagramPosts[instagramPosts.length - 1], key: 'clone-last', isClone: true, originalIndex: instagramPosts.length - 1 },
+    ...instagramPosts.slice(-cloneCount).map((post, index) => ({ post, key: `clone-before-${index}`, isClone: true, originalIndex: instagramPosts.length - cloneCount + index })),
     ...instagramPosts.map((post, index) => ({ post, key: post.url, isClone: false, originalIndex: index })),
-    { post: instagramPosts[0], key: 'clone-first', isClone: true, originalIndex: 0 },
+    ...instagramPosts.slice(0, cloneCount).map((post, index) => ({ post, key: `clone-after-${index}`, isClone: true, originalIndex: index })),
   ]
+  const isNearCurrentPost = (postIndex: number) => {
+    const distance = Math.abs(postIndex - currentIndex)
+    return Math.min(distance, instagramPosts.length - distance) <= 1
+  }
 
   const centerCard = (trackIndex: number, behavior: ScrollBehavior = 'smooth') => {
     const track = trackRef.current
-    const nextTrackIndex = Math.max(0, Math.min(trackIndex, trailingCloneIndex))
+    const nextTrackIndex = Math.max(0, Math.min(trackIndex, lastTrackIndex))
     const card = track?.querySelectorAll<HTMLElement>('.instagram-card')[nextTrackIndex]
     if (!track || !card) return
-    const nextIndex = nextTrackIndex === 0
-      ? instagramPosts.length - 1
-      : nextTrackIndex === trailingCloneIndex ? 0 : nextTrackIndex - 1
+    const nextIndex = (nextTrackIndex - firstRealIndex + instagramPosts.length) % instagramPosts.length
     currentTrackIndexRef.current = nextTrackIndex
     setCurrentIndex(nextIndex)
     const left = card.offsetLeft - (track.clientWidth - card.offsetWidth) / 2
@@ -474,16 +578,16 @@ function InstagramCarousel() {
       centerCard(closestTrackIndex)
       return
     }
-    if (closestTrackIndex === 0) {
-      centerCard(lastRealIndex, 'auto')
+    if (closestTrackIndex < firstRealIndex) {
+      centerCard(closestTrackIndex + instagramPosts.length, 'auto')
       return
     }
-    if (closestTrackIndex === trailingCloneIndex) {
-      centerCard(firstRealIndex, 'auto')
+    if (closestTrackIndex >= firstTrailingCloneIndex) {
+      centerCard(closestTrackIndex - instagramPosts.length, 'auto')
       return
     }
     currentTrackIndexRef.current = closestTrackIndex
-    setCurrentIndex(closestTrackIndex - 1)
+    setCurrentIndex(closestTrackIndex - firstRealIndex)
   }
 
   useEffect(() => {
@@ -581,8 +685,8 @@ function InstagramCarousel() {
         event.stopPropagation()
       }}
     >
-      {carouselPosts.map(({ post, key, isClone, originalIndex }) => <article className="instagram-card reveal" aria-hidden={isClone || undefined} aria-label={isClone ? undefined : `Publicação ${originalIndex + 1} de ${instagramPosts.length}`} style={{ '--delay': `${(originalIndex % 4) * 70}ms` } as React.CSSProperties} key={key}>
-        {'video' in post ? <div className="instagram-card__media"><InstagramVideo src={post.video} ariaLabel={isClone ? undefined : post.videoAriaLabel} tabIndex={isClone ? -1 : undefined} /></div> : <a className="instagram-card__media" href={post.url} target="_blank" rel="noreferrer" tabIndex={isClone ? -1 : undefined} aria-label={`Abrir no Instagram: ${post.title}`} onClick={() => trackEvent('click_instagram_post', { post: String(originalIndex + 1) })}>
+      {carouselPosts.map(({ post, key, isClone, originalIndex }) => <article className={`instagram-card${isClone ? '' : ' reveal'}`} aria-hidden={isClone || undefined} aria-label={isClone ? undefined : `Publicação ${originalIndex + 1} de ${instagramPosts.length}`} style={{ '--delay': `${(originalIndex % 4) * 70}ms` } as React.CSSProperties} key={key}>
+        {'video' in post ? <div className="instagram-card__media">{isClone ? <img src={post.videoPoster} alt="" width="540" height="960" loading="lazy" decoding="async" /> : <InstagramVideo src={post.video} webm={post.videoWebm} poster={post.videoPoster} ariaLabel={post.videoAriaLabel} loadVideo={isNearCurrentPost(originalIndex)} />}</div> : <a className="instagram-card__media" href={post.url} target="_blank" rel="noreferrer" tabIndex={isClone ? -1 : undefined} aria-label={`Abrir no Instagram: ${post.title}`} onClick={() => trackEvent('click_instagram_post', { post: String(originalIndex + 1) })}>
         {'image' in post ? <img src={post.image} alt={isClone ? '' : post.imageAlt} width="1080" height="1350" loading="lazy" /> : <span className="instagram-card__pending">
           <span className="instagram-card__play"><Play fill="currentColor" /></span>
           <span>Vídeo em atualização</span>
@@ -590,7 +694,7 @@ function InstagramCarousel() {
         </span>}
       </a>}
       <div className="instagram-card__body">
-        <h3>{post.title}</h3>
+        <h3><a href={post.page} tabIndex={isClone ? -1 : undefined}>{post.title}</a></h3>
         <p>{post.description}</p>
         <a href={post.url} target="_blank" rel="noreferrer" tabIndex={isClone ? -1 : undefined} onClick={() => trackEvent('click_instagram_post', { post: String(originalIndex + 1) })}>Ler mais <ArrowRight size={17} /></a>
       </div>
@@ -1025,7 +1129,7 @@ export default function App() {
           <SectionTitle eyebrow="Ouvidos, nariz e garganta" title="Áreas de atendimento" text="Avaliação especializada para adultos e crianças, respeitando as necessidades de cada fase da vida." centered />
           <div className="specialty-grid">
             {specialties.map(({ icon: Icon, title, text, className }, i) => <article className={`specialty-card ${className} reveal`} style={{ '--delay': `${i * 90}ms` } as React.CSSProperties} key={title}>
-              <div className="specialty-icon">{Icon === 'ear-nose-throat' ? <EarNoseThroatIcon /> : Icon === 'surgery-tool' ? <SurgeryToolIcon /> : Icon === 'otoneurology-exam' ? <OtoneurologyExamIcon /> : Icon === 'dizziness' ? <DizzinessIcon /> : Icon === 'throat' ? <ThroatIcon /> : <Icon strokeWidth={1.7} />}</div><span className="card-number">0{i + 1}</span><h3>{title}</h3><p>{text}</p><a href={className === 'throat' ? '#procedimentos' : '#sintomas'}>{className === 'throat' ? 'Conheça a técnica Coblation®' : 'Saiba mais'} <ArrowRight size={18} /></a>
+              <div className="specialty-icon">{Icon === 'ear-nose-throat' ? <EarNoseThroatIcon /> : Icon === 'surgery-tool' ? <SurgeryToolIcon /> : Icon === 'otoneurology-exam' ? <OtoneurologyExamIcon /> : Icon === 'dizziness' ? <DizzinessIcon /> : Icon === 'throat' ? <ThroatIcon /> : <Icon strokeWidth={1.7} />}</div><span className="card-number">0{i + 1}</span><h3>{title}</h3><p>{text}</p><a href={className === 'throat' ? '#procedimentos' : '#contato'}>{className === 'throat' ? 'Conheça a técnica Coblation®' : 'Agende uma consulta'} <ArrowRight size={18} /></a>
             </article>)}
           </div>
           <div className="center-action reveal"><WhatsAppLink source="after-specialties">Quero agendar uma avaliação <MessageCircle size={19} /></WhatsAppLink></div>
@@ -1094,8 +1198,8 @@ export default function App() {
           <div className="instagram-heading reveal">
             <div>
               <span className="eyebrow"><InstagramIcon /> Conteúdos e orientações</span>
-              <h2>Informação também faz parte do cuidado</h2>
-              <p>Publicações sobre ouvido, nariz, garganta e equilíbrio, explicadas de forma acessível.</p>
+              <h2>Informação para cuidar melhor da sua saúde</h2>
+              <p>Confira conteúdos sobre sintomas, prevenção, exames, tratamentos e cuidados em otorrinolaringologia e otoneurologia.</p>
             </div>
             <a className="instagram-profile-link" href={siteConfig.contact.instagram} target="_blank" rel="noreferrer" onClick={() => trackEvent('click_instagram', { source: 'content-section' })}>
               <InstagramIcon /> Ver perfil no Instagram <ArrowRight size={18} />
@@ -1107,38 +1211,6 @@ export default function App() {
       </section>
 
       <LocationsSection />
-
-      <section className="section symptoms" id="sintomas">
-        <div className="container symptoms-grid">
-          <div className="symptoms-intro reveal">
-            <span className="eyebrow">Observe os sinais</span><h2>Quando procurar um otorrinolaringologista?</h2>
-            <p>Alguns sintomas podem indicar que é hora de conversar com um médico de ouvido, nariz e garganta.</p>
-            <div className="medical-note"><CircleAlert /><p>Estas informações possuem caráter educativo e não substituem uma avaliação médica.</p></div>
-          </div>
-          <ul className="symptom-list">
-            {symptoms.map((symptom, i) => <li className="reveal" style={{ '--delay': `${(i % 3) * 70}ms` } as React.CSSProperties} key={symptom}><span>{String(i + 1).padStart(2, '0')}</span><p>{symptom}</p><Check /></li>)}
-          </ul>
-        </div>
-      </section>
-
-      <section className="section differentials">
-        <div className="container">
-          <SectionTitle eyebrow="Confiança em cada etapa" title="Um atendimento baseado em confiança" text="Da conversa inicial às orientações, cada etapa é pensada para que você se sinta bem informado." centered />
-          <div className="differential-grid">{differentials.map(({ icon: Icon, title, text }, i) => <article className="differential-card reveal" style={{ '--delay': `${i * 70}ms` } as React.CSSProperties} key={title}><Icon /><h3>{title}</h3><p>{text}</p></article>)}</div>
-        </div>
-      </section>
-
-      <section className="section journey">
-        <div className="container">
-          <SectionTitle eyebrow="Simples e direto" title="Como funciona o agendamento" centered />
-          <div className="journey-grid">
-            {[['01', MessageCircle, 'Entre em contato', 'Clique no botão e acesse o canal de agendamento.'], ['02', Clock3, 'Escolha o melhor horário', 'Confirme a disponibilidade diretamente com a equipe.'], ['03', CalendarCheck, 'Compareça à consulta', 'Receba as orientações necessárias para o atendimento.']].map(([number, Icon, title, text], i) => {
-              const StepIcon = Icon as typeof MessageCircle
-              return <article className="journey-step reveal" style={{ '--delay': `${i * 100}ms` } as React.CSSProperties} key={title as string}><span className="step-number">{number as string}</span><div className="step-icon"><StepIcon /></div><h3>{title as string}</h3><p>{text as string}</p></article>
-            })}
-          </div>
-        </div>
-      </section>
 
       <section className="section reviews">
         <div className="container reviews-card reveal">
@@ -1172,9 +1244,9 @@ export default function App() {
       <div className="container footer-grid">
         <div className="footer-brand"><img src={siteConfig.assets.logoDark} alt="Dr. Evaldo César Macau" width="344" height="82" /><p>Otorrinolaringologia com atenção, clareza e cuidado para adultos e crianças.</p><p><strong>CRM-MA 10415 · RQE 3698</strong></p></div>
         <div><h2>Navegação</h2>{navItems.map(([label, href]) => <a key={href} href={href}>{label}</a>)}</div>
-        <div><h2>Contato</h2><a href={whatsappUrl()} target="_blank" rel="noreferrer"><MessageCircle /> Agendamento online</a>{siteConfig.contact.instagram ? <a href={siteConfig.contact.instagram} target="_blank" rel="noreferrer"><InstagramIcon /> Instagram</a> : <span className="placeholder-link"><InstagramIcon /> Instagram a configurar</span>}<a href="#privacidade">Política de Privacidade</a></div>
+        <div><h2>Contato</h2><a href={whatsappUrl()} target="_blank" rel="noreferrer"><MessageCircle /> Agendamento online</a>{siteConfig.contact.instagram ? <a href={siteConfig.contact.instagram} target="_blank" rel="noreferrer"><InstagramIcon /> Instagram</a> : <span className="placeholder-link"><InstagramIcon /> Instagram a configurar</span>}<a href="/privacidade.html">Política de Privacidade</a></div>
       </div>
-      <div className="container footer-bottom" id="privacidade"><p>© {new Date().getFullYear()} Dr. Evaldo César Macau. Todos os direitos reservados.</p><p>As informações deste site são educativas e não substituem consulta médica.</p></div>
+      <div className="container footer-bottom"><p>© {new Date().getFullYear()} Dr. Evaldo César Macau. Todos os direitos reservados.</p><p>As informações deste site são educativas e não substituem consulta médica.</p></div>
     </footer>
     <MobileStickyCTA />
   </>
