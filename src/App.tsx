@@ -75,7 +75,6 @@ const coblationChapters = [
     imageAlt: 'Dr. Evaldo, otorrinolaringologista em São Luís, com instrumento utilizado em procedimentos de Coblation®',
     imagePosition: '50% 35%',
     video: {
-      webm: '/videos/coblation-dr-evaldo.webm',
       mp4: '/videos/coblation-dr-evaldo.mp4',
     },
     items: [],
@@ -260,12 +259,12 @@ function PatientReviewsCarousel() {
 }
 
 const faqs = [
-  ['Quando devo procurar um otorrinolaringologista?', 'Quando houver sintomas persistentes ou recorrentes relacionados à audição, nariz, garganta, voz, equilíbrio, respiração ou sono. A avaliação médica ajuda a compreender cada caso.'],
-  ['Quais regiões do corpo são avaliadas pelo otorrino?', 'O otorrinolaringologista avalia principalmente ouvidos, nariz e garganta, além de estruturas relacionadas da cabeça e do pescoço.'],
-  ['Como posso agendar uma consulta?', 'Use um dos botões de agendamento desta página para falar com a equipe pelo WhatsApp e consultar a disponibilidade.'],
-  ['Onde ficam os locais de atendimento?', 'O atendimento é realizado no Executive Lake Center, no Jardim Renascença, e na Unidade Medical Center Jaracaty, no UDI Hospital, em São Luís — MA.'],
-  ['Quais informações devo levar para a consulta?', 'Leve um documento de identificação e, se tiver, exames anteriores, receitas em uso e anotações sobre os sintomas que deseja relatar.'],
-  ['O atendimento é particular ou aceita convênio?', 'Essa informação ainda será confirmada. Consulte diretamente a equipe antes de agendar.'],
+  ['Quando devo procurar um otorrinolaringologista ou uma avaliação em Otoneurologia?', 'A avaliação otorrinolaringológica é indicada diante de sintomas persistentes ou recorrentes relacionados ao ouvido, audição, nariz, garganta, voz, respiração ou sono. Para casos de tontura, vertigem, desequilíbrio, zumbido, perda auditiva ou sensação de ouvido tampado, uma avaliação em Otoneurologia pode ajudar a investigar a origem dos sintomas e direcionar o tratamento.'],
+  ['Quais são as principais causas de tontura e vertigem?', 'Tontura e vertigem podem ter diferentes causas e nem sempre significam “labirintite”. Entre as possibilidades estão alterações como VPPB, doença de Ménière, hipofunções vestibulares, migrânea vestibular e tontura postural-perceptual persistente (TPPP). Condições neurológicas e outros problemas clínicos também podem causar sintomas semelhantes, por isso a avaliação individualizada é importante.'],
+  ['Quais exames podem ser realizados na investigação da tontura e do equilíbrio?', 'Os exames são definidos de acordo com a avaliação clínica de cada paciente. Dependendo do caso, podem ser utilizados exames como videonistagmoscopia infravermelha, Video Head Impulse Test (vHIT), avaliações auditivas e outros testes específicos da função vestibular.'],
+  ['Zumbido tem tratamento?', 'Sim, existem diferentes formas de acompanhamento e tratamento, dependendo da causa e das características do zumbido. Ele pode estar relacionado a condições auditivas ou não auditivas, por isso a avaliação busca identificar possíveis fatores associados e seu impacto na qualidade de vida para definir a abordagem mais adequada.'],
+  ['Quando a cirurgia das amígdalas e adenoide é indicada e o que é Coblation®?', 'A cirurgia pode ser indicada em casos de amígdalas ou adenoide aumentadas, obstrução respiratória, alterações respiratórias durante o sono ou determinadas infecções recorrentes. Em alguns casos, pode ser utilizada a tecnologia Coblation®️, que emprega radiofrequência associada a uma solução salina para remoção ou redução dos tecidos em temperaturas relativamente baixas. A indicação da cirurgia e da técnica utilizada depende da avaliação de cada paciente.'],
+  ['Como funciona o atendimento, agendamento e formas de pagamento?', 'O atendimento otorrinolaringológico contempla adultos e crianças, com avaliação direcionada às necessidades de cada faixa etária. O agendamento pode ser realizado diretamente pelo WhatsApp, onde a equipe informa os locais e horários disponíveis. As modalidades de atendimento particular ou por convênio podem variar de acordo com o local e devem ser consultadas diretamente com a equipe.'],
 ] as const
 
 const instagramPosts = [
@@ -279,7 +278,7 @@ Na prática, o que mais aparece são outras causas, como:
 🔹 Enxaqueca vestibular
 🔹 Neurite vestibular`,
     video: '/instagram/nem-toda-tontura-e-labirintite.mp4',
-    videoWebm: '/instagram/nem-toda-tontura-e-labirintite.webm',
+    videoLite: '/instagram/nem-toda-tontura-e-labirintite-lite.mp4',
     videoPoster: '/instagram/nem-toda-tontura-e-labirintite-poster.webp',
     page: '/conteudos/labirintite-e-tontura.html',
     videoAriaLabel: 'Vídeo explicando que nem toda tontura é labirintite',
@@ -333,11 +332,11 @@ Resultado? A tontura continua — e você perde tempo.
 💬 Já passou por isso? Comenta aqui
 📲 Envia pra quem vive com tontura`,
     video: '/instagram/enxaqueca-vestibular.mp4',
-    videoWebm: '/instagram/enxaqueca-vestibular.webm',
+    videoLite: '/instagram/enxaqueca-vestibular-lite.mp4',
     videoPoster: '/instagram/enxaqueca-vestibular-poster.webp',
     page: '/conteudos/enxaqueca-vestibular.html',
     videoAriaLabel: 'Vídeo explicando os sintomas da enxaqueca vestibular',
-    url: 'https://www.instagram.com/reel/DVexR90gPy8/',
+    url: 'https://www.instagram.com/reel/DWhkB1zgHo6/',
   },
   {
     title: 'O ouvido não serve apenas para ouvir',
@@ -352,11 +351,11 @@ Quando essas informações não se entendem, o resultado pode ser:
 ⚠️ sensação de chão mole
 ⚠️ cabeça “flutuando”`,
     video: '/instagram/ouvido-equilibrio-labirinto.mp4',
-    videoWebm: '/instagram/ouvido-equilibrio-labirinto.webm',
+    videoLite: '/instagram/ouvido-equilibrio-labirinto-lite.mp4',
     videoPoster: '/instagram/ouvido-equilibrio-labirinto-poster.webp',
     page: '/conteudos/ouvido-interno-e-equilibrio.html',
     videoAriaLabel: 'Vídeo explicando como o ouvido e o labirinto participam do equilíbrio',
-    url: 'https://www.instagram.com/reel/DWhkB1zgHo6/',
+    url: 'https://www.instagram.com/reel/DVexR90gPy8/',
   },
   {
     title: 'Tontura no supermercado',
@@ -376,7 +375,7 @@ Essa sensação comum pode não ser “labirintite” como muitos pensam… Pode
 
 🚨 O erro não é o remédio. É tratar sem diagnóstico certo.`,
     video: '/instagram/se-sua-tontura-nao-melhora.mp4',
-    videoWebm: '/instagram/se-sua-tontura-nao-melhora.webm',
+    videoLite: '/instagram/se-sua-tontura-nao-melhora-lite.mp4',
     videoPoster: '/instagram/se-sua-tontura-nao-melhora-poster.webp',
     page: '/conteudos/tontura-e-diagnostico.html',
     videoAriaLabel: 'Vídeo alertando sobre o tratamento de tontura sem diagnóstico correto',
@@ -384,29 +383,78 @@ Essa sensação comum pode não ser “labirintite” como muitos pensam… Pode
   },
 ] as const
 
-function InstagramVideo({ src, webm, poster, ariaLabel, tabIndex, loadVideo }: { src: string; webm: string; poster: string; ariaLabel?: string; tabIndex?: number; loadVideo: boolean }) {
+type VideoNetworkTier = 'fast' | 'medium' | 'constrained'
+type VideoPriority = 'active' | 'next' | 'none'
+type VideoStatus = 'idle' | 'preparing' | 'playing' | 'waiting' | 'delayed' | 'error'
+
+type NavigatorWithConnection = Navigator & {
+  connection?: {
+    effectiveType?: string
+    saveData?: boolean
+    addEventListener?: (type: 'change', listener: () => void) => void
+    removeEventListener?: (type: 'change', listener: () => void) => void
+  }
+}
+
+const readVideoNetworkTier = (): VideoNetworkTier => {
+  if (typeof navigator === 'undefined') return 'medium'
+  const connection = (navigator as NavigatorWithConnection).connection
+  if (connection?.saveData || connection?.effectiveType === 'slow-2g' || connection?.effectiveType === '2g') return 'constrained'
+  if (connection?.effectiveType === '3g') return 'medium'
+  return 'fast'
+}
+
+function useVideoNetworkTier() {
+  const [tier, setTier] = useState<VideoNetworkTier>('medium')
+
+  useEffect(() => {
+    const connection = (navigator as NavigatorWithConnection).connection
+    const updateTier = () => setTier(readVideoNetworkTier())
+    updateTier()
+    if (!connection?.addEventListener) return
+    connection.addEventListener('change', updateTier)
+    return () => connection.removeEventListener?.('change', updateTier)
+  }, [])
+
+  return tier
+}
+
+const videoPreloadMargin = (tier: VideoNetworkTier) => tier === 'fast' ? '1000px 0px' : tier === 'medium' ? '650px 0px' : '0px'
+
+function InstagramVideo({ src, liteSrc, poster, ariaLabel, tabIndex, priority, sectionNear, networkTier }: { src: string; liteSrc: string; poster: string; ariaLabel?: string; tabIndex?: number; priority: VideoPriority; sectionNear: boolean; networkTier: VideoNetworkTier }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const playTimerRef = useRef<number | null>(null)
+  const prepareTimerRef = useRef<number | null>(null)
   const manuallyPausedRef = useRef(false)
   const playAfterLoadRef = useRef(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [manuallyRequested, setManuallyRequested] = useState(false)
-  const hasSource = loadVideo || manuallyRequested
+  const [showPoster, setShowPoster] = useState(true)
+  const [status, setStatus] = useState<VideoStatus>('idle')
+  const [retryKey, setRetryKey] = useState(0)
+  const mayPreload = sectionNear && networkTier !== 'constrained' && priority !== 'none'
+  const hasSource = manuallyRequested || mayPreload
+  const selectedSrc = manuallyRequested && networkTier === 'constrained' ? liteSrc : src
+  const requestSrc = retryKey === 0 ? selectedSrc : `${selectedSrc}${selectedSrc.includes('?') ? '&' : '?'}retry=${retryKey}`
+  const preload = manuallyRequested ? 'auto' : priority === 'active' && networkTier === 'fast' ? 'auto' : mayPreload ? 'metadata' : 'none'
 
   useEffect(() => {
-    if (!loadVideo) setManuallyRequested(false)
-  }, [loadVideo])
-
-  useEffect(() => {
-    if (!hasSource || !playAfterLoadRef.current) return
-    playAfterLoadRef.current = false
-    void videoRef.current?.play().catch(() => undefined)
-  }, [hasSource])
+    if (priority !== 'none') return
+    setManuallyRequested(false)
+    setStatus('idle')
+    setShowPoster(true)
+  }, [priority])
 
   useEffect(() => {
     const video = videoRef.current
-    if (!video) return
-    const track = video.closest('.instagram-track')
+    if (!video || !hasSource) return
+    video.load()
+    if (playAfterLoadRef.current) void video.play().catch(() => undefined)
+  }, [hasSource, retryKey, selectedSrc])
+
+  useEffect(() => {
+    const video = videoRef.current
+    const track = video?.closest('.instagram-track')
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
     const mobileScreen = window.matchMedia('(max-width: 899px)')
     let isVisible = false
@@ -418,9 +466,15 @@ function InstagramVideo({ src, webm, poster, ariaLabel, tabIndex, loadVideo }: {
       playTimerRef.current = null
     }
 
+    const clearPrepareTimer = () => {
+      if (prepareTimerRef.current === null) return
+      window.clearTimeout(prepareTimerRef.current)
+      prepareTimerRef.current = null
+    }
+
     const schedulePlayback = () => {
       clearPlayTimer()
-      if (!mobileScreen.matches || !isVisible || document.hidden || reducedMotion.matches || manuallyPausedRef.current) return
+      if (!video || !hasSource || networkTier === 'constrained' || !mobileScreen.matches || !isVisible || document.hidden || reducedMotion.matches || manuallyPausedRef.current) return
       playTimerRef.current = window.setTimeout(() => {
         if (!mobileScreen.matches || !isVisible || document.hidden || reducedMotion.matches || manuallyPausedRef.current) return
         void video.play().catch(() => undefined)
@@ -428,9 +482,13 @@ function InstagramVideo({ src, webm, poster, ariaLabel, tabIndex, loadVideo }: {
     }
 
     const resetToThumbnail = () => {
+      if (!video) return
       video.pause()
       if (video.readyState > 0) video.currentTime = 0
       setIsPlaying(false)
+      setShowPoster(true)
+      setStatus('idle')
+      clearPrepareTimer()
     }
 
     const handleHorizontalMovement = () => {
@@ -455,6 +513,7 @@ function InstagramVideo({ src, webm, poster, ariaLabel, tabIndex, loadVideo }: {
       schedulePlayback()
     }
 
+    if (!video) return
     const observer = new IntersectionObserver(([entry]) => {
       const wasVisible = isVisible
       isVisible = entry.isIntersecting && entry.intersectionRatio >= .6
@@ -480,9 +539,39 @@ function InstagramVideo({ src, webm, poster, ariaLabel, tabIndex, loadVideo }: {
       mobileScreen.removeEventListener('change', handleScreenChange)
       reducedMotion.removeEventListener('change', schedulePlayback)
       clearPlayTimer()
+      clearPrepareTimer()
       video.pause()
     }
-  }, [src, hasSource])
+  }, [selectedSrc, hasSource, networkTier])
+
+  const startPrepareTimer = () => {
+    if (prepareTimerRef.current !== null) window.clearTimeout(prepareTimerRef.current)
+    prepareTimerRef.current = window.setTimeout(() => {
+      setShowPoster(true)
+      setStatus((current) => current === 'preparing' || current === 'waiting' ? 'delayed' : current)
+    }, 15000)
+  }
+
+  const requestPlayback = () => {
+    playAfterLoadRef.current = true
+    manuallyPausedRef.current = false
+    setStatus('preparing')
+    startPrepareTimer()
+    if (!hasSource) {
+      setManuallyRequested(true)
+      return
+    }
+    void videoRef.current?.play().catch(() => undefined)
+  }
+
+  const retryPlayback = () => {
+    setStatus('preparing')
+    setShowPoster(true)
+    playAfterLoadRef.current = true
+    startPrepareTimer()
+    setManuallyRequested(true)
+    setRetryKey((value) => value + 1)
+  }
 
   const handlePlayClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -492,36 +581,63 @@ function InstagramVideo({ src, webm, poster, ariaLabel, tabIndex, loadVideo }: {
       playTimerRef.current = null
     }
     const video = videoRef.current
-    if (!video) return
-    if (!hasSource) {
-      playAfterLoadRef.current = true
-      setManuallyRequested(true)
+    if (status === 'error' || status === 'delayed') {
+      retryPlayback()
       return
     }
-    if (video.paused) {
-      manuallyPausedRef.current = false
-      void video.play().catch(() => undefined)
+    if (!video || video.paused) {
+      requestPlayback()
       return
     }
     manuallyPausedRef.current = true
     video.pause()
+    setIsPlaying(false)
   }
 
-  const showFirstFrame = () => {
-    const video = videoRef.current
-    if (!video || video.readyState < HTMLMediaElement.HAVE_METADATA || video.duration <= 0) return
-    video.currentTime = Math.min(0.1, video.duration)
+  const handlePlaying = () => {
+    playAfterLoadRef.current = false
+    if (prepareTimerRef.current !== null) window.clearTimeout(prepareTimerRef.current)
+    prepareTimerRef.current = null
+    setIsPlaying(true)
+    setShowPoster(false)
+    setStatus('playing')
   }
 
   return <>
-    <video key={hasSource ? src : poster} ref={videoRef} aria-label={ariaLabel} muted loop playsInline preload="metadata" poster={poster} onLoadedMetadata={showFirstFrame} onPlay={() => setIsPlaying(true)} onPause={() => setIsPlaying(false)}>
-      {hasSource && <><source src={webm} type="video/webm" /><source src={src} type="video/mp4" /></>}
-    </video>
-    <button type="button" className={`instagram-video-play${isPlaying ? ' is-playing' : ''}`} tabIndex={tabIndex} aria-label={isPlaying ? 'Pausar vídeo' : 'Reproduzir vídeo'} onPointerDown={(event) => event.stopPropagation()} onClick={handlePlayClick}>{isPlaying ? <Pause fill="currentColor" /> : <Play fill="currentColor" />}</button>
+    {hasSource && <video
+      key={requestSrc}
+      ref={videoRef}
+      aria-label={ariaLabel}
+      muted
+      loop
+      playsInline
+      preload={preload}
+      poster={poster}
+      onCanPlay={() => { if (playAfterLoadRef.current) void videoRef.current?.play().catch(() => undefined) }}
+      onClick={() => {
+        if (!videoRef.current || videoRef.current.paused) return
+        manuallyPausedRef.current = true
+        videoRef.current.pause()
+        setIsPlaying(false)
+      }}
+      onPlaying={handlePlaying}
+      onPause={() => setIsPlaying(false)}
+      onWaiting={() => {
+        if (showPoster) return
+        setStatus('waiting')
+        startPrepareTimer()
+      }}
+      onError={() => { setStatus('error'); setIsPlaying(false); setShowPoster(true) }}
+    ><source src={requestSrc} type="video/mp4" /></video>}
+    <img className={`instagram-video-poster${showPoster ? '' : ' is-hidden'}`} src={poster} alt="" width="540" height="960" loading="lazy" decoding="async" aria-hidden="true" />
+    {(status === 'preparing' || status === 'waiting') && <div className="instagram-video-status" role="status"><span className="video-spinner" />Preparando vídeo…</div>}
+    {(status === 'delayed' || status === 'error') && <button type="button" className="instagram-video-retry" onClick={handlePlayClick}>{status === 'delayed' ? 'Conexão lenta. Tentar novamente' : 'Não foi possível carregar. Tentar novamente'}</button>}
+    {status !== 'preparing' && status !== 'waiting' && status !== 'delayed' && status !== 'error' && <button type="button" className={`instagram-video-play${isPlaying ? ' is-playing' : ''}`} tabIndex={tabIndex} aria-label={isPlaying ? 'Pausar vídeo' : 'Reproduzir vídeo'} onPointerDown={(event) => event.stopPropagation()} onClick={handlePlayClick}>{isPlaying ? <Pause fill="currentColor" /> : <Play fill="currentColor" />}</button>}
   </>
 }
 
 function InstagramCarousel() {
+  const networkTier = useVideoNetworkTier()
   const cloneCount = Math.min(instagramPosts.length, 3)
   const firstRealIndex = cloneCount
   const lastRealIndex = cloneCount + instagramPosts.length - 1
@@ -534,14 +650,16 @@ function InstagramCarousel() {
   const dragStateRef = useRef({ active: false, pointerId: -1, startX: 0, scrollLeft: 0, moved: false })
   const suppressClickRef = useRef(false)
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [sectionNear, setSectionNear] = useState(false)
   const carouselPosts = [
     ...instagramPosts.slice(-cloneCount).map((post, index) => ({ post, key: `clone-before-${index}`, isClone: true, originalIndex: instagramPosts.length - cloneCount + index })),
     ...instagramPosts.map((post, index) => ({ post, key: post.url, isClone: false, originalIndex: index })),
     ...instagramPosts.slice(0, cloneCount).map((post, index) => ({ post, key: `clone-after-${index}`, isClone: true, originalIndex: index })),
   ]
-  const isNearCurrentPost = (postIndex: number) => {
-    const distance = Math.abs(postIndex - currentIndex)
-    return Math.min(distance, instagramPosts.length - distance) <= 1
+  const videoPriority = (postIndex: number): VideoPriority => {
+    if (postIndex === currentIndex) return 'active'
+    if (networkTier === 'fast' && postIndex === (currentIndex + 1) % instagramPosts.length) return 'next'
+    return 'none'
   }
 
   const centerCard = (trackIndex: number, behavior: ScrollBehavior = 'smooth') => {
@@ -598,6 +716,18 @@ function InstagramCarousel() {
     resizeObserver.observe(track)
     return () => resizeObserver.disconnect()
   }, [])
+
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track) return
+    setSectionNear(false)
+    const observer = new IntersectionObserver(([entry]) => setSectionNear(entry.isIntersecting), {
+      threshold: 0.01,
+      rootMargin: videoPreloadMargin(networkTier),
+    })
+    observer.observe(track)
+    return () => observer.disconnect()
+  }, [networkTier])
 
   useEffect(() => {
     const track = trackRef.current
@@ -686,7 +816,7 @@ function InstagramCarousel() {
       }}
     >
       {carouselPosts.map(({ post, key, isClone, originalIndex }) => <article className={`instagram-card${isClone ? '' : ' reveal'}`} aria-hidden={isClone || undefined} aria-label={isClone ? undefined : `Publicação ${originalIndex + 1} de ${instagramPosts.length}`} style={{ '--delay': `${(originalIndex % 4) * 70}ms` } as React.CSSProperties} key={key}>
-        {'video' in post ? <div className="instagram-card__media">{isClone ? <img src={post.videoPoster} alt="" width="540" height="960" loading="lazy" decoding="async" /> : <InstagramVideo src={post.video} webm={post.videoWebm} poster={post.videoPoster} ariaLabel={post.videoAriaLabel} loadVideo={isNearCurrentPost(originalIndex)} />}</div> : <a className="instagram-card__media" href={post.url} target="_blank" rel="noreferrer" tabIndex={isClone ? -1 : undefined} aria-label={`Abrir no Instagram: ${post.title}`} onClick={() => trackEvent('click_instagram_post', { post: String(originalIndex + 1) })}>
+        {'video' in post ? <div className="instagram-card__media">{isClone ? <img src={post.videoPoster} alt="" width="540" height="960" loading="lazy" decoding="async" /> : <InstagramVideo src={post.video} liteSrc={post.videoLite} poster={post.videoPoster} ariaLabel={post.videoAriaLabel} priority={videoPriority(originalIndex)} sectionNear={sectionNear} networkTier={networkTier} />}</div> : <a className="instagram-card__media" href={post.url} target="_blank" rel="noreferrer" tabIndex={isClone ? -1 : undefined} aria-label={`Abrir no Instagram: ${post.title}`} onClick={() => trackEvent('click_instagram_post', { post: String(originalIndex + 1) })}>
         {'image' in post ? <img src={post.image} alt={isClone ? '' : post.imageAlt} width="1080" height="1350" loading="lazy" /> : <span className="instagram-card__pending">
           <span className="instagram-card__play"><Play fill="currentColor" /></span>
           <span>Vídeo em atualização</span>
@@ -725,10 +855,115 @@ type NarrativeChapter = {
   readonly imageAlt: string
   readonly imagePosition: string
   readonly video?: {
-    readonly webm: string
     readonly mp4: string
   }
   readonly items: readonly (readonly [string, string])[]
+}
+
+function LazyProcedureVideo({ src, poster, ariaLabel, objectPosition, active }: { src: string; poster: string; ariaLabel: string; objectPosition?: string; active: boolean }) {
+  const networkTier = useVideoNetworkTier()
+  const shellRef = useRef<HTMLDivElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const delayTimerRef = useRef<number | null>(null)
+  const [near, setNear] = useState(false)
+  const [visible, setVisible] = useState(false)
+  const [manual, setManual] = useState(false)
+  const [showPoster, setShowPoster] = useState(true)
+  const [status, setStatus] = useState<VideoStatus>('idle')
+  const [retryKey, setRetryKey] = useState(0)
+  const hasSource = manual || (near && networkTier !== 'constrained')
+  const requestSrc = retryKey === 0 ? src : `${src}${src.includes('?') ? '&' : '?'}retry=${retryKey}`
+
+  useEffect(() => {
+    const shell = shellRef.current
+    if (!shell) return
+    const preloadObserver = new IntersectionObserver(([entry]) => setNear(entry.isIntersecting), {
+      threshold: 0.01,
+      rootMargin: videoPreloadMargin(networkTier),
+    })
+    const visibilityObserver = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting && entry.intersectionRatio >= .35), { threshold: [0, .35] })
+    preloadObserver.observe(shell)
+    visibilityObserver.observe(shell)
+    return () => {
+      preloadObserver.disconnect()
+      visibilityObserver.disconnect()
+    }
+  }, [networkTier])
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video || !hasSource) return
+    video.load()
+    if (manual || (visible && networkTier !== 'constrained' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches)) void video.play().catch(() => undefined)
+  }, [hasSource, manual, networkTier, retryKey, visible])
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video || visible) return
+    video.pause()
+    setShowPoster(true)
+    setStatus('idle')
+  }, [visible])
+
+  useEffect(() => () => {
+    if (delayTimerRef.current !== null) window.clearTimeout(delayTimerRef.current)
+  }, [])
+
+  const startDelayTimer = () => {
+    if (delayTimerRef.current !== null) window.clearTimeout(delayTimerRef.current)
+    delayTimerRef.current = window.setTimeout(() => {
+      setShowPoster(true)
+      setStatus((current) => current === 'preparing' || current === 'waiting' ? 'delayed' : current)
+    }, 15000)
+  }
+
+  const requestPlayback = () => {
+    setManual(true)
+    setStatus('preparing')
+    startDelayTimer()
+    if (hasSource) void videoRef.current?.play().catch(() => undefined)
+  }
+
+  const retryPlayback = () => {
+    setShowPoster(true)
+    setStatus('preparing')
+    setManual(true)
+    startDelayTimer()
+    setRetryKey((value) => value + 1)
+  }
+
+  const handlePlaying = () => {
+    if (delayTimerRef.current !== null) window.clearTimeout(delayTimerRef.current)
+    delayTimerRef.current = null
+    setShowPoster(false)
+    setStatus('playing')
+  }
+
+  return <div ref={shellRef} className={`procedure-narrative__image procedure-video-shell${active ? ' is-active' : ''}`}>
+    {hasSource && <video
+      key={requestSrc}
+      aria-label={ariaLabel}
+      ref={videoRef}
+      muted
+      loop
+      playsInline
+      preload={manual || networkTier === 'fast' ? 'auto' : 'metadata'}
+      poster={poster}
+      style={{ objectPosition }}
+      onCanPlay={() => { if (manual || (visible && networkTier !== 'constrained')) void videoRef.current?.play().catch(() => undefined) }}
+      onPlaying={handlePlaying}
+      onWaiting={() => {
+        if (showPoster) return
+        setStatus('waiting')
+        startDelayTimer()
+      }}
+      onError={() => { setShowPoster(true); setStatus('error') }}
+    ><source src={requestSrc} type="video/mp4" /></video>}
+    <img className={`procedure-video-poster${showPoster ? '' : ' is-hidden'}`} src={poster} alt="" loading="lazy" decoding="async" style={{ objectPosition }} aria-hidden="true" />
+    {(status === 'preparing' || status === 'waiting') && <div className="procedure-video-status" role="status"><span className="video-spinner" />Preparando vídeo…</div>}
+    {(status === 'delayed' || status === 'error') && <button type="button" className="procedure-video-retry" onClick={retryPlayback}>{status === 'delayed' ? 'Conexão lenta. Tentar novamente' : 'Não foi possível carregar. Tentar novamente'}</button>}
+    {networkTier === 'constrained' && status !== 'preparing' && status !== 'waiting' && status !== 'delayed' && status !== 'error' && showPoster && <button type="button" className="procedure-video-play" aria-label="Reproduzir vídeo" onClick={requestPlayback}><Play fill="currentColor" /></button>}
+  </div>
 }
 
 function ProcedureNarrative({ id, variant, chapters, message }: {
@@ -889,21 +1124,14 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
         <div className="procedure-narrative__stage">
           {chapters.length === 1 && <div className="procedure-narrative__media-title" aria-hidden="true">{chapters[0].title}</div>}
           <figure className="procedure-narrative__figure">
-            {chapters.map((chapter, index) => chapter.video ? <video
-              className={`procedure-narrative__image ${index === 0 ? 'is-active' : ''}`}
-              key={`${chapter.title}-${chapter.video.webm}`}
-              aria-label={chapter.imageAlt}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
+            {chapters.map((chapter, index) => chapter.video ? <LazyProcedureVideo
+              key={`${chapter.title}-${chapter.video.mp4}`}
+              src={chapter.video.mp4}
               poster={chapter.image}
-              style={{ objectPosition: chapter.imagePosition }}
-            >
-              <source src={chapter.video.webm} type="video/webm" />
-              <source src={chapter.video.mp4} type="video/mp4" />
-            </video> : <picture className={`procedure-narrative__image ${index === 0 ? 'is-active' : ''}`} key={`${chapter.title}-${chapter.image}`}>
+              ariaLabel={chapter.imageAlt}
+              objectPosition={chapter.imagePosition}
+              active={index === 0}
+            /> : <picture className={`procedure-narrative__image ${index === 0 ? 'is-active' : ''}`} key={`${chapter.title}-${chapter.image}`}>
               <img src={chapter.image} alt={chapter.imageAlt} width={variant === 'exams' ? 1440 : 1006} height={variant === 'exams' ? 1080 : 1788} loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />
             </picture>)}
           </figure>
