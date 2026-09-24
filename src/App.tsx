@@ -76,6 +76,8 @@ const coblationChapters = [
     imagePosition: '50% 35%',
     video: {
       mp4: '/videos/coblation-dr-evaldo.mp4',
+      liteMp4: '/videos/coblation-dr-evaldo-mobile.mp4',
+      poster: '/videos/coblation-dr-evaldo-poster.webp',
     },
     items: [],
   },
@@ -856,23 +858,56 @@ type NarrativeChapter = {
   readonly imagePosition: string
   readonly video?: {
     readonly mp4: string
+    readonly liteMp4: string
+    readonly poster: string
   }
   readonly items: readonly (readonly [string, string])[]
 }
 
-function LazyProcedureVideo({ src, poster, ariaLabel, objectPosition, active }: { src: string; poster: string; ariaLabel: string; objectPosition?: string; active: boolean }) {
+function LazyProcedureVideo({ src, liteSrc, poster, ariaLabel, objectPosition, active, preloadOnDesktopSelector, preloadOnMobileSelector }: { src: string; liteSrc: string; poster: string; ariaLabel: string; objectPosition?: string; active: boolean; preloadOnDesktopSelector?: string; preloadOnMobileSelector?: string }) {
   const networkTier = useVideoNetworkTier()
   const shellRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const delayTimerRef = useRef<number | null>(null)
+  const hasPlayedRef = useRef(false)
   const [near, setNear] = useState(false)
+  const [desktopReady, setDesktopReady] = useState(false)
+  const [mobileReady, setMobileReady] = useState(false)
+  const [mobileScreen, setMobileScreen] = useState(false)
   const [visible, setVisible] = useState(false)
   const [manual, setManual] = useState(false)
   const [showPoster, setShowPoster] = useState(true)
   const [status, setStatus] = useState<VideoStatus>('idle')
   const [retryKey, setRetryKey] = useState(0)
-  const hasSource = manual || (near && networkTier !== 'constrained')
-  const requestSrc = retryKey === 0 ? src : `${src}${src.includes('?') ? '&' : '?'}retry=${retryKey}`
+  const triggerReady = mobileScreen ? mobileReady : desktopReady
+  const hasSource = manual || ((near || triggerReady) && networkTier !== 'constrained')
+  const selectedSrc = mobileScreen || networkTier !== 'fast' ? liteSrc : src
+  const requestSrc = retryKey === 0 ? selectedSrc : `${selectedSrc}${selectedSrc.includes('?') ? '&' : '?'}retry=${retryKey}`
+
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 899px)')
+    const updateScreen = () => setMobileScreen(query.matches)
+    updateScreen()
+    query.addEventListener('change', updateScreen)
+    return () => query.removeEventListener('change', updateScreen)
+  }, [])
+
+  useEffect(() => {
+    const mobileTarget = preloadOnMobileSelector ? document.querySelector(preloadOnMobileSelector) : null
+    const desktopTarget = preloadOnDesktopSelector ? document.querySelector(preloadOnDesktopSelector) : null
+    const mobileObserver = mobileTarget && new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && window.matchMedia('(max-width: 899px)').matches) setMobileReady(true)
+    }, { threshold: 0.12 })
+    const desktopObserver = desktopTarget && new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && window.matchMedia('(min-width: 900px)').matches) setDesktopReady(true)
+    }, { threshold: 0.12 })
+    if (mobileObserver) mobileObserver.observe(mobileTarget)
+    if (desktopObserver) desktopObserver.observe(desktopTarget)
+    return () => {
+      mobileObserver?.disconnect()
+      desktopObserver?.disconnect()
+    }
+  }, [preloadOnDesktopSelector, preloadOnMobileSelector])
 
   useEffect(() => {
     const shell = shellRef.current
@@ -890,18 +925,29 @@ function LazyProcedureVideo({ src, poster, ariaLabel, objectPosition, active }: 
     }
   }, [networkTier])
 
+  const playWhenFullyBuffered = () => {
+    const video = videoRef.current
+    if (!video || video.ended || !visible || networkTier === 'constrained' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const bufferedUntil = video.buffered.length > 0 ? video.buffered.end(video.buffered.length - 1) : 0
+    if (!Number.isFinite(video.duration) || bufferedUntil < video.duration - 0.1) return
+    void video.play().catch(() => undefined)
+  }
+
   useEffect(() => {
     const video = videoRef.current
     if (!video || !hasSource) return
-    video.load()
-    if (manual || (visible && networkTier !== 'constrained' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches)) void video.play().catch(() => undefined)
-  }, [hasSource, manual, networkTier, retryKey, visible])
+    if (manual && video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      void video.play().catch(() => undefined)
+      return
+    }
+    playWhenFullyBuffered()
+  }, [hasSource, manual, networkTier, requestSrc, visible])
 
   useEffect(() => {
     const video = videoRef.current
     if (!video || visible) return
     video.pause()
-    setShowPoster(true)
+    if (!hasPlayedRef.current) setShowPoster(true)
     setStatus('idle')
   }, [visible])
 
@@ -933,10 +979,16 @@ function LazyProcedureVideo({ src, poster, ariaLabel, objectPosition, active }: 
   }
 
   const handlePlaying = () => {
+    hasPlayedRef.current = true
     if (delayTimerRef.current !== null) window.clearTimeout(delayTimerRef.current)
     delayTimerRef.current = null
-    setShowPoster(false)
     setStatus('playing')
+    const video = videoRef.current
+    if (video?.requestVideoFrameCallback) {
+      video.requestVideoFrameCallback(() => setShowPoster(false))
+      return
+    }
+    window.requestAnimationFrame(() => setShowPoster(false))
   }
 
   return <div ref={shellRef} className={`procedure-narrative__image procedure-video-shell${active ? ' is-active' : ''}`}>
@@ -947,10 +999,12 @@ function LazyProcedureVideo({ src, poster, ariaLabel, objectPosition, active }: 
       muted
       loop
       playsInline
-      preload={manual || networkTier === 'fast' ? 'auto' : 'metadata'}
+      preload={manual || triggerReady || networkTier === 'fast' ? 'auto' : 'metadata'}
       poster={poster}
       style={{ objectPosition }}
-      onCanPlay={() => { if (manual || (visible && networkTier !== 'constrained')) void videoRef.current?.play().catch(() => undefined) }}
+      onCanPlay={() => { if (manual) void videoRef.current?.play().catch(() => undefined) }}
+      onCanPlayThrough={playWhenFullyBuffered}
+      onProgress={playWhenFullyBuffered}
       onPlaying={handlePlaying}
       onWaiting={() => {
         if (showPoster) return
@@ -966,11 +1020,13 @@ function LazyProcedureVideo({ src, poster, ariaLabel, objectPosition, active }: 
   </div>
 }
 
-function ProcedureNarrative({ id, variant, chapters, message }: {
+function ProcedureNarrative({ id, variant, chapters, message, preloadVideoOnDesktop, preloadVideoOnMobile }: {
   id: string
   variant: 'exams' | 'surgeries'
   chapters: readonly NarrativeChapter[]
   message: string
+  preloadVideoOnDesktop?: string
+  preloadVideoOnMobile?: string
 }) {
   const sectionRef = useRef<HTMLElement>(null)
 
@@ -1127,10 +1183,13 @@ function ProcedureNarrative({ id, variant, chapters, message }: {
             {chapters.map((chapter, index) => chapter.video ? <LazyProcedureVideo
               key={`${chapter.title}-${chapter.video.mp4}`}
               src={chapter.video.mp4}
-              poster={chapter.image}
+              liteSrc={chapter.video.liteMp4}
+              poster={chapter.video.poster}
               ariaLabel={chapter.imageAlt}
               objectPosition={chapter.imagePosition}
               active={index === 0}
+              preloadOnDesktopSelector={preloadVideoOnDesktop}
+              preloadOnMobileSelector={preloadVideoOnMobile}
             /> : <picture className={`procedure-narrative__image ${index === 0 ? 'is-active' : ''}`} key={`${chapter.title}-${chapter.image}`}>
               <img src={chapter.image} alt={chapter.imageAlt} width={variant === 'exams' ? 1440 : 1006} height={variant === 'exams' ? 1080 : 1788} loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />
             </picture>)}
@@ -1369,6 +1428,8 @@ export default function App() {
         variant="surgeries"
         chapters={coblationChapters}
         message="Olá! Gostaria de informações sobre a técnica Coblation® para cirurgia de amígdalas e adenoide."
+        preloadVideoOnDesktop="#especialidades"
+        preloadVideoOnMobile=".specialty-card.balance"
       />
 
       <ProcedureNarrative
