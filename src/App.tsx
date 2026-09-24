@@ -932,11 +932,9 @@ function LazyProcedureVideo({ src, liteSrc, poster, ariaLabel, objectPosition, a
     }
   }, [networkTier])
 
-  const playWhenFullyBuffered = () => {
+  const attemptAutomaticPlayback = () => {
     const video = videoRef.current
     if (!video || video.ended || !visible || networkTier === 'constrained' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const bufferedUntil = video.buffered.length > 0 ? video.buffered.end(video.buffered.length - 1) : 0
-    if (!Number.isFinite(video.duration) || bufferedUntil < video.duration - 0.1) return
     void video.play().catch(() => undefined)
   }
 
@@ -947,7 +945,7 @@ function LazyProcedureVideo({ src, liteSrc, poster, ariaLabel, objectPosition, a
       void video.play().catch(() => undefined)
       return
     }
-    playWhenFullyBuffered()
+    if (video.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) attemptAutomaticPlayback()
   }, [hasSource, manual, networkTier, requestSrc, visible])
 
   useEffect(() => {
@@ -1009,9 +1007,13 @@ function LazyProcedureVideo({ src, liteSrc, poster, ariaLabel, objectPosition, a
       preload={manual || triggerReady || networkTier === 'fast' ? 'auto' : 'metadata'}
       poster={poster}
       style={{ objectPosition }}
-      onCanPlay={() => { if (manual) void videoRef.current?.play().catch(() => undefined) }}
-      onCanPlayThrough={playWhenFullyBuffered}
-      onProgress={playWhenFullyBuffered}
+      onCanPlay={() => {
+        if (manual) {
+          void videoRef.current?.play().catch(() => undefined)
+          return
+        }
+        attemptAutomaticPlayback()
+      }}
       onPlaying={handlePlaying}
       onWaiting={() => {
         if (showPoster) return
@@ -1023,7 +1025,7 @@ function LazyProcedureVideo({ src, liteSrc, poster, ariaLabel, objectPosition, a
     <img className={`procedure-video-poster${showPoster ? '' : ' is-hidden'}`} src={poster} alt="" loading="lazy" decoding="async" style={{ objectPosition }} aria-hidden="true" />
     {(status === 'preparing' || status === 'waiting') && <div className="procedure-video-status" role="status"><span className="video-spinner" />Preparando vídeo…</div>}
     {(status === 'delayed' || status === 'error') && <button type="button" className="procedure-video-retry" onClick={retryPlayback}>{status === 'delayed' ? 'Conexão lenta. Tentar novamente' : 'Não foi possível carregar. Tentar novamente'}</button>}
-    {networkTier === 'constrained' && status !== 'preparing' && status !== 'waiting' && status !== 'delayed' && status !== 'error' && showPoster && <button type="button" className="procedure-video-play" aria-label="Reproduzir vídeo" onClick={requestPlayback}><Play fill="currentColor" /></button>}
+    {status === 'idle' && showPoster && <button type="button" className="procedure-video-play" aria-label="Reproduzir vídeo" onClick={requestPlayback}><Play fill="currentColor" /></button>}
   </div>
 }
 
