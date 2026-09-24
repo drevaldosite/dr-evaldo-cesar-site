@@ -840,13 +840,20 @@ function InstagramCarousel() {
   </>
 }
 
-function WhatsAppLink({ children, className = 'button primary', source, message }: { children: ReactNode; className?: string; source: string; message?: string }) {
+function WhatsAppLink({ children, className = 'button primary', source, message, ...props }: { children: ReactNode; className?: string; source: string; message?: string; 'aria-label'?: string; title?: string }) {
   return (
-    <a className={className} href={whatsappUrl(message)} target="_blank" rel="noreferrer"
+    <a className={className} href={whatsappUrl(message)} target="_blank" rel="noreferrer" {...props}
       onClick={() => trackEvent(siteConfig.contact.whatsapp ? 'click_whatsapp' : 'click_doctoralia', { source })}>
       {children}
     </a>
   )
+}
+
+function WhatsAppIcon() {
+  return <svg className="whatsapp-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+    <path d="M16 3.5a12.4 12.4 0 0 0-10.7 19L3.8 28.5l6.2-1.5A12.5 12.5 0 1 0 16 3.5Zm0 22.4a10 10 0 0 1-5.1-1.4l-.4-.2-3.7.9 1-3.6-.3-.4A10 10 0 1 1 16 25.9Z" />
+    <path d="M21.5 18.1c-.3-.2-1.8-.9-2.1-1s-.5-.2-.7.2c-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1a8.2 8.2 0 0 1-2.4-1.5 9 9 0 0 1-1.7-2.1c-.2-.3 0-.5.1-.7l.5-.6c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.6l-.9-2.1c-.2-.5-.5-.4-.7-.4h-.6c-.2 0-.5.1-.7.3-.2.3-1 1-1 2.4s1 2.8 1.1 3c.1.2 2 3.1 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4Z" />
+  </svg>
 }
 
 type NarrativeChapter = {
@@ -1366,7 +1373,7 @@ function MobileStickyCTA() {
   }, [])
 
   if (heroVisible || contactVisible || footerVisible) return null
-  return <div className="mobile-cta-bar"><WhatsAppLink source="mobile-sticky"><MessageCircle /> <span>Agendar pelo WhatsApp</span></WhatsAppLink></div>
+  return <div className="mobile-cta-bar"><WhatsAppLink className="floating-whatsapp" source="mobile-sticky" aria-label="Agendar pelo WhatsApp" title="Agendar pelo WhatsApp"><WhatsAppIcon /><span className="sr-only">Agendar pelo WhatsApp</span></WhatsAppLink></div>
 }
 
 export default function App() {

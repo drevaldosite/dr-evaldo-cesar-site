@@ -30,7 +30,8 @@ export const contactText = {
 
 export function whatsappUrl(message = 'Olá! Gostaria de informações para agendar uma consulta com o Dr. Evaldo.') {
   const phone = siteConfig.contact.whatsapp.replace(/\D/g, '')
-  return phone ? `https://wa.me/${phone}?text=${encodeURIComponent(message)}` : siteConfig.contact.doctoralia
+  const messageWithOrigin = message.includes('Vim pelo site.') ? message : `${message}\n\nVim pelo site.`
+  return phone ? `https://wa.me/${phone}?text=${encodeURIComponent(messageWithOrigin)}` : siteConfig.contact.doctoralia
 }
 
 export function trackEvent(event: string, details: Record<string, string> = {}) {
