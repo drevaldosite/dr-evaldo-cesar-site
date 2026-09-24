@@ -614,6 +614,12 @@ function InstagramVideo({ src, liteSrc, poster, ariaLabel, tabIndex, priority, s
       preload={preload}
       poster={poster}
       onCanPlay={() => { if (playAfterLoadRef.current) void videoRef.current?.play().catch(() => undefined) }}
+      onClick={() => {
+        if (!videoRef.current || videoRef.current.paused) return
+        manuallyPausedRef.current = true
+        videoRef.current.pause()
+        setIsPlaying(false)
+      }}
       onPlaying={handlePlaying}
       onPause={() => setIsPlaying(false)}
       onWaiting={() => {

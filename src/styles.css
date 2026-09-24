@@ -218,10 +218,8 @@ main { display: flex; flex-direction: column; }
 .instagram-card:hover .instagram-card__media img, .instagram-card:hover .instagram-card__media video { transform: scale(1.025); }
 .instagram-video-play { position: absolute; z-index: 2; top: 50%; left: 50%; width: 52px; height: 52px; display: grid; place-items: center; padding: 0; color: var(--navy); background: #fff; border: 0; border-radius: 50%; box-shadow: 0 12px 26px rgba(0,0,0,.16); transform: translate(-50%, -50%); cursor: pointer; }
 .instagram-video-play:hover { transform: translate(-50%, -50%) scale(1.04); }
-.instagram-video-play svg { width: 21px; height: 21px; margin-left: 3px; }
-.instagram-video-play.is-playing { opacity: 0; transition: opacity .2s ease, transform .2s ease; }
-.instagram-card__media:hover .instagram-video-play.is-playing, .instagram-video-play.is-playing:focus-visible { opacity: 1; }
-@media (max-width: 899px) { .instagram-video-play.is-playing { opacity: .8; } }
+.instagram-video-play svg { display: block; width: 21px; height: 21px; margin: 0; }
+.instagram-video-play.is-playing { opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease; }
 .instagram-video-status, .instagram-video-retry { position: absolute; z-index: 3; left: 50%; bottom: 22px; max-width: calc(100% - 32px); transform: translateX(-50%); }
 .instagram-video-status { display: inline-flex; align-items: center; gap: 8px; padding: 9px 13px; color: #fff; background: rgba(0,27,98,.82); border-radius: 999px; font-size: .76rem; font-weight: 800; white-space: nowrap; backdrop-filter: blur(8px); }
 .instagram-video-retry { width: max-content; padding: 10px 14px; color: var(--navy); background: #fff; border: 0; border-radius: 999px; box-shadow: 0 8px 22px rgba(0,0,0,.2); font-size: .74rem; font-weight: 800; cursor: pointer; }
