@@ -5,7 +5,8 @@ a { color: #005bb7; }
 h1, h2 { color: #001b62; line-height: 1.15; }
 h1 { font-size: clamp(2rem, 8vw, 3rem); }
 h2 { margin-top: 2rem; }
-p, li, summary { line-height: 1.7; }
+p, li { line-height: 1.7; text-align: justify; text-justify: inter-word; hyphens: auto; overflow-wrap: break-word; }
+summary { line-height: 1.7; }
 .eyebrow { color: #005bb7; font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .notice { padding: 16px 18px; border-radius: 12px; background: #e7f6fb; }
 details { margin: 12px 0; padding: 14px 16px; border: 1px solid #d7e0ee; border-radius: 12px; background: #fff; }

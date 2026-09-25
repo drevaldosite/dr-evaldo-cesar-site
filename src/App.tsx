@@ -15,7 +15,7 @@ const specialties = [
   { icon: 'dizziness', title: 'Otoneurologia: tontura, vertigem e equilíbrio', text: 'Avaliação para pessoas que sentem tontura, vertigem, sensação de desequilíbrio ou instabilidade. A consulta busca entender a causa desses sintomas e, quando necessário, podem ser solicitados exames específicos do equilíbrio.', className: 'nose' },
   { icon: Ear, title: 'Zumbido e alterações auditivas', text: 'Avaliação de sintomas como zumbido, diminuição da audição, sensação de ouvido tampado ou pressão no ouvido. O objetivo é investigar o que pode estar causando essas alterações e orientar o tratamento adequado.', className: 'ear' },
   { icon: 'otoneurology-exam', title: 'Exames otoneurológicos', text: 'Exames que ajudam a avaliar o funcionamento do sistema responsável pelo equilíbrio. Podem ser utilizados testes como a videonistagmoscopia infravermelha, o vHIT e o exame de posturografia para ajudar a identificar alterações relacionadas à tontura, vertigem e desequilíbrio.', className: 'balance' },
-  { icon: 'throat', title: 'Cirurgia de amígdalas e adenoide com Coblation', text: 'Cirurgia indicada em casos de aumento das amígdalas ou da adenoide, que podem causar dificuldade para respirar, roncos, infecções frequentes ou outros problemas. Em casos selecionados, pode ser utilizada a tecnologia Coblation durante o procedimento.', className: 'throat' },
+  { icon: 'throat', title: 'Cirurgia de amígdalas e adenoide com Coblation®', text: 'Cirurgia indicada em casos de aumento das amígdalas ou da adenoide, que podem causar dificuldade para respirar, roncos, infecções frequentes ou outros problemas. Em casos selecionados, pode ser utilizada a tecnologia Coblation® durante o procedimento.', className: 'throat' },
   { icon: 'surgery-tool', title: 'Cirurgia otorrinolaringológica', text: 'Avaliação de problemas do nariz, seios da face, garganta e ouvido que podem precisar de tratamento cirúrgico. Cada caso é analisado individualmente para definir se a cirurgia é necessária e qual é a opção mais adequada.', className: 'kids' },
   { icon: 'ear-nose-throat', title: 'Otorrinolaringologia geral', text: 'Atendimento para adultos e crianças com problemas como rinite, sinusite, nariz entupido, infecções de ouvido, dores ou alterações na garganta e outras condições relacionadas ao ouvido, nariz e garganta.', className: 'surgery' },
 ] as const
@@ -29,7 +29,7 @@ const examChapters = [
     imageAlt: 'Dr. Evaldo realiza avaliação otoneurológica em paciente em São Luís',
     imagePosition: '48% center',
     items: [
-      ['Videonistagmoscopia infravermelha', 'Exame que observa os movimentos dos olhos para ajudar a identificar alterações relacionadas à tontura e à vertigem. Ele permite avaliar como o sistema responsável pelo equilíbrio está funcionando.'],
+      ['Videonistagmoscopia Infravermelha', 'Exame que observa os movimentos dos olhos para ajudar a identificar alterações relacionadas à tontura e à vertigem. Ele permite avaliar como o sistema responsável pelo equilíbrio está funcionando.'],
       ['VHIT – Video Head Impulse Test', 'Exame que avalia como os olhos e o ouvido interno trabalham juntos para manter a visão estável durante os movimentos da cabeça. Ele ajuda a identificar alterações no sistema responsável pelo equilíbrio.'],
     ],
   },
@@ -54,8 +54,8 @@ const examChapters = [
     imagePosition: '58% 30%',
     items: [
       ['Posturografia', 'Exame que avalia como o seu corpo mantém o equilíbrio em diferentes situações. Ele ajuda a identificar dificuldades de equilíbrio e também pode auxiliar na escolha do tratamento ou da reabilitação mais adequada.'],
-      ['Manobras de reposicionamento para vertigem posicional (VPPB)', 'São movimentos realizados pelo médico para tratar um tipo específico de vertigem que costuma surgir ao mudar a posição da cabeça, como ao deitar, levantar ou virar na cama. As manobras ajudam a reposicionar pequenas partículas dentro do ouvido que podem estar causando a tontura.'],
-      ['Aplicação intratimpânica de medicamentos', 'Procedimento em que o medicamento é aplicado diretamente no ouvido através do tímpano, permitindo que ele atue mais próximo da região que precisa ser tratada. Pode ser indicado em situações específicas, como alguns casos de perda auditiva súbita, doença de Ménière e outras alterações do ouvido interno.'],
+      ['Manobras de Reposicionamento para Vertigem Posicional (VPPB)', 'São movimentos realizados pelo médico para tratar um tipo específico de vertigem que costuma surgir ao mudar a posição da cabeça, como ao deitar, levantar ou virar na cama. As manobras ajudam a reposicionar pequenas partículas dentro do ouvido que podem estar causando a tontura.'],
+      ['Aplicação Intratimpânica de Medicamentos', 'Procedimento em que o medicamento é aplicado diretamente no ouvido através do tímpano, permitindo que ele atue mais próximo da região que precisa ser tratada. Pode ser indicado em situações específicas, como alguns casos de perda auditiva súbita, doença de Ménière e outras alterações do ouvido interno.'],
     ],
   },
 ] as const
@@ -63,7 +63,7 @@ const examChapters = [
 const coblationChapters = [
   {
     eyebrow: 'Tecnologia para amígdalas e adenoide',
-    title: 'Coblation®: tecnologia moderna para cirurgias de amígdalas e adenoide',
+    title: 'Coblation®: Tecnologia moderna para cirurgias de Amígdalas e Adenoide',
     intro: [
       'A Coblation® é uma tecnologia utilizada em procedimentos de otorrinolaringologia para tratar tecidos das amígdalas e da adenoide. O método utiliza energia de radiofrequência combinada com uma solução salina, formando um campo de plasma capaz de atuar de maneira controlada na área tratada.',
       'Por trabalhar em temperaturas mais baixas do que algumas técnicas convencionais, a Coblation® foi desenvolvida para proporcionar maior precisão e reduzir a propagação de calor nos tecidos próximos. Ela pode ser utilizada em procedimentos como amigdalectomia, adenoidectomia e adenotonsilectomia, conforme a indicação médica.',
@@ -93,29 +93,29 @@ const surgeryChapters = [
     imagePosition: '50% 38%',
     items: [
       ['Septoplastia', 'Cirurgia realizada para corrigir o desvio do septo, que é a estrutura que separa os dois lados do nariz. O objetivo é melhorar a passagem do ar e facilitar a respiração pelo nariz.'],
-      ['Cirurgia dos cornetos nasais', 'Cirurgia indicada quando os cornetos, estruturas localizadas dentro do nariz, estão aumentados e dificultam a passagem do ar. O procedimento busca reduzir o tamanho dessas estruturas para melhorar a respiração nasal.'],
+      ['Cirurgia dos Cornetos Nasais', 'Cirurgia indicada quando os cornetos, estruturas localizadas dentro do nariz, estão aumentados e dificultam a passagem do ar. O procedimento busca reduzir o tamanho dessas estruturas para melhorar a respiração nasal.'],
     ],
   },
   {
     eyebrow: 'Nariz e seios da face',
-    title: 'Cirurgia endoscópica nasossinusal',
+    title: 'Cirurgia Endoscópica Nasossinusal',
     intro: [],
     image: '/images/procedimentos-cirurgia-otorrino-sao-luis.webp',
     imageAlt: 'Dr. Evaldo durante procedimento cirúrgico otorrinolaringológico',
     imagePosition: '50% 20%',
     items: [
-      ['Cirurgia endoscópica nasossinusal', 'Cirurgia realizada por dentro do nariz, com o auxílio de uma pequena câmera, sem necessidade de cortes externos na maioria dos casos. Pode ser indicada para tratar problemas como sinusite crônica, pólipos nasais e outras alterações que causam obstrução ou inflamação persistente.'],
+      ['Cirurgia Endoscópica Nasossinusal', 'Cirurgia realizada por dentro do nariz, com o auxílio de uma pequena câmera, sem necessidade de cortes externos na maioria dos casos. Pode ser indicada para tratar problemas como sinusite crônica, pólipos nasais e outras alterações que causam obstrução ou inflamação persistente.'],
     ],
   },
   {
     eyebrow: 'Garganta, amígdalas e voz',
-    title: 'Cirurgias da garganta e da laringe',
+    title: 'Cirurgias da Garganta e da Laringe',
     intro: [],
     image: '/images/procedimentos-cirurgia-otorrinolaringologica-maranhao.webp',
     imageAlt: 'Procedimento cirúrgico de otorrinolaringologia realizado pelo Dr. Evaldo',
     imagePosition: '50% 34%',
     items: [
-      ['Microcirurgia da laringe', 'Cirurgia realizada para avaliar e tratar alterações na laringe e nas cordas vocais, como pólipos, cistos e outras lesões. O procedimento busca remover ou tratar essas alterações preservando ao máximo a voz e o funcionamento das cordas vocais.'],
+      ['Microcirurgia da Laringe', 'Cirurgia realizada para avaliar e tratar alterações na laringe e nas cordas vocais, como pólipos, cistos e outras lesões. O procedimento busca remover ou tratar essas alterações preservando ao máximo a voz e o funcionamento das cordas vocais.'],
     ],
   },
 ] as const

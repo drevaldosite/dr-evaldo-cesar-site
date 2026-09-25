@@ -16,7 +16,14 @@ img { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button { font: inherit; }
-p { color: var(--muted); line-height: 1.7; }
+p {
+  color: var(--muted);
+  line-height: 1.7;
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
 h1, h2, h3, p { margin-top: 0; }
 h1, h2, h3 { color: var(--navy); letter-spacing: -.04em; }
 .container { width: min(calc(100% - 32px), var(--container)); margin-inline: auto; }
@@ -137,6 +144,8 @@ main { display: flex; flex-direction: column; }
 .procedure-narrative__chapter::before { content: none; }
 .procedure-narrative__chapter .eyebrow { margin-bottom: 12px; }
 .procedure-narrative__chapter h2, .procedure-narrative__chapter h3 { max-width: 22ch; margin: 0 0 14px; font-size: clamp(1.65rem, 6.6vw, 2.25rem); line-height: 1.12; }
+.procedure-narrative--exams .procedure-narrative__chapter h2,
+.procedure-narrative--surgeries .procedure-narrative__chapter h2 { text-align: justify; text-justify: inter-word; hyphens: auto; }
 .procedure-narrative__intro { max-width: 58ch; margin-bottom: 24px; font-size: 1rem; line-height: 1.65; }
 .procedure-narrative__intro p { margin: 0 0 1em; }
 .procedure-narrative__intro p:last-child { margin-bottom: 0; }
@@ -144,7 +153,7 @@ main { display: flex; flex-direction: column; }
 .procedure-narrative__items { max-width: 620px; margin: 0; padding: 0; list-style: none; border-top: 1px solid rgba(0,27,98,.1); }
 .procedure-narrative__items li { display: grid; gap: 6px; padding: 16px 0; border-bottom: 1px solid rgba(0,27,98,.1); }
 .procedure-narrative__items strong { color: var(--navy); font-size: .98rem; line-height: 1.45; }
-.procedure-narrative__items span { color: var(--muted); font-size: .94rem; line-height: 1.65; }
+.procedure-narrative__items span { color: var(--muted); font-size: .94rem; line-height: 1.65; text-align: justify; text-justify: inter-word; hyphens: auto; overflow-wrap: break-word; }
 .procedure-narrative__footer { display: grid; gap: 16px; margin-top: 20px; }
 .procedure-narrative__footer .button { width: 100%; }
 
@@ -230,7 +239,7 @@ main { display: flex; flex-direction: column; }
 .instagram-card__pending::before { width: 220px; height: 220px; right: -92px; top: -62px; }
 .instagram-card__pending::after { width: 150px; height: 150px; right: -48px; top: -26px; }
 .instagram-card__pending > span:not(.instagram-card__play) { font-size: 1.15rem; font-weight: 800; letter-spacing: -.025em; }
-.instagram-card__pending small { max-width: 23ch; margin-top: 7px; color: #ccecf6; line-height: 1.45; }
+.instagram-card__pending small { max-width: 23ch; margin-top: 7px; color: #ccecf6; line-height: 1.45; text-align: justify; text-justify: inter-word; hyphens: auto; overflow-wrap: break-word; }
 .instagram-card__play { width: 52px; height: 52px; display: grid; place-items: center; margin-bottom: 18px; color: var(--navy); background: #fff; border-radius: 50%; box-shadow: 0 12px 26px rgba(0,0,0,.16); }
 .instagram-card__play svg { width: 21px; height: 21px; margin-left: 3px; }
 .instagram-card__body { flex: 1; min-height: 236px; display: flex; flex-direction: column; padding: 22px 20px 20px; }
@@ -247,7 +256,7 @@ main { display: flex; flex-direction: column; }
 .location-logo { width: min(100%, 190px); height: 58px; margin: -4px 0 18px; object-fit: contain; object-position: left center; }
 .location-card h3 { margin: 0; font-size: clamp(1.3rem, 3.4vw, 1.65rem); line-height: 1.15; }
 .location-subtitle { margin: 7px 0 0; color: var(--vivid); font-size: .875rem; font-weight: 800; }
-.location-card address { margin-top: 18px; color: var(--muted); font-size: .94rem; font-style: normal; line-height: 1.65; white-space: pre-line; }
+.location-card address { margin-top: 18px; color: var(--muted); font-size: .94rem; font-style: normal; line-height: 1.65; white-space: pre-line; text-align: justify; text-justify: inter-word; hyphens: auto; overflow-wrap: break-word; }
 .location-reference { margin: 12px 0 0; color: #344866; font-size: .875rem; font-weight: 700; }
 .location-actions { display: grid; gap: 10px; margin-top: auto; padding-top: 25px; }
 .location-actions .button { width: 100%; }
@@ -268,7 +277,7 @@ main { display: flex; flex-direction: column; }
 .patient-review-header { display: grid; grid-template-columns: 34px minmax(0, 1fr); align-items: center; gap: 10px; }
 .review-avatar { width: 34px; height: 34px; display: grid; place-items: center; color: #006f63; background: #d9f2ed; border-radius: 50%; font-size: .78rem; font-weight: 800; }
 .patient-review h3 { margin: 0; font-size: .9rem; letter-spacing: -.02em; }
-.patient-review blockquote { margin: 20px 0; color: #263752; font-size: .91rem; line-height: 1.7; }
+.patient-review blockquote { margin: 20px 0; color: #263752; font-size: .91rem; line-height: 1.7; text-align: justify; text-justify: inter-word; hyphens: auto; overflow-wrap: break-word; }
 .patient-review footer { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 9px 14px; margin-top: auto; padding-top: 14px; border-top: 1px solid var(--line); color: #68758a; font-size: .84rem; }
 .patient-review footer a { display: inline-flex; align-items: center; gap: 5px; color: var(--vivid); font-weight: 800; }
 .reviews-carousel-controls, .instagram-carousel-controls { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 4px; }
@@ -338,6 +347,7 @@ main { display: flex; flex-direction: column; }
 @keyframes float { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
 
 @media (max-width: 899px) {
+  .specialty-card.throat p { text-align: left; }
   .procedure-narrative.is-enhanced {
     --narrative-gap: 16px;
     --narrative-photo-size: clamp(216px, 66vw, 248px);
@@ -587,7 +597,7 @@ main { display: flex; flex-direction: column; }
   .footer-grid a, .placeholder-link { min-height: 0; font-size: .79rem; }
   .footer-bottom p { font-size: .67rem; }
   .footer-bottom { grid-template-columns: 1fr 1fr; }
-  .footer-bottom p:last-child { text-align: right; }
+  .footer-bottom p:last-child { text-align: justify; }
 }
 
 @media (min-width: 900px) and (max-width: 1149px) {
