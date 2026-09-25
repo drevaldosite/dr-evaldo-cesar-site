@@ -41,7 +41,7 @@ const examChapters = [
     imageAlt: 'Dr. Evaldo realiza videoendoscopia nasossinusal durante atendimento',
     imagePosition: '75% 32%',
     items: [
-      ['Videoendoscopia nasossinusal', 'Exame realizado com uma pequena câmera que permite visualizar por dentro do nariz e avaliar regiões que não podem ser vistas facilmente em um exame comum. Ajuda a investigar problemas como obstrução nasal, sinusite e outras alterações nasais.'],
+      ['Videoendoscopia Nasossinusal', 'Exame realizado com uma pequena câmera que permite visualizar por dentro do nariz e avaliar regiões que não podem ser vistas facilmente em um exame comum. Ajuda a investigar problemas como obstrução nasal, sinusite e outras alterações nasais.'],
       ['Videolaringoscopia', 'Exame realizado com uma pequena câmera para observar a garganta, a laringe e as cordas vocais. É utilizado para investigar sintomas como rouquidão, alterações na voz, tosse persistente, engasgos e desconfortos na garganta.'],
     ],
   },
