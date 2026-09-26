@@ -347,6 +347,7 @@ main { display: flex; flex-direction: column; }
 @keyframes float { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
 
 @media (max-width: 899px) {
+  .specialty-card { padding-inline: 20px; }
   .specialty-card.throat p { text-align: left; }
   .procedure-narrative.is-enhanced {
     --narrative-gap: 16px;
@@ -429,6 +430,8 @@ main { display: flex; flex-direction: column; }
 }
 
 @media (max-width: 599px) {
+  .specialty-card { padding-inline: 12px; }
+  .specialty-card p { font-size: .87rem; }
   #procedimentos.procedure-narrative {
     padding: 48px 0 64px;
     background:
