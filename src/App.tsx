@@ -51,7 +51,7 @@ const specialties = [
 const examChapters = [
   {
     eyebrow: 'Nariz, garganta e voz',
-    title: 'Exames otorrinolaringológicos',
+    title: 'Exames Otorrinolaringológicos',
     intro: [],
     image: '/images/procedimentos-videoendoscopia-nasossinusal-sao-luis.webp',
     imageAlt: 'Dr. Evaldo realiza videoendoscopia nasossinusal durante atendimento',
@@ -63,7 +63,7 @@ const examChapters = [
   },
   {
     eyebrow: 'Equilíbrio e otoneurologia',
-    title: 'Exames otoneurológicos',
+    title: 'Exames Otoneurológicos',
     intro: [],
     image: '/images/procedimentos-avaliacao-otoneurologica-sao-luis.webp',
     imageAlt: 'Dr. Evaldo realiza avaliação otoneurológica em paciente em São Luís',
@@ -76,7 +76,7 @@ const examChapters = [
   },
   {
     eyebrow: 'Tratamentos no consultório',
-    title: 'Procedimentos ambulatoriais',
+    title: 'Procedimentos Ambulatoriais',
     intro: [],
     image: '/images/procedimentos-manobra-epley-vppb-ampliada.webp',
     imageAlt: 'Dr. Evaldo realiza manobra de Epley para vertigem posicional em paciente',
@@ -91,7 +91,7 @@ const examChapters = [
 const coblationChapters = [
   {
     eyebrow: 'Tecnologia para amígdalas e adenoide',
-    title: 'Coblation®: Tecnologia moderna para cirurgias de Amígdalas e Adenoide',
+    title: 'Coblation®: Tecnologia Moderna para Cirurgias de Amígdalas e Adenoide',
     intro: [
       'A Coblation® é uma tecnologia utilizada em procedimentos de otorrinolaringologia para tratar tecidos das amígdalas e da adenoide. O método utiliza energia de radiofrequência combinada com uma solução salina, formando um campo de plasma capaz de atuar de maneira controlada na área tratada.',
       'Por trabalhar em temperaturas mais baixas do que algumas técnicas convencionais, a Coblation® foi desenvolvida para proporcionar maior precisão e reduzir a propagação de calor nos tecidos próximos. Ela pode ser utilizada em procedimentos como amigdalectomia, adenoidectomia e adenotonsilectomia, conforme a indicação médica.',
@@ -114,7 +114,7 @@ const coblationChapters = [
 const surgeryChapters = [
   {
     eyebrow: 'Respiração nasal',
-    title: 'Cirurgias otorrinolaringológicas',
+    title: 'Cirurgias Otorrinolaringológicas',
     intro: [],
     image: '/images/procedimentos-ambiente-cirurgico.webp',
     imageAlt: 'Dr. Evaldo realiza cirurgia em ambiente cirúrgico',
