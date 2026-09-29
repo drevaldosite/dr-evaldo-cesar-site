@@ -50,20 +50,8 @@ const specialties = [
 
 const examChapters = [
   {
-    eyebrow: 'Equilíbrio e otoneurologia',
-    title: 'Exames otorrinolaringológicos',
-    intro: [],
-    image: '/images/procedimentos-avaliacao-otoneurologica-sao-luis.webp',
-    imageAlt: 'Dr. Evaldo realiza avaliação otoneurológica em paciente em São Luís',
-    imagePosition: '48% center',
-    items: [
-      ['Videonistagmoscopia Infravermelha', 'Exame que observa os movimentos dos olhos para ajudar a identificar alterações relacionadas à tontura e à vertigem. Ele permite avaliar como o sistema responsável pelo equilíbrio está funcionando.'],
-      ['VHIT – Video Head Impulse Test', 'Exame que avalia como os olhos e o ouvido interno trabalham juntos para manter a visão estável durante os movimentos da cabeça. Ele ajuda a identificar alterações no sistema responsável pelo equilíbrio.'],
-    ],
-  },
-  {
     eyebrow: 'Nariz, garganta e voz',
-    title: 'Exames com imagem para uma avaliação detalhada',
+    title: 'Exames otorrinolaringológicos',
     intro: [],
     image: '/images/procedimentos-videoendoscopia-nasossinusal-sao-luis.webp',
     imageAlt: 'Dr. Evaldo realiza videoendoscopia nasossinusal durante atendimento',
@@ -74,14 +62,26 @@ const examChapters = [
     ],
   },
   {
-    eyebrow: 'Tratamentos no consultório',
-    title: 'Procedimentos para vertigem e alterações do ouvido interno',
+    eyebrow: 'Equilíbrio e otoneurologia',
+    title: 'Exames otoneurológicos',
     intro: [],
-    image: '/images/procedimentos-avaliacao-equilibrio-tv-52pol.webp',
-    imageAlt: 'Dr. Evaldo orienta paciente durante avaliação do equilíbrio com plataforma no consultório',
-    imagePosition: '58% 30%',
+    image: '/images/procedimentos-avaliacao-otoneurologica-sao-luis.webp',
+    imageAlt: 'Dr. Evaldo realiza avaliação otoneurológica em paciente em São Luís',
+    imagePosition: '48% center',
     items: [
-      ['Posturografia', 'Exame que avalia como o seu corpo mantém o equilíbrio em diferentes situações. Ele ajuda a identificar dificuldades de equilíbrio e também pode auxiliar na escolha do tratamento ou da reabilitação mais adequada.'],
+      ['Videonistagmoscopia Infravermelha', 'Exame que observa os movimentos dos olhos para ajudar a identificar alterações relacionadas à tontura e à vertigem. Ele permite avaliar como o sistema responsável pelo equilíbrio está funcionando.'],
+      ['VHIT – Video Head Impulse Test', 'Exame que avalia como os olhos e o ouvido interno trabalham juntos para manter a visão estável durante os movimentos da cabeça. Ele ajuda a identificar alterações no sistema responsável pelo equilíbrio.'],
+      ['Posturografia Computadorizada', 'Exame que avalia como o seu corpo mantém o equilíbrio em diferentes situações. Ele ajuda a identificar dificuldades de equilíbrio e também pode auxiliar na escolha do tratamento ou da reabilitação mais adequada.'],
+    ],
+  },
+  {
+    eyebrow: 'Tratamentos no consultório',
+    title: 'Procedimentos ambulatoriais',
+    intro: [],
+    image: '/images/procedimentos-manobra-epley-vppb-ampliada.webp',
+    imageAlt: 'Dr. Evaldo realiza manobra de Epley para vertigem posicional em paciente',
+    imagePosition: '60% center',
+    items: [
       ['Manobras de Reposicionamento para Vertigem Posicional (VPPB)', 'São movimentos realizados pelo médico para tratar um tipo específico de vertigem que costuma surgir ao mudar a posição da cabeça, como ao deitar, levantar ou virar na cama. As manobras ajudam a reposicionar pequenas partículas dentro do ouvido que podem estar causando a tontura.'],
       ['Aplicação Intratimpânica de Medicamentos', 'Procedimento em que o medicamento é aplicado diretamente no ouvido através do tímpano, permitindo que ele atue mais próximo da região que precisa ser tratada. Pode ser indicado em situações específicas, como alguns casos de perda auditiva súbita, doença de Ménière e outras alterações do ouvido interno.'],
     ],
@@ -120,19 +120,20 @@ const surgeryChapters = [
     imageAlt: 'Dr. Evaldo realiza cirurgia em ambiente cirúrgico',
     imagePosition: '50% 38%',
     items: [
-      ['Septoplastia', 'Cirurgia realizada para corrigir o desvio do septo, que é a estrutura que separa os dois lados do nariz. O objetivo é melhorar a passagem do ar e facilitar a respiração pelo nariz.'],
-      ['Cirurgia dos Cornetos Nasais', 'Cirurgia indicada quando os cornetos, estruturas localizadas dentro do nariz, estão aumentados e dificultam a passagem do ar. O procedimento busca reduzir o tamanho dessas estruturas para melhorar a respiração nasal.'],
+      ['Septoplastia e Cirurgia dos Cornetos Nasais', 'A septoplastia e a cirurgia dos cornetos nasais são procedimentos que podem melhorar a respiração pelo nariz. A septoplastia corrige o desvio do septo, estrutura que separa os dois lados do nariz. Já a cirurgia dos cornetos nasais reduz estruturas aumentadas no interior do nariz que dificultam a passagem do ar.'],
+      ['Cirurgia Endoscópica Nasossinusal', 'Cirurgia realizada por dentro do nariz, com o auxílio de uma pequena câmera, sem necessidade de cortes externos na maioria dos casos. Pode ser indicada para tratar problemas como sinusite crônica, pólipos nasais e outras alterações que causam obstrução ou inflamação persistente.'],
     ],
   },
   {
-    eyebrow: 'Nariz e seios da face',
-    title: 'Cirurgia Endoscópica Nasossinusal',
-    intro: [],
-    image: '/images/procedimentos-cirurgia-otorrino-sao-luis.webp',
-    imageAlt: 'Dr. Evaldo durante procedimento cirúrgico otorrinolaringológico',
-    imagePosition: '50% 20%',
+    eyebrow: 'Ouvido médio',
+    title: 'Timpanotomia e Timpanoplastia',
+    intro: ['Cirurgias realizadas para tratar diferentes alterações do ouvido médio e da membrana do tímpano.'],
+    image: '/images/procedimentos-timpanotomia-timpanoplastia-sao-luis.webp',
+    imageAlt: 'Dr. Evaldo realiza cirurgia otológica com auxílio de microscópio',
+    imagePosition: '70% center',
     items: [
-      ['Cirurgia Endoscópica Nasossinusal', 'Cirurgia realizada por dentro do nariz, com o auxílio de uma pequena câmera, sem necessidade de cortes externos na maioria dos casos. Pode ser indicada para tratar problemas como sinusite crônica, pólipos nasais e outras alterações que causam obstrução ou inflamação persistente.'],
+      ['Timpanotomia com colocação de tubos de ventilação', 'Procedimento que ajuda a melhorar a ventilação do ouvido médio e a drenagem de líquidos acumulados atrás do tímpano. Pode ser utilizado principalmente em casos de otites recorrentes ou de persistência de secreção no ouvido.'],
+      ['Timpanoplastia', 'Cirurgia indicada para reparar perfurações ou lesões da membrana do tímpano, buscando restaurar sua integridade, proteger o ouvido médio e contribuir para a melhora da audição.'],
     ],
   },
   {
@@ -313,20 +314,6 @@ Na prática, o que mais aparece são outras causas, como:
     page: '/conteudos/labirintite-e-tontura.html',
     videoAriaLabel: 'Vídeo explicando que nem toda tontura é labirintite',
     url: 'https://www.instagram.com/reel/DVw1LcIgG8p/?utm_source=ig_web_copy_link&stkn=NTc4MTIwNjQ2YQ==',
-  },
-  {
-    title: 'Estação chuvosa e rinite vasomotora',
-    description: `🌧️ Chegou a estação chuvosa… e com ela, as crises de rinite vasomotora!
-
-Nariz entupido, escorrendo, espirros e aquela sensação constante de congestão — sem alergia envolvida.
-Isso é rinite vasomotora.
-
-👉 Diferente da rinite alérgica, aqui o problema é a hiper-reatividade dos vasos do nariz.
-Mudanças bruscas de temperatura, aumento da umidade, mofo, cheiros fortes e até o ar-condicionado viram gatilhos clássicos — exatamente o combo da época das chuvas.`,
-    url: 'https://www.instagram.com/p/DUBeG0vAO5E/',
-    image: '/instagram/rinite-estacao-chuvosa.webp',
-    imageAlt: 'Publicação do Dr. Evaldo sobre rinite vasomotora na estação chuvosa',
-    page: '/conteudos/rinite-vasomotora.html',
   },
   {
     title: '“Labirintite”? Você tem certeza?',

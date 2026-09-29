@@ -104,9 +104,9 @@ main { display: flex; flex-direction: column; }
 .hero-trust { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 22px; color: #364761; font-size: .75rem; font-weight: 700; }
 .hero-trust span { display: inline-flex; align-items: center; gap: 6px; }
 .hero-trust svg { color: var(--cyan); }
-.hero-certifications { width: min(100%, 390px); display: grid; grid-template-columns: 70px minmax(0, 1fr); align-items: center; gap: 14px; margin: 16px 0 0; padding: 10px 14px; border: 1px solid rgba(0,61,145,.1); border-radius: 18px; background: #fff; box-shadow: 0 12px 28px rgba(0,27,98,.07); }
+.hero-certifications { width: min(100%, 390px); display: grid; grid-template-columns: 80px minmax(0, 1fr); align-items: center; gap: 14px; margin: 16px 0 0; padding: 10px 14px; border: 1px solid rgba(0,61,145,.1); border-radius: 18px; background: #fff; box-shadow: 0 12px 28px rgba(0,27,98,.07); }
 .hero-certifications img { display: block; object-fit: contain; }
-.hero-residency-seal { width: 70px; height: 70px; }
+.hero-residency-seal { width: 80px; height: 80px; }
 .hero-aborl-seal { width: min(100%, 240px); height: auto; }
 .hero-visual { order: 5; position: relative; width: min(100%, 430px); margin: 24px auto 0; padding: 0; }
 .portrait-shape { height: clamp(360px, 112vw, 430px); position: relative; overflow: hidden; border-radius: 28px 72px 28px 28px; background: linear-gradient(155deg, #e1eef7, #a6daec); box-shadow: 0 22px 48px rgba(0,27,98,.15); }
@@ -545,6 +545,8 @@ main { display: flex; flex-direction: column; }
   .hero-grid { display: grid; grid-template-columns: .98fr 1.02fr; align-items: center; gap: 40px; }
   .hero-copy { display: block; text-align: left; padding-top: 20px; }
   .hero-doctor { margin-top: 18px; }
+  .hero-doctor strong { font-size: 1.18rem; }
+  .hero-doctor span { font-size: .95rem; }
   .hero-copy h1 { font-size: clamp(3.45rem, 5.2vw, 4.75rem); }
   .hero-copy h1 em { display: block; }
   .hero-copy > p { margin-inline: 0; font-size: 1.06rem; }
@@ -552,6 +554,8 @@ main { display: flex; flex-direction: column; }
   .hero-actions .button { width: auto; }
   .hero-location-link { min-height: 52px; padding: 0 20px; border: 1px solid rgba(0,27,98,.14); border-radius: 14px; background: rgba(255,255,255,.75); }
   .hero-trust { display: flex; }
+  .hero-certifications { width: min(100%, 450px); grid-template-columns: 110px minmax(0, 1fr); }
+  .hero-residency-seal { width: 110px; height: 110px; }
   .hero-certifications { margin-inline: 0; }
   .hero-actions .button { min-width: auto; }
   .hero-visual { width: min(100%, 520px); margin-top: 0; padding: 15px 6px 0; }
@@ -585,6 +589,8 @@ main { display: flex; flex-direction: column; }
   .procedure-narrative__layout { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); align-items: start; gap: clamp(48px, 6vw, 88px); }
   .procedure-narrative__stage { position: sticky; top: 30px; align-self: start; }
   .procedure-narrative__figure { aspect-ratio: 4 / 5; }
+  /* Give the first surgery photo a little more upward framing on desktop. */
+  .procedure-narrative--surgeries .procedure-narrative__stage picture:first-of-type img { object-position: 50% 45% !important; }
   .procedure-narrative.is-enhanced .procedure-narrative__figure { clip-path: inset(calc((1 - var(--narrative-reveal)) * 7%) calc((1 - var(--narrative-reveal)) * 5.5%) round calc(13px + (1 - var(--narrative-reveal)) * 15px)); }
   .procedure-narrative__chapter { min-height: 64svh; display: flex; flex-direction: column; justify-content: center; padding-bottom: 0; }
   .procedure-narrative__chapter h2, .procedure-narrative__chapter h3 { max-width: 24ch; font-size: clamp(2.15rem, 3.6vw, 3.2rem); }
