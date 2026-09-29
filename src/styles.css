@@ -28,10 +28,13 @@ p,
 .patient-review blockquote {
   text-align: justify;
   text-align-last: left;
+  word-spacing: -.05em;
   text-justify: inter-word;
   -webkit-hyphens: auto;
   hyphens: auto;
-  hyphenate-limit-chars: 6 3 2;
+  -webkit-hyphenate-limit-before: 2;
+  -webkit-hyphenate-limit-after: 2;
+  hyphenate-limit-chars: 4 2 2;
   text-wrap: pretty;
   overflow-wrap: break-word;
 }
@@ -121,7 +124,7 @@ main { display: flex; flex-direction: column; }
 .scroll-cue { display: none; }
 .specialties { order: 2; }
 .specialty-grid { display: grid; gap: 18px; align-items: stretch; }
-.specialty-card { position: relative; overflow: hidden; display: flex; flex-direction: column; min-height: 394px; padding: 25px 32px 28px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 28px rgba(0,27,98,.06); transition: transform .3s, box-shadow .3s, border-color .3s; }
+.specialty-card { position: relative; overflow: hidden; display: flex; flex-direction: column; min-height: 394px; padding: 25px 24px 28px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 28px rgba(0,27,98,.06); transition: transform .3s, box-shadow .3s, border-color .3s; }
 .specialty-card::before { content: ''; position: absolute; width: 154px; height: 154px; right: -54px; top: -58px; border-radius: 50%; background: #eff9fd; }
 .specialty-card:hover { transform: translateY(-7px); border-color: rgba(0,146,199,.3); box-shadow: var(--shadow); }
 .specialty-icon { width: 58px; height: 58px; display: grid; place-items: center; color: var(--vivid); border-radius: 18px; background: linear-gradient(145deg, #eaf8fd, #ddecff); }
@@ -325,7 +328,7 @@ main { display: flex; flex-direction: column; }
 .contact-copy, .contact-info { position: relative; z-index: 2; }
 .contact-copy h2 { margin: 14px 0 12px; color: #fff; font-size: clamp(1.75rem, 7vw, 2.15rem); line-height: 1.12; }
 .contact-copy .button { width: 100%; }
-.contact-copy p { color: #cbd8ec; }
+.contact-copy p { color: #cbd8ec; max-width: 55ch; }
 .contact-info { display: grid; gap: 12px; }
 .contact-info > div, .contact-info > a { display: flex; align-items: center; gap: 12px; padding: 14px; border: 1px solid rgba(255,255,255,.12); border-radius: 15px; background: rgba(255,255,255,.07); }
 .contact-info > a { transition: background .25s, border-color .25s, transform .25s; }
@@ -365,7 +368,6 @@ main { display: flex; flex-direction: column; }
 @keyframes float { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
 
 @media (max-width: 899px) {
-  .specialty-card.throat p { text-align: left; }
   .procedure-narrative.is-enhanced {
     --narrative-gap: 16px;
     --narrative-photo-size: clamp(216px, 66vw, 248px);
