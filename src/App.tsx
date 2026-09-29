@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import {
   ArrowRight, CalendarCheck, Check, ChevronDown, ChevronLeft, ChevronRight,
   Ear, HeartHandshake, MapPin, Menu, MessageCircle,
-  PhoneCall, Pause, Play, ShieldCheck, Sparkles, X,
+  PhoneCall, Play, ShieldCheck, Sparkles, X,
 } from 'lucide-react'
 import { contactText, siteConfig, trackEvent, whatsappUrl } from './config'
 import { tuneJustification } from './justifyTune'
@@ -438,12 +438,15 @@ function useVideoNetworkTier() {
 
 const videoPreloadMargin = (tier: VideoNetworkTier) => tier === 'fast' ? '1000px 0px' : tier === 'medium' ? '650px 0px' : '0px'
 
-function InstagramVideo({ src, liteSrc, poster, ariaLabel, tabIndex, priority, sectionNear, networkTier }: { src: string; liteSrc: string; poster: string; ariaLabel?: string; tabIndex?: number; priority: VideoPriority; sectionNear: boolean; networkTier: VideoNetworkTier }) {
+function InstagramVideo({ src, liteSrc, poster, ariaLabel, tabIndex, priority, sectionNear, networkTier, playbackId, activePlaybackId, onPlaybackStart, onPlaybackPause, autoplay = true }: { src: string; liteSrc: string; poster: string; ariaLabel?: string; tabIndex?: number; priority: VideoPriority; sectionNear: boolean; networkTier: VideoNetworkTier; playbackId: string; activePlaybackId: string | null; onPlaybackStart: (playbackId: string) => void; onPlaybackPause: (playbackId: string) => void; autoplay?: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const activePlaybackIdRef = useRef(activePlaybackId)
+  activePlaybackIdRef.current = activePlaybackId
   const playTimerRef = useRef<number | null>(null)
   const prepareTimerRef = useRef<number | null>(null)
   const manuallyPausedRef = useRef(false)
   const playAfterLoadRef = useRef(false)
+  const hasStartedPlaybackRef = useRef(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [manuallyRequested, setManuallyRequested] = useState(false)
   const [showPoster, setShowPoster] = useState(true)
@@ -455,12 +458,38 @@ function InstagramVideo({ src, liteSrc, poster, ariaLabel, tabIndex, priority, s
   const requestSrc = retryKey === 0 ? selectedSrc : `${selectedSrc}${selectedSrc.includes('?') ? '&' : '?'}retry=${retryKey}`
   const preload = manuallyRequested ? 'auto' : priority === 'active' && networkTier === 'fast' ? 'auto' : mayPreload ? 'metadata' : 'none'
 
+  const resetToPoster = useCallback(() => {
+    const video = videoRef.current
+    playAfterLoadRef.current = false
+    hasStartedPlaybackRef.current = false
+    if (playTimerRef.current !== null) {
+      window.clearTimeout(playTimerRef.current)
+      playTimerRef.current = null
+    }
+    if (prepareTimerRef.current !== null) {
+      window.clearTimeout(prepareTimerRef.current)
+      prepareTimerRef.current = null
+    }
+    if (video) {
+      if (!video.paused) video.pause()
+      if (video.readyState > 0) video.currentTime = 0
+    }
+    setIsPlaying(false)
+    setShowPoster(true)
+    setStatus('idle')
+  }, [])
+
+  useEffect(() => {
+    if (activePlaybackId === playbackId) return
+    resetToPoster()
+  }, [activePlaybackId, playbackId, resetToPoster])
+
   useEffect(() => {
     if (priority !== 'none') return
+    resetToPoster()
+    onPlaybackPause(playbackId)
     setManuallyRequested(false)
-    setStatus('idle')
-    setShowPoster(true)
-  }, [priority])
+  }, [priority, onPlaybackPause, playbackId, resetToPoster])
 
   useEffect(() => {
     const video = videoRef.current
@@ -491,21 +520,18 @@ function InstagramVideo({ src, liteSrc, poster, ariaLabel, tabIndex, priority, s
 
     const schedulePlayback = () => {
       clearPlayTimer()
-      if (!video || !hasSource || networkTier === 'constrained' || !mobileScreen.matches || !isVisible || document.hidden || reducedMotion.matches || manuallyPausedRef.current) return
+      if (!autoplay || !video || !hasSource || networkTier === 'constrained' || !mobileScreen.matches || !isVisible || document.hidden || reducedMotion.matches || manuallyPausedRef.current) return
       playTimerRef.current = window.setTimeout(() => {
-        if (!mobileScreen.matches || !isVisible || document.hidden || reducedMotion.matches || manuallyPausedRef.current) return
+        const otherVideoActive = activePlaybackIdRef.current !== null && activePlaybackIdRef.current !== playbackId
+        if (otherVideoActive || !mobileScreen.matches || !isVisible || document.hidden || reducedMotion.matches || manuallyPausedRef.current) return
+        onPlaybackStart(playbackId)
         void video.play().catch(() => undefined)
       }, 7000)
     }
 
     const resetToThumbnail = () => {
-      if (!video) return
-      video.pause()
-      if (video.readyState > 0) video.currentTime = 0
-      setIsPlaying(false)
-      setShowPoster(true)
-      setStatus('idle')
-      clearPrepareTimer()
+      resetToPoster()
+      onPlaybackPause(playbackId)
     }
 
     const handleHorizontalMovement = () => {
@@ -534,7 +560,7 @@ function InstagramVideo({ src, liteSrc, poster, ariaLabel, tabIndex, priority, s
     const observer = new IntersectionObserver(([entry]) => {
       const wasVisible = isVisible
       isVisible = entry.isIntersecting && entry.intersectionRatio >= .6
-      if (!isVisible) {
+      if (!entry.isIntersecting || (wasVisible && !isVisible)) {
         manuallyPausedRef.current = false
         resetToThumbnail()
         clearPlayTimer()
@@ -559,7 +585,7 @@ function InstagramVideo({ src, liteSrc, poster, ariaLabel, tabIndex, priority, s
       clearPrepareTimer()
       video.pause()
     }
-  }, [selectedSrc, hasSource, networkTier])
+  }, [selectedSrc, hasSource, networkTier, autoplay, onPlaybackPause, onPlaybackStart, playbackId, resetToPoster])
 
   const startPrepareTimer = () => {
     if (prepareTimerRef.current !== null) window.clearTimeout(prepareTimerRef.current)
@@ -570,6 +596,7 @@ function InstagramVideo({ src, liteSrc, poster, ariaLabel, tabIndex, priority, s
   }
 
   const requestPlayback = () => {
+    onPlaybackStart(playbackId)
     playAfterLoadRef.current = true
     manuallyPausedRef.current = false
     setStatus('preparing')
@@ -582,6 +609,7 @@ function InstagramVideo({ src, liteSrc, poster, ariaLabel, tabIndex, priority, s
   }
 
   const retryPlayback = () => {
+    onPlaybackStart(playbackId)
     setStatus('preparing')
     setShowPoster(true)
     playAfterLoadRef.current = true
@@ -607,12 +635,14 @@ function InstagramVideo({ src, liteSrc, poster, ariaLabel, tabIndex, priority, s
       return
     }
     manuallyPausedRef.current = true
-    video.pause()
-    setIsPlaying(false)
+    resetToPoster()
+    onPlaybackPause(playbackId)
   }
 
   const handlePlaying = () => {
+    onPlaybackStart(playbackId)
     playAfterLoadRef.current = false
+    hasStartedPlaybackRef.current = true
     if (prepareTimerRef.current !== null) window.clearTimeout(prepareTimerRef.current)
     prepareTimerRef.current = null
     setIsPlaying(true)
@@ -634,11 +664,15 @@ function InstagramVideo({ src, liteSrc, poster, ariaLabel, tabIndex, priority, s
       onClick={() => {
         if (!videoRef.current || videoRef.current.paused) return
         manuallyPausedRef.current = true
-        videoRef.current.pause()
-        setIsPlaying(false)
+        resetToPoster()
+        onPlaybackPause(playbackId)
       }}
       onPlaying={handlePlaying}
-      onPause={() => setIsPlaying(false)}
+      onPause={() => {
+        if (!hasStartedPlaybackRef.current) return
+        resetToPoster()
+        onPlaybackPause(playbackId)
+      }}
       onWaiting={() => {
         if (showPoster) return
         setStatus('waiting')
@@ -647,14 +681,18 @@ function InstagramVideo({ src, liteSrc, poster, ariaLabel, tabIndex, priority, s
       onError={() => { setStatus('error'); setIsPlaying(false); setShowPoster(true) }}
     ><source src={requestSrc} type="video/mp4" /></video>}
     <img className={`instagram-video-poster${showPoster ? '' : ' is-hidden'}`} src={poster} alt="" width="540" height="960" loading="lazy" decoding="async" aria-hidden="true" />
-    {(status === 'preparing' || status === 'waiting') && <div className="instagram-video-status" role="status"><span className="video-spinner" />Preparando vídeo…</div>}
+    {(status === 'preparing' || status === 'waiting') && <div className="instagram-video-status" role="status">Preparando vídeo…</div>}
     {(status === 'delayed' || status === 'error') && <button type="button" className="instagram-video-retry" onClick={handlePlayClick}>{status === 'delayed' ? 'Conexão lenta. Tentar novamente' : 'Não foi possível carregar. Tentar novamente'}</button>}
-    {status !== 'preparing' && status !== 'waiting' && status !== 'delayed' && status !== 'error' && <button type="button" className={`instagram-video-play${isPlaying ? ' is-playing' : ''}`} tabIndex={tabIndex} aria-label={isPlaying ? 'Pausar vídeo' : 'Reproduzir vídeo'} onPointerDown={(event) => event.stopPropagation()} onClick={handlePlayClick}>{isPlaying ? <Pause fill="currentColor" /> : <Play fill="currentColor" />}</button>}
+    {(showPoster || !isPlaying) && <button type="button" className={`instagram-video-play${status === 'preparing' || status === 'waiting' ? ' is-loading' : ''}`} tabIndex={tabIndex} aria-label="Reproduzir vídeo" onPointerDown={(event) => event.stopPropagation()} onClick={handlePlayClick}><Play fill="currentColor" /></button>}
   </>
 }
 
 function InstagramCarousel() {
   const networkTier = useVideoNetworkTier()
+  const [activePlaybackId, setActivePlaybackId] = useState<string | null>(null)
+  const handlePlaybackPause = useCallback((playbackId: string) => {
+    setActivePlaybackId((current) => current === playbackId ? null : current)
+  }, [])
   const cloneCount = Math.min(instagramPosts.length, 3)
   const firstRealIndex = cloneCount
   const lastRealIndex = cloneCount + instagramPosts.length - 1
@@ -833,7 +871,7 @@ function InstagramCarousel() {
       }}
     >
       {carouselPosts.map(({ post, key, isClone, originalIndex }) => <article className={`instagram-card${isClone ? '' : ' reveal'}`} aria-hidden={isClone || undefined} aria-label={isClone ? undefined : `Publicação ${originalIndex + 1} de ${instagramPosts.length}`} style={{ '--delay': `${(originalIndex % 4) * 70}ms` } as React.CSSProperties} key={key}>
-        {'video' in post ? <div className="instagram-card__media">{isClone ? <img src={post.videoPoster} alt="" width="540" height="960" loading="lazy" decoding="async" /> : <InstagramVideo src={post.video} liteSrc={post.videoLite} poster={post.videoPoster} ariaLabel={post.videoAriaLabel} priority={videoPriority(originalIndex)} sectionNear={sectionNear} networkTier={networkTier} />}</div> : <a className="instagram-card__media" href={post.url} target="_blank" rel="noreferrer" tabIndex={isClone ? -1 : undefined} aria-label={`Abrir no Instagram: ${post.title}`} onClick={() => trackEvent('click_instagram_post', { post: String(originalIndex + 1) })}>
+        {'video' in post ? <div className="instagram-card__media"><InstagramVideo src={post.video} liteSrc={post.videoLite} poster={post.videoPoster} ariaLabel={post.videoAriaLabel} tabIndex={isClone ? -1 : undefined} priority={isClone ? 'none' : videoPriority(originalIndex)} sectionNear={sectionNear} networkTier={networkTier} playbackId={key} activePlaybackId={activePlaybackId} onPlaybackStart={setActivePlaybackId} onPlaybackPause={handlePlaybackPause} autoplay={!isClone} /></div> : <a className="instagram-card__media" href={post.url} target="_blank" rel="noreferrer" tabIndex={isClone ? -1 : undefined} aria-label={`Abrir no Instagram: ${post.title}`} onClick={() => trackEvent('click_instagram_post', { post: String(originalIndex + 1) })}>
         {'image' in post ? <img src={post.image} alt={isClone ? '' : post.imageAlt} width="1080" height="1350" loading="lazy" /> : <span className="instagram-card__pending">
           <span className="instagram-card__play"><Play fill="currentColor" /></span>
           <span>Vídeo em atualização</span>
