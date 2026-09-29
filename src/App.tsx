@@ -132,7 +132,7 @@ const surgeryChapters = [
     imageAlt: 'Dr. Evaldo realiza cirurgia otológica com auxílio de microscópio',
     imagePosition: '70% center',
     items: [
-      ['Timpanotomia com colocação de tubos de ventilação', 'Procedimento que ajuda a melhorar a ventilação do ouvido médio e a drenagem de líquidos acumulados atrás do tímpano. Pode ser utilizado principalmente em casos de otites recorrentes ou de persistência de secreção no ouvido.'],
+      ['Timpanotomia com Colocação de Tubos de Ventilação', 'Procedimento que ajuda a melhorar a ventilação do ouvido médio e a drenagem de líquidos acumulados atrás do tímpano. Pode ser utilizado principalmente em casos de otites recorrentes ou de persistência de secreção no ouvido.'],
       ['Timpanoplastia', 'Cirurgia indicada para reparar perfurações ou lesões da membrana do tímpano, buscando restaurar sua integridade, proteger o ouvido médio e contribuir para a melhora da audição.'],
     ],
   },
