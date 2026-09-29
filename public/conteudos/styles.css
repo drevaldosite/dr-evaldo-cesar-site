@@ -5,7 +5,20 @@ a { color: #005bb7; }
 h1, h2 { color: #001b62; line-height: 1.15; }
 h1 { font-size: clamp(2rem, 8vw, 3rem); }
 h2 { margin-top: 2rem; }
-p, li { line-height: 1.7; text-align: justify; text-justify: inter-word; hyphens: auto; overflow-wrap: break-word; }
+p, li {
+  line-height: 1.7;
+  text-align: justify;
+  text-align-last: left;
+  text-justify: inter-word;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  hyphenate-limit-chars: 6 3 2;
+  text-wrap: pretty;
+  overflow-wrap: break-word;
+}
+@supports not (hyphens: auto) {
+  p, li { text-align: left; }
+}
 summary { line-height: 1.7; }
 .eyebrow { color: #005bb7; font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .notice { padding: 16px 18px; border-radius: 12px; background: #e7f6fb; }

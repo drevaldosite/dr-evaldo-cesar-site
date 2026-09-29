@@ -19,10 +19,33 @@ button { font: inherit; }
 p {
   color: var(--muted);
   line-height: 1.7;
+}
+/* Justificacao sem rios de espaco: limites de hifenizacao e quebra mais equilibrada. */
+.justified-text,
+p,
+.procedure-narrative__items span,
+.location-card address,
+.patient-review blockquote {
   text-align: justify;
+  text-align-last: left;
+  word-spacing: -.05em;
   text-justify: inter-word;
+  -webkit-hyphens: auto;
   hyphens: auto;
+  -webkit-hyphenate-limit-before: 2;
+  -webkit-hyphenate-limit-after: 2;
+  hyphenate-limit-chars: 4 2 2;
+  text-wrap: pretty;
   overflow-wrap: break-word;
+}
+@supports not (hyphens: auto) {
+  .justified-text,
+  p,
+  .procedure-narrative__items span,
+  .location-card address,
+  .patient-review blockquote {
+    text-align: left;
+  }
 }
 h1, h2, h3, p { margin-top: 0; }
 h1, h2, h3 { color: var(--navy); letter-spacing: -.04em; }
@@ -101,7 +124,7 @@ main { display: flex; flex-direction: column; }
 .scroll-cue { display: none; }
 .specialties { order: 2; }
 .specialty-grid { display: grid; gap: 18px; align-items: stretch; }
-.specialty-card { position: relative; overflow: hidden; display: flex; flex-direction: column; min-height: 394px; padding: 25px 32px 28px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 28px rgba(0,27,98,.06); transition: transform .3s, box-shadow .3s, border-color .3s; }
+.specialty-card { position: relative; overflow: hidden; display: flex; flex-direction: column; min-height: 394px; padding: 25px 24px 28px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 28px rgba(0,27,98,.06); transition: transform .3s, box-shadow .3s, border-color .3s; }
 .specialty-card::before { content: ''; position: absolute; width: 154px; height: 154px; right: -54px; top: -58px; border-radius: 50%; background: #eff9fd; }
 .specialty-card:hover { transform: translateY(-7px); border-color: rgba(0,146,199,.3); box-shadow: var(--shadow); }
 .specialty-icon { width: 58px; height: 58px; display: grid; place-items: center; color: var(--vivid); border-radius: 18px; background: linear-gradient(145deg, #eaf8fd, #ddecff); }
@@ -144,8 +167,6 @@ main { display: flex; flex-direction: column; }
 .procedure-narrative__chapter::before { content: none; }
 .procedure-narrative__chapter .eyebrow { margin-bottom: 12px; }
 .procedure-narrative__chapter h2, .procedure-narrative__chapter h3 { max-width: 22ch; margin: 0 0 14px; font-size: clamp(1.65rem, 6.6vw, 2.25rem); line-height: 1.12; }
-.procedure-narrative--exams .procedure-narrative__chapter h2,
-.procedure-narrative--surgeries .procedure-narrative__chapter h2 { text-align: justify; text-justify: inter-word; hyphens: auto; }
 .procedure-narrative__intro { max-width: 58ch; margin-bottom: 24px; font-size: 1rem; line-height: 1.65; }
 .procedure-narrative__intro p { margin: 0 0 1em; }
 .procedure-narrative__intro p:last-child { margin-bottom: 0; }
@@ -153,7 +174,7 @@ main { display: flex; flex-direction: column; }
 .procedure-narrative__items { max-width: 620px; margin: 0; padding: 0; list-style: none; border-top: 1px solid rgba(0,27,98,.1); }
 .procedure-narrative__items li { display: grid; gap: 6px; padding: 16px 0; border-bottom: 1px solid rgba(0,27,98,.1); }
 .procedure-narrative__items strong { color: var(--navy); font-size: .98rem; line-height: 1.45; }
-.procedure-narrative__items span { color: var(--muted); font-size: .94rem; line-height: 1.65; text-align: justify; text-justify: inter-word; hyphens: auto; overflow-wrap: break-word; }
+.procedure-narrative__items span { color: var(--muted); font-size: .94rem; line-height: 1.65; }
 .procedure-narrative__footer { display: grid; gap: 16px; margin-top: 20px; }
 .procedure-narrative__footer .button { width: 100%; }
 
@@ -239,7 +260,7 @@ main { display: flex; flex-direction: column; }
 .instagram-card__pending::before { width: 220px; height: 220px; right: -92px; top: -62px; }
 .instagram-card__pending::after { width: 150px; height: 150px; right: -48px; top: -26px; }
 .instagram-card__pending > span:not(.instagram-card__play) { font-size: 1.15rem; font-weight: 800; letter-spacing: -.025em; }
-.instagram-card__pending small { max-width: 23ch; margin-top: 7px; color: #ccecf6; line-height: 1.45; text-align: justify; text-justify: inter-word; hyphens: auto; overflow-wrap: break-word; }
+.instagram-card__pending small { max-width: 23ch; margin-top: 7px; color: #ccecf6; line-height: 1.45; text-align: left; }
 .instagram-card__play { width: 52px; height: 52px; display: grid; place-items: center; margin-bottom: 18px; color: var(--navy); background: #fff; border-radius: 50%; box-shadow: 0 12px 26px rgba(0,0,0,.16); }
 .instagram-card__play svg { width: 21px; height: 21px; margin-left: 3px; }
 .instagram-card__body { flex: 1; min-height: 236px; display: flex; flex-direction: column; padding: 22px 20px 20px; }
@@ -307,7 +328,7 @@ main { display: flex; flex-direction: column; }
 .contact-copy, .contact-info { position: relative; z-index: 2; }
 .contact-copy h2 { margin: 14px 0 12px; color: #fff; font-size: clamp(1.75rem, 7vw, 2.15rem); line-height: 1.12; }
 .contact-copy .button { width: 100%; }
-.contact-copy p { color: #cbd8ec; }
+.contact-copy p { color: #cbd8ec; max-width: 55ch; }
 .contact-info { display: grid; gap: 12px; }
 .contact-info > div, .contact-info > a { display: flex; align-items: center; gap: 12px; padding: 14px; border: 1px solid rgba(255,255,255,.12); border-radius: 15px; background: rgba(255,255,255,.07); }
 .contact-info > a { transition: background .25s, border-color .25s, transform .25s; }
@@ -347,8 +368,6 @@ main { display: flex; flex-direction: column; }
 @keyframes float { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
 
 @media (max-width: 899px) {
-  .specialty-card { padding-inline: 20px; }
-  .specialty-card.throat p { text-align: left; }
   .procedure-narrative.is-enhanced {
     --narrative-gap: 16px;
     --narrative-photo-size: clamp(216px, 66vw, 248px);
@@ -600,7 +619,7 @@ main { display: flex; flex-direction: column; }
   .footer-grid a, .placeholder-link { min-height: 0; font-size: .79rem; }
   .footer-bottom p { font-size: .67rem; }
   .footer-bottom { grid-template-columns: 1fr 1fr; }
-  .footer-bottom p:last-child { text-align: justify; }
+  .footer-bottom p:last-child { text-align: right; }
 }
 
 @media (min-width: 900px) and (max-width: 1149px) {

@@ -5,6 +5,34 @@ import {
   PhoneCall, Pause, Play, ShieldCheck, Sparkles, X,
 } from 'lucide-react'
 import { contactText, siteConfig, trackEvent, whatsappUrl } from './config'
+import { tuneJustification } from './justifyTune'
+
+const HYPHEN_VOWELS = 'aeiouáàâãéèêíïóòôõúüAEIOUÁÀÂÃÉÈÊÍÏÓÒÔÕÚÜ'
+const isHyphenVowel = (c: string | undefined) => !!c && HYPHEN_VOWELS.includes(c)
+const INSEPARABLE_CLUSTERS = new Set([
+  'bl','br','ch','cl','cr','dl','dr','fl','fr','gl','gr','lh','nh','pl','pr','tl','tr','vl','vr','qu','gu',
+])
+function sh(text: string): string {
+  return text.split(/(\s+)/).map(word => {
+    if (word.length < 5 || /\s/.test(word)) return word
+    let out = ''
+    for (let i = 0; i < word.length; i++) {
+      out += word[i]
+      if (i < 1 || i > word.length - 3) continue
+      const c = word[i], n1 = word[i + 1], n2 = word[i + 2], n3 = word[i + 3]
+      if (isHyphenVowel(c) && !isHyphenVowel(n1) && isHyphenVowel(n2)) {
+        out += '­'
+      } else if (isHyphenVowel(c) && !isHyphenVowel(n1) && !isHyphenVowel(n2) && isHyphenVowel(n3)) {
+        const cluster = (n1 + n2).toLowerCase()
+        if (!INSEPARABLE_CLUSTERS.has(cluster)) {
+          out += n1 + '­'
+          i++
+        }
+      }
+    }
+    return out
+  }).join('')
+}
 
 const navItems = [
   ['Início', '#inicio'], ['Especialidades', '#especialidades'], ['Procedimentos', '#procedimentos'], ['Sobre', '#sobre'],
@@ -12,12 +40,12 @@ const navItems = [
 ] as const
 
 const specialties = [
-  { icon: 'dizziness', title: 'Otoneurologia: Tontura, vertigem e equilíbrio', text: 'Avaliação para pessoas que sentem tontura, vertigem, sensação de desequilíbrio ou instabilidade. A consulta busca entender a causa desses sintomas e, quando necessário, podem ser solicitados exames específicos do equilíbrio.', className: 'nose' },
-  { icon: Ear, title: 'Zumbido e alterações auditivas', text: 'Avaliação de sintomas como zumbido, diminuição da audição, sensação de ouvido tampado ou pressão no ouvido. O objetivo é investigar o que pode estar causando essas alterações e orientar o tratamento adequado.', className: 'ear' },
-  { icon: 'otoneurology-exam', title: 'Exames otoneurológicos', text: 'Exames que ajudam a avaliar o funcionamento do sistema responsável pelo equilíbrio. Podem ser utilizados testes como a videonistagmoscopia infravermelha, o vHIT e o exame de posturografia para ajudar a identificar alterações relacionadas à tontura, vertigem e desequilíbrio.', className: 'balance' },
-  { icon: 'throat', title: 'Cirurgia de amígdalas e adenoide com Coblation®', text: 'Cirurgia indicada em casos de aumento das amígdalas ou da adenoide, que podem causar dificuldade para respirar, roncos, infecções frequentes ou outros problemas. Em casos selecionados, pode ser utilizada a tecnologia Coblation® durante o procedimento.', className: 'throat' },
-  { icon: 'surgery-tool', title: 'Cirurgia otorrinolaringológica', text: 'Avaliação de problemas do nariz, seios da face, garganta e ouvido que podem precisar de tratamento cirúrgico. Cada caso é analisado individualmente para definir se a cirurgia é necessária e qual é a opção mais adequada.', className: 'kids' },
-  { icon: 'ear-nose-throat', title: 'Otorrinolaringologia geral', text: 'Atendimento para adultos e crianças com problemas como rinite, sinusite, nariz entupido, infecções de ouvido, dores ou alterações na garganta e outras condições relacionadas ao ouvido, nariz e garganta.', className: 'surgery' },
+  { icon: 'dizziness', title: 'Otoneurologia: Tontura, Vertigem e Equilíbrio', text: 'Avaliação para pessoas que sentem tontura, vertigem, sensação de desequilíbrio ou instabilidade. A consulta busca entender a causa desses sintomas e, quando necessário, podem ser solicitados exames específicos do equilíbrio.', className: 'nose' },
+  { icon: Ear, title: 'Zumbido e Alterações Auditivas', text: 'Avaliação de sintomas como zumbido, diminuição da audição, sensação de ouvido tampado ou pressão no ouvido. O objetivo é investigar o que pode estar causando essas alterações e orientar o tratamento adequado.', className: 'ear' },
+  { icon: 'otoneurology-exam', title: 'Exames Otoneurológicos', text: 'Exames que ajudam a avaliar o funcionamento do sistema responsável pelo equilíbrio. Podem ser utilizados testes como a videonistagmoscopia infravermelha, o vHIT e o exame de posturografia para ajudar a identificar alterações relacionadas à tontura, vertigem e desequilíbrio.', className: 'balance' },
+  { icon: 'throat', title: 'Cirurgia de Amígdalas e Adenoide com Coblation®', text: 'Cirurgia indicada em casos de aumento das amígdalas ou da adenoide, que podem causar dificuldade para respirar, roncos, infecções frequentes ou outros problemas. Em casos selecionados, pode ser utilizada a tecnologia Coblation® durante o procedimento.', className: 'throat' },
+  { icon: 'surgery-tool', title: 'Cirurgia Otorrinolaringológica', text: 'Avaliação de problemas do nariz, seios da face, garganta e ouvido que podem precisar de tratamento cirúrgico. Cada caso é analisado individualmente para definir se a cirurgia é necessária e qual é a opção mais adequada.', className: 'kids' },
+  { icon: 'ear-nose-throat', title: 'Otorrinolaringologia Geral', text: 'Atendimento para adultos e crianças com problemas como rinite, sinusite, nariz entupido, infecções de ouvido, dores ou alterações na garganta e outras condições relacionadas ao ouvido, nariz e garganta.', className: 'surgery' },
 ] as const
 
 const examChapters = [
@@ -248,7 +276,7 @@ function PatientReviewsCarousel() {
           <span className="review-avatar" aria-hidden="true">{name.charAt(0)}</span>
           <h3>{name}</h3>
         </div>
-        <blockquote>“{text}”</blockquote>
+        <blockquote>“{sh(text)}”</blockquote>
         <footer><span>{date} · {location}</span><a href={siteConfig.contact.doctoralia} target="_blank" rel="noreferrer">Doctoralia <ArrowRight size={15} /></a></footer>
       </article>)}
     </div>
@@ -1211,9 +1239,9 @@ function ProcedureNarrative({ id, variant, chapters, message, preloadVideoOnDesk
               <img src={chapter.image} alt="" loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />
             </figure>
             {index === 0 ? <h2 id={`${id}-title`}>{chapter.title}</h2> : <h3>{chapter.title}</h3>}
-            {chapter.intro.length > 0 && <div className="procedure-narrative__intro">{chapter.intro.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div>}
+            {chapter.intro.length > 0 && <div className="procedure-narrative__intro">{chapter.intro.map((paragraph) => <p key={paragraph}>{sh(paragraph)}</p>)}</div>}
             {chapter.items.length > 0 && <ul className="procedure-narrative__items">
-              {chapter.items.map(([name, description]) => <li key={name}><strong>{name}</strong><span>{description}</span></li>)}
+              {chapter.items.map(([name, description]) => <li key={name}><strong>{name}</strong><span>{sh(description)}</span></li>)}
             </ul>}
           </article>)}
         </div>
@@ -1340,7 +1368,7 @@ function FAQItem({ question, answer, index, open, onToggle }: { question: string
     <h3><button type="button" aria-expanded={open} aria-controls={contentId} onClick={() => { onToggle(); if (!open) trackEvent('open_faq', { question }) }}>
       <span>{question}</span><ChevronDown aria-hidden="true" />
     </button></h3>
-    <div id={contentId} className="faq-answer" role="region" aria-hidden={!open}><p>{answer}</p></div>
+    <div id={contentId} className="faq-answer" role="region" aria-hidden={!open}><p>{sh(answer)}</p></div>
   </div>
 }
 
@@ -1387,6 +1415,22 @@ export default function App() {
     return () => observer.disconnect()
   }, [])
 
+  useEffect(() => {
+    let frame = 0
+    let lastWidth = window.innerWidth
+    const schedule = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(tuneJustification)
+    }
+    const onResize = () => {
+      if (window.innerWidth !== lastWidth) { lastWidth = window.innerWidth; schedule() }
+    }
+    schedule()
+    document.fonts?.ready.then(schedule)
+    window.addEventListener('resize', onResize)
+    return () => { cancelAnimationFrame(frame); window.removeEventListener('resize', onResize) }
+  }, [])
+
   return <>
     <Header />
     <main id="conteudo">
@@ -1396,7 +1440,7 @@ export default function App() {
           <div className="hero-copy reveal visible">
             <span className="eyebrow"><MapPin size={15} /> Otorrinolaringologista em São Luís</span>
             <div className="hero-doctor"><strong>Dr. Evaldo César Macau</strong><span>CRM-MA 10415 · RQE 3698</span></div>
-            <h1>Cuidado especializado para <em>tontura, zumbido, audição, ouvido, nariz e garganta</em></h1>
+            <h1>Cuidado Especializado para <em>Tontura, Zumbido, Audição, Ouvido, Nariz e Garganta</em></h1>
             <p>Avaliação especializada de tontura, vertigem, desequilíbrio, zumbido e perda auditiva, além das principais doenças do ouvido, nariz e garganta, em adultos e crianças.</p>
             <div className="hero-actions">
               <WhatsAppLink source="hero">Agendar consulta pelo WhatsApp <MessageCircle size={19} /></WhatsAppLink>
@@ -1422,10 +1466,10 @@ export default function App() {
 
       <section className="section specialties" id="especialidades">
         <div className="container">
-          <SectionTitle eyebrow="Ouvidos, nariz e garganta" title="Áreas de atendimento" text="Avaliação especializada para adultos e crianças, respeitando as necessidades de cada fase da vida." centered />
+          <SectionTitle eyebrow="Ouvidos, nariz e garganta" title="Áreas de Atendimento" text="Avaliação especializada para adultos e crianças, respeitando as necessidades de cada fase da vida." centered />
           <div className="specialty-grid">
             {specialties.map(({ icon: Icon, title, text, className }, i) => <article className={`specialty-card ${className} reveal`} style={{ '--delay': `${i * 90}ms` } as React.CSSProperties} key={title}>
-              <div className="specialty-icon">{Icon === 'ear-nose-throat' ? <EarNoseThroatIcon /> : Icon === 'surgery-tool' ? <SurgeryToolIcon /> : Icon === 'otoneurology-exam' ? <OtoneurologyExamIcon /> : Icon === 'dizziness' ? <DizzinessIcon /> : Icon === 'throat' ? <ThroatIcon /> : <Icon strokeWidth={1.7} />}</div><span className="card-number">0{i + 1}</span><h3>{title}</h3><p>{text}</p><a href={className === 'throat' ? '#procedimentos' : '#contato'}>{className === 'throat' ? 'Conheça a técnica Coblation®' : 'Agende uma consulta'} <ArrowRight size={18} /></a>
+              <div className="specialty-icon">{Icon === 'ear-nose-throat' ? <EarNoseThroatIcon /> : Icon === 'surgery-tool' ? <SurgeryToolIcon /> : Icon === 'otoneurology-exam' ? <OtoneurologyExamIcon /> : Icon === 'dizziness' ? <DizzinessIcon /> : Icon === 'throat' ? <ThroatIcon /> : <Icon strokeWidth={1.7} />}</div><span className="card-number">0{i + 1}</span><h3>{title}</h3><p>{sh(text)}</p><a href={className === 'throat' ? '#procedimentos' : '#contato'}>{className === 'throat' ? 'Conheça a técnica Coblation®' : 'Agende uma consulta'} <ArrowRight size={18} /></a>
             </article>)}
           </div>
           <div className="center-action reveal"><WhatsAppLink source="after-specialties">Quero agendar uma avaliação <MessageCircle size={19} /></WhatsAppLink></div>
@@ -1464,12 +1508,12 @@ export default function App() {
           <div className="about-copy reveal">
             <span className="eyebrow">Sobre o especialista</span>
             <h2>Conheça o Dr. Evaldo Macau</h2>
-            <p>Sou médico otorrinolaringologista, graduado em Medicina pela Universidade Federal do Maranhão (UFMA), com Residência Médica em Otorrinolaringologia pela Universidade Estadual de Campinas (UNICAMP) e Título de Especialista pela ABORL-CCF.</p>
-            <p>Minha atuação é dedicada especialmente à Otoneurologia, com foco na investigação e tratamento de tontura, vertigem, desequilíbrio, zumbido e alterações do ouvido interno, além da atuação em cirurgia otorrinolaringológica, incluindo procedimentos de amígdalas e adenoide com tecnologia Coblation, quando indicada.</p>
+            <p>{sh('Sou médico otorrinolaringologista, graduado em Medicina pela Universidade Federal do Maranhão (UFMA), com Residência Médica em Otorrinolaringologia pela Universidade Estadual de Campinas (UNICAMP) e Título de Especialista pela ABORL-CCF.')}</p>
+            <p>{sh('Minha atuação é dedicada especialmente à Otoneurologia, com foco na investigação e tratamento de tontura, vertigem, desequilíbrio, zumbido e alterações do ouvido interno, além da atuação em cirurgia otorrinolaringológica, incluindo procedimentos de amígdalas e adenoide com tecnologia Coblation, quando indicada.')}</p>
             <details className="about-more">
               <summary>Ver trajetória e abordagem completas</summary>
               <div>
-                <p>Realizei aperfeiçoamento em Otoneurologia na Universidade de Lisboa, em Portugal, complementando minha formação na avaliação especializada dos distúrbios do equilíbrio e da audição.</p>
+                <p>{sh('Realizei aperfeiçoamento em Otoneurologia na Universidade de Lisboa, em Portugal, complementando minha formação na avaliação especializada dos distúrbios do equilíbrio e da audição.')}</p>
               </div>
             </details>
             <ul className="check-list"><li><Check /> CRM-MA 10415 | RQE 3698</li><li><Check /> Título de Especialista pela ABORL-CCF</li><li><Check /> Otorrinolaringologia e Otoneurologia</li></ul>
@@ -1527,7 +1571,7 @@ export default function App() {
 
       <section className="section contact" id="contato">
         <div className="container contact-card reveal">
-          <div className="contact-copy"><span className="eyebrow light">Agende sua consulta</span><h2>Dê o primeiro passo para cuidar da sua saúde</h2><p>Se você apresenta dificuldade para respirar, crises frequentes de sinusite, dores no ouvido, zumbido, tontura, perda auditiva, ronco ou problemas recorrentes nas amígdalas, procure uma avaliação especializada.</p><p>Entre em contato para consultar a disponibilidade e agendar seu atendimento.</p><WhatsAppLink className="button white" source="contact">Consultar disponibilidade <MessageCircle size={19} /></WhatsAppLink><div className="contact-doctor-id"><strong>Dr. Evaldo César Macau</strong><span>Otorrinolaringologista · CRM-MA 10415 · RQE 3698</span></div></div>
+          <div className="contact-copy"><span className="eyebrow light">Agende sua consulta</span><h2>Dê o primeiro passo para cuidar da sua saúde</h2><p>{sh('Se você apresenta dificuldade para respirar, crises frequentes de sinusite, dores no ouvido, zumbido, tontura, perda auditiva, ronco ou problemas recorrentes nas amígdalas, procure uma avaliação especializada.')}</p><p>{sh('Entre em contato para consultar a disponibilidade e agendar seu atendimento.')}</p><WhatsAppLink className="button white" source="contact">Consultar disponibilidade <MessageCircle size={19} /></WhatsAppLink><div className="contact-doctor-id"><strong>Dr. Evaldo César Macau</strong><span>Otorrinolaringologista · CRM-MA 10415 · RQE 3698</span></div></div>
           <div className="contact-info">
             <div><MapPin /><span><small>{siteConfig.location.clinic}</small><strong>{contactText.address}</strong></span></div>
             <a href="tel:+5598991433929"><PhoneCall /><span><small>Telefone</small><strong>{contactText.phone}</strong></span></a>
