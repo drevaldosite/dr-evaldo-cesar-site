@@ -3,6 +3,7 @@
 
   var measurementId = 'G-GN5Y43B9F4'
   var storageKey = 'dr_evaldo_analytics_consent'
+  var debugMode = new URLSearchParams(window.location.search).get('ga_debug') === '1'
   var currentConsent = null
   var analyticsLoaded = false
 
@@ -37,7 +38,7 @@
       allow_ad_personalization_signals: false,
     })
     window.gtag('js', new Date())
-    window.gtag('config', measurementId)
+    window.gtag('config', measurementId, debugMode ? { debug_mode: true } : {})
 
     var script = document.createElement('script')
     script.async = true

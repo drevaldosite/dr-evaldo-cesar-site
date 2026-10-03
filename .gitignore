@@ -7,3 +7,5 @@ vite-local*.log
 .wrangler/
 .dev.vars
 worker-configuration.d.ts
+.vercel
+.env*
