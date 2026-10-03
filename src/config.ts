@@ -1,7 +1,7 @@
 export const siteConfig = {
   doctor: { name: 'Dr. Evaldo César Macau', shortName: 'Dr. Evaldo', specialty: 'Otorrinolaringologia', crm: 'CRM-MA 10415', rqe: 'RQE 3698' },
   contact: {
-    whatsapp: '+55 98 9143-3929',
+    whatsapp: '+55 98 99143-3929',
     phone: '(98) 99143-3929',
     address: 'Rua das Andirobas, 10, sala 405 — Jardim Renascença, São Luís — MA, CEP 65075-040',
     openingHours: '',
@@ -36,10 +36,11 @@ export function whatsappUrl(message = 'Olá! Gostaria de informações para agen
 
 export function trackEvent(event: string, details: Record<string, string> = {}) {
   const win = window as Window & {
-    dataLayer?: unknown[]
-    gtag?: (...args: unknown[]) => void
+    DrEvaldoAnalytics?: {
+      isGranted: () => boolean
+      showPreferences: () => void
+      trackEvent: (eventName: string, parameters?: Record<string, string>) => void
+    }
   }
-  win.dataLayer = win.dataLayer || []
-  win.dataLayer.push({ event, ...details })
-  win.gtag?.('event', event, details)
+  win.DrEvaldoAnalytics?.trackEvent(event, details)
 }

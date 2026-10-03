@@ -871,7 +871,7 @@ function InstagramCarousel() {
       }}
     >
       {carouselPosts.map(({ post, key, isClone, originalIndex }) => <article className={`instagram-card${isClone ? '' : ' reveal'}`} aria-hidden={isClone || undefined} aria-label={isClone ? undefined : `Publicação ${originalIndex + 1} de ${instagramPosts.length}`} style={{ '--delay': `${(originalIndex % 4) * 70}ms` } as React.CSSProperties} key={key}>
-        {'video' in post ? <div className="instagram-card__media"><InstagramVideo src={post.video} liteSrc={post.videoLite} poster={post.videoPoster} ariaLabel={post.videoAriaLabel} tabIndex={isClone ? -1 : undefined} priority={isClone ? 'none' : videoPriority(originalIndex)} sectionNear={sectionNear} networkTier={networkTier} playbackId={key} activePlaybackId={activePlaybackId} onPlaybackStart={setActivePlaybackId} onPlaybackPause={handlePlaybackPause} autoplay={!isClone} /></div> : <a className="instagram-card__media" href={post.url} target="_blank" rel="noreferrer" tabIndex={isClone ? -1 : undefined} aria-label={`Abrir no Instagram: ${post.title}`} onClick={() => trackEvent('click_instagram_post', { post: String(originalIndex + 1) })}>
+        {'video' in post ? <div className="instagram-card__media"><InstagramVideo src={post.video} liteSrc={post.videoLite} poster={post.videoPoster} ariaLabel={post.videoAriaLabel} tabIndex={isClone ? -1 : undefined} priority={isClone ? 'none' : videoPriority(originalIndex)} sectionNear={sectionNear} networkTier={networkTier} playbackId={key} activePlaybackId={activePlaybackId} onPlaybackStart={setActivePlaybackId} onPlaybackPause={handlePlaybackPause} autoplay={!isClone} /></div> : <a className="instagram-card__media" href={post.url} target="_blank" rel="noreferrer" tabIndex={isClone ? -1 : undefined} aria-label={`Abrir no Instagram: ${post.title}`} onClick={() => trackEvent('click_instagram_post', { post_index: String(originalIndex + 1) })}>
         {'image' in post ? <img src={post.image} alt={isClone ? '' : post.imageAlt} width="1080" height="1350" loading="lazy" /> : <span className="instagram-card__pending">
           <span className="instagram-card__play"><Play fill="currentColor" /></span>
           <span>Vídeo em atualização</span>
@@ -881,7 +881,7 @@ function InstagramCarousel() {
       <div className="instagram-card__body">
         <h3><a href={post.page} tabIndex={isClone ? -1 : undefined}>{post.title}</a></h3>
         <p>{post.description}</p>
-        <a href={post.url} target="_blank" rel="noreferrer" tabIndex={isClone ? -1 : undefined} onClick={() => trackEvent('click_instagram_post', { post: String(originalIndex + 1) })}>Ler mais <ArrowRight size={17} /></a>
+        <a href={post.url} target="_blank" rel="noreferrer" tabIndex={isClone ? -1 : undefined} onClick={() => trackEvent('click_instagram_post', { post_index: String(originalIndex + 1) })}>Ler mais <ArrowRight size={17} /></a>
       </div>
     </article>)}
     </div>
@@ -896,7 +896,7 @@ function InstagramCarousel() {
 function WhatsAppLink({ children, className = 'button primary', source, message, ...props }: { children: ReactNode; className?: string; source: string; message?: string; 'aria-label'?: string; title?: string }) {
   return (
     <a className={className} href={whatsappUrl(message)} target="_blank" rel="noreferrer" {...props}
-      onClick={() => trackEvent(siteConfig.contact.whatsapp ? 'click_whatsapp' : 'click_doctoralia', { source })}>
+      onClick={() => trackEvent(siteConfig.contact.whatsapp ? 'click_whatsapp' : 'click_doctoralia', { cta_source: source })}>
       {children}
     </a>
   )
@@ -1262,7 +1262,7 @@ function LocationsSection() {
           <address>{location.address}</address>
           {location.reference && <p className="location-reference">{location.reference}</p>}
           <div className="location-actions">
-            <a className="button secondary" href={location.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label={`Ver rota para ${location.name} no Google Maps`} onClick={() => trackEvent('click_directions', { location: location.name })}>Ver rota no Google Maps <ArrowRight size={18} /></a>
+            <a className="button secondary" href={location.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label={`Ver rota para ${location.name} no Google Maps`} onClick={() => trackEvent('click_directions', { location_name: location.name })}>Ver rota no Google Maps <ArrowRight size={18} /></a>
             <WhatsAppLink source={`location-${index + 1}`} message={location.whatsappMessage}>Agendar nesta unidade <MessageCircle size={18} /></WhatsAppLink>
           </div>
         </article>)}
@@ -1539,7 +1539,7 @@ export default function App() {
               <h2>Informação para cuidar melhor da sua saúde</h2>
               <p>Confira conteúdos sobre sintomas, prevenção, exames, tratamentos e cuidados em otorrinolaringologia e otoneurologia.</p>
             </div>
-            <a className="instagram-profile-link" href={siteConfig.contact.instagram} target="_blank" rel="noreferrer" onClick={() => trackEvent('click_instagram', { source: 'content-section' })}>
+            <a className="instagram-profile-link" href={siteConfig.contact.instagram} target="_blank" rel="noreferrer" onClick={() => trackEvent('click_instagram', { cta_source: 'content-section' })}>
               <InstagramIcon /> Ver perfil no Instagram <ArrowRight size={18} />
             </a>
           </div>
@@ -1570,9 +1570,9 @@ export default function App() {
           <div className="contact-copy"><span className="eyebrow light">Agende sua consulta</span><h2>Dê o primeiro passo para cuidar da sua saúde</h2><p>{sh('Se você apresenta dificuldade para respirar, crises frequentes de sinusite, dores no ouvido, zumbido, tontura, perda auditiva, ronco ou problemas recorrentes nas amígdalas, procure uma avaliação especializada.')}</p><p>{sh('Entre em contato para consultar a disponibilidade e agendar seu atendimento.')}</p><WhatsAppLink className="button white" source="contact">Consultar disponibilidade <MessageCircle size={19} /></WhatsAppLink><div className="contact-doctor-id"><strong>Dr. Evaldo César Macau</strong><span>Otorrinolaringologista · CRM-MA 10415 · RQE 3698</span></div></div>
           <div className="contact-info">
             <div><MapPin /><span><small>{siteConfig.location.clinic}</small><strong>{contactText.address}</strong></span></div>
-            <a href="tel:+5598991433929"><PhoneCall /><span><small>Telefone</small><strong>{contactText.phone}</strong></span></a>
-            <a href={siteConfig.contact.instagram} target="_blank" rel="noreferrer" onClick={() => trackEvent('click_instagram', { source: 'contact' })}><InstagramIcon /><span><small>Instagram</small><strong>@drevaldomacau</strong></span></a>
-            <a className="location-link" href={siteConfig.location.mapsUrl} target="_blank" rel="noreferrer" onClick={() => trackEvent('click_directions')}><MapPin /> Ver localização <ArrowRight /></a>
+            <a href="tel:+5598991433929" onClick={() => trackEvent('click_phone', { cta_source: 'contact' })}><PhoneCall /><span><small>Telefone</small><strong>{contactText.phone}</strong></span></a>
+            <a href={siteConfig.contact.instagram} target="_blank" rel="noreferrer" onClick={() => trackEvent('click_instagram', { cta_source: 'contact' })}><InstagramIcon /><span><small>Instagram</small><strong>@drevaldomacau</strong></span></a>
+            <a className="location-link" href={siteConfig.location.mapsUrl} target="_blank" rel="noreferrer" onClick={() => trackEvent('click_directions', { location_name: siteConfig.location.clinic })}><MapPin /> Ver localização <ArrowRight /></a>
           </div>
         </div>
       </section>
@@ -1582,7 +1582,7 @@ export default function App() {
       <div className="container footer-grid">
         <div className="footer-brand"><img src={siteConfig.assets.logoDark} alt="Dr. Evaldo César Macau" width="344" height="82" /><p>Otorrinolaringologia com atenção, clareza e cuidado para adultos e crianças.</p><p><strong>CRM-MA 10415 · RQE 3698</strong></p></div>
         <div><h2>Navegação</h2>{navItems.map(([label, href]) => <a key={href} href={href}>{label}</a>)}</div>
-        <div><h2>Contato</h2><a href={whatsappUrl()} target="_blank" rel="noreferrer"><MessageCircle /> Agendamento online</a>{siteConfig.contact.instagram ? <a href={siteConfig.contact.instagram} target="_blank" rel="noreferrer"><InstagramIcon /> Instagram</a> : <span className="placeholder-link"><InstagramIcon /> Instagram a configurar</span>}<a href="/privacidade.html">Política de Privacidade</a></div>
+        <div><h2>Contato</h2><WhatsAppLink className="" source="footer"><MessageCircle /> Agendamento online</WhatsAppLink>{siteConfig.contact.instagram ? <a href={siteConfig.contact.instagram} target="_blank" rel="noreferrer" onClick={() => trackEvent('click_instagram', { cta_source: 'footer' })}><InstagramIcon /> Instagram</a> : <span className="placeholder-link"><InstagramIcon /> Instagram a configurar</span>}<a href="/privacidade.html">Política de Privacidade</a></div>
       </div>
       <div className="container footer-bottom"><p>© {new Date().getFullYear()} Dr. Evaldo César Macau. Todos os direitos reservados.</p><p>As informações deste site são educativas e não substituem consulta médica.</p></div>
     </footer>

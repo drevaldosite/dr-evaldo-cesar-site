@@ -52,7 +52,7 @@ O conteúdo médico é educativo. A interface e o rodapé deixam claro que ele n
 
 ### 3.3 Contato e presença externa no estado atual
 
-- **WhatsApp em `src/config.ts`:** `+55 98 9143-3929`.
+- **WhatsApp em `src/config.ts`:** `+55 98 99143-3929`.
 - **Telefone de exibição:** `(98) 99143-3929`.
 - **Instagram:** `https://www.instagram.com/drevaldomacau` (`@drevaldomacau`).
 - **Doctoralia:** `https://www.doctoralia.com.br/evaldo-cesar-macau/otorrino/santa-ines`.

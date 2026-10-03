@@ -49,4 +49,4 @@ O card social fica em `public/og-dr-evaldo.png` e está conectado às metatags O
 
 ## Eventos de conversão preparados
 
-Os cliques de WhatsApp e a abertura do FAQ enviam eventos para `window.dataLayer`, caso Google Tag Manager ou Analytics sejam adicionados posteriormente com a gestão de consentimento adequada à LGPD.
+O site usa GA4 com Consent Mode v2. O Google Analytics só é carregado após a autorização do visitante, e a escolha pode ser alterada pelo botão “Privacidade”. Cliques de WhatsApp, telefone, rotas, Instagram e interações com o FAQ são enviados como eventos após o consentimento.
