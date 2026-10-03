@@ -295,7 +295,9 @@ main { display: flex; flex-direction: column; }
 .patient-reviews { margin-top: 30px; }
 .reviews-carousel-heading { margin-bottom: 18px; }
 .reviews-carousel-heading h3 { margin: 12px 0 0; font-size: clamp(1.25rem, 4vw, 1.8rem); }
-.patient-reviews-track { display: flex; gap: 16px; overflow-x: auto; padding: 2px 2px 18px; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; overscroll-behavior-inline: contain; }
+/* scroll-padding matches the 2px inline padding so the first card is already snapped on load;
+   otherwise Chrome runs a smooth snap scroll during load, which stops LCP reporting (PageSpeed NO_LCP). */
+.patient-reviews-track { display: flex; gap: 16px; overflow-x: auto; padding: 2px 2px 18px; scroll-padding-inline: 2px; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; overscroll-behavior-inline: contain; }
 .patient-reviews-track::-webkit-scrollbar { display: none; }
 .patient-review { flex: 0 0 calc(100% - 4px); scroll-snap-align: start; display: flex; flex-direction: column; min-height: 100%; padding: 22px; border: 1px solid var(--line); border-radius: 22px; background: #fff; box-shadow: 0 12px 30px rgba(0,27,98,.07); }
 .patient-review-header { display: grid; grid-template-columns: 34px minmax(0, 1fr); align-items: center; gap: 10px; }
