@@ -6,7 +6,7 @@ export const siteConfig = {
     address: 'Rua das Andirobas, 10, sala 405 — Jardim Renascença, São Luís — MA, CEP 65075-040',
     openingHours: '',
     instagram: 'https://www.instagram.com/drevaldomacau',
-    officialUrl: 'https://SEU-DOMINIO.com.br',
+    officialUrl: 'https://www.drevaldomacau.com.br',
     doctoralia: 'https://www.doctoralia.com.br/evaldo-cesar-macau/otorrino/santa-ines',
   },
   location: {
@@ -35,7 +35,11 @@ export function whatsappUrl(message = 'Olá! Gostaria de informações para agen
 }
 
 export function trackEvent(event: string, details: Record<string, string> = {}) {
-  const win = window as Window & { dataLayer?: unknown[] }
+  const win = window as Window & {
+    dataLayer?: unknown[]
+    gtag?: (...args: unknown[]) => void
+  }
   win.dataLayer = win.dataLayer || []
   win.dataLayer.push({ event, ...details })
+  win.gtag?.('event', event, details)
 }
