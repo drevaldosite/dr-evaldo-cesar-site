@@ -527,6 +527,20 @@ main { display: flex; flex-direction: column; }
   .footer-grid { grid-template-columns: 1.6fr 1fr 1fr; }
 }
 
+/* Tablets keep the mobile reading order, but surface the primary actions before
+   the portrait so an appointment does not require scrolling past the image. */
+@media (min-width: 600px) and (max-width: 899px) {
+  .hero { padding-bottom: 64px; }
+  .hero-actions { order: 5; margin-top: 24px; }
+  .hero-visual { order: 6; width: min(100%, 500px); margin-top: 30px; }
+  .hero-proof { order: 7; }
+  .portrait-shape { height: clamp(390px, 66vw, 500px); }
+  .hero-certifications { margin-inline: auto; }
+  .section { padding: 78px 0; }
+  .specialty-card { min-height: 360px; }
+  .center-action .button { width: auto; }
+}
+
 @media (min-width: 900px) {
   main { display: block; }
   .section { padding: 120px 0; }
@@ -634,6 +648,33 @@ main { display: flex; flex-direction: column; }
   .desktop-nav, .nav-cta.button { display: none; }
   .menu-toggle { display: grid; }
   .mobile-menu { display: block; }
+
+  /* This is a tablet layout, not a compressed desktop. Keep the hero and
+     multi-column sections comfortably legible at 10–11 inch tablet widths. */
+  .section { padding: 88px 0; }
+  .hero { min-height: 0; padding: 118px 0 76px; }
+  .hero-grid { grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); gap: 24px; }
+  .hero-copy { padding-top: 0; }
+  .hero-copy h1 { font-size: clamp(2.7rem, 5vw, 3.2rem); line-height: 1.08; }
+  .hero-copy h1 em { display: inline; }
+  .hero-copy > p { max-width: 48ch; font-size: 1rem; }
+  .hero-actions { gap: 8px; }
+  .hero-actions .button { padding-inline: 16px; }
+  .hero-visual { width: min(100%, 440px); padding: 0; }
+  .portrait-shape { height: 535px; border-radius: 42% 42% 26px 26px; }
+  .floating-card, .floating-badge { display: none; }
+  .hero-certifications { width: min(100%, 390px); grid-template-columns: 88px minmax(0, 1fr); }
+  .hero-residency-seal { width: 88px; height: 88px; }
+
+  .specialty-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .specialty-card { min-height: 350px; }
+  .procedure-narrative__layout { grid-template-columns: minmax(280px, .86fr) minmax(0, 1.14fr); gap: 38px; }
+  .procedure-narrative__chapter { min-height: 56svh; }
+  .credentials-grid, .faq-grid { gap: 48px; }
+  .about-grid { gap: 50px; }
+  .about-image { height: 520px; }
+  .contact-card { grid-template-columns: 1fr; gap: 34px; padding: 46px; }
+  .reviews-card { padding: 44px; }
 }
 
 @media (min-width: 1280px) {
