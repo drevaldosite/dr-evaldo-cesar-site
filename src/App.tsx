@@ -1,30 +1,159 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import {
-  ArrowRight, CalendarCheck, Check, ChevronDown, ChevronLeft, ChevronRight, CircleAlert, Clock3,
+  ArrowRight, CalendarCheck, Check, ChevronDown, ChevronLeft, ChevronRight,
   Ear, HeartHandshake, MapPin, Menu, MessageCircle,
-  PhoneCall, ShieldCheck, Sparkles, Stethoscope, UserRoundCheck, X,
+  PhoneCall, Play, ShieldCheck, Sparkles, X,
 } from 'lucide-react'
 import { contactText, siteConfig, trackEvent, whatsappUrl } from './config'
+import { tuneJustification } from './justifyTune'
+
+const HYPHEN_VOWELS = 'aeiouáàâãéèêíïóòôõúüAEIOUÁÀÂÃÉÈÊÍÏÓÒÔÕÚÜ'
+const isHyphenVowel = (c: string | undefined) => !!c && HYPHEN_VOWELS.includes(c)
+const INSEPARABLE_CLUSTERS = new Set([
+  'bl','br','ch','cl','cr','dl','dr','fl','fr','gl','gr','lh','nh','pl','pr','tl','tr','vl','vr','qu','gu',
+])
+function sh(text: string): string {
+  return text.split(/(\s+)/).map(word => {
+    if (word.length < 5 || /\s/.test(word)) return word
+    let out = ''
+    for (let i = 0; i < word.length; i++) {
+      out += word[i]
+      if (i < 1 || i > word.length - 3) continue
+      const c = word[i], n1 = word[i + 1], n2 = word[i + 2], n3 = word[i + 3]
+      if (isHyphenVowel(c) && !isHyphenVowel(n1) && isHyphenVowel(n2)) {
+        out += '­'
+      } else if (isHyphenVowel(c) && !isHyphenVowel(n1) && !isHyphenVowel(n2) && isHyphenVowel(n3)) {
+        const cluster = (n1 + n2).toLowerCase()
+        if (!INSEPARABLE_CLUSTERS.has(cluster)) {
+          out += n1 + '­'
+          i++
+        }
+      }
+    }
+    return out
+  }).join('')
+}
 
 const navItems = [
-  ['Início', '#inicio'], ['Sobre', '#sobre'], ['Especialidades', '#especialidades'],
+  ['Início', '#inicio'], ['Especialidades', '#especialidades'], ['Procedimentos', '#procedimentos'], ['Sobre', '#sobre'],
   ['Locais', '#locais'], ['Dúvidas', '#duvidas'], ['Contato', '#contato'],
 ] as const
 
 const specialties = [
-  { icon: 'nose', title: 'Nariz e respiração', text: 'Avaliação de rinite, sinusite, obstrução nasal, desvio de septo e outras alterações que podem dificultar a respiração.', className: 'nose' },
-  { icon: Ear, title: 'Ouvido e audição', text: 'Investigação de dores no ouvido, infecções, perda auditiva, sensação de ouvido entupido e outras alterações auditivas.', className: 'ear' },
-  { icon: 'dizziness', title: 'Otoneuro: tontura, vertigem e zumbido', text: 'Atendimento em otoneuro para avaliação de sintomas relacionados ao equilíbrio e à audição, como tontura, vertigem, labirintite e zumbido.', className: 'balance' },
-  { icon: 'throat', title: 'Garganta, amígdalas e adenoide', text: 'Acompanhamento de amigdalites, alterações da garganta, aumento das adenoides, ronco e dificuldades respiratórias.', className: 'throat' },
-  { icon: 'baby', title: 'Otorrinolaringologia infantil', text: 'Atendimento cuidadoso para crianças com problemas respiratórios, infecções recorrentes, alterações auditivas, amígdalas ou adenoides.', className: 'kids' },
-  { icon: Stethoscope, title: 'Avaliação cirúrgica', text: 'Avaliação para cirurgias otorrinolaringológicas, com orientações sobre indicação, preparação e acompanhamento do procedimento.', className: 'surgery' },
+  { icon: 'dizziness', title: 'Otoneurologia: Tontura, Vertigem e Equilíbrio', text: 'Avaliação para pessoas que sentem tontura, vertigem, sensação de desequilíbrio ou instabilidade. A consulta busca entender a causa desses sintomas e, quando necessário, podem ser solicitados exames específicos do equilíbrio.', className: 'nose' },
+  { icon: Ear, title: 'Zumbido e Alterações Auditivas', text: 'Avaliação de sintomas como zumbido, diminuição da audição, sensação de ouvido tampado ou pressão no ouvido. O objetivo é investigar o que pode estar causando essas alterações e orientar o tratamento adequado.', className: 'ear' },
+  { icon: 'otoneurology-exam', title: 'Exames Otoneurológicos', text: 'Exames que ajudam a avaliar o funcionamento do sistema responsável pelo equilíbrio. Podem ser utilizados testes como a videonistagmoscopia infravermelha, o vHIT e o exame de posturografia para ajudar a identificar alterações relacionadas à tontura, vertigem e desequilíbrio.', className: 'balance' },
+  { icon: 'throat', title: 'Cirurgia de Amígdalas e Adenoide com Coblation®', text: 'Cirurgia indicada em casos de aumento das amígdalas ou da adenoide, que podem causar dificuldade para respirar, roncos, infecções frequentes ou outros problemas. Em casos selecionados, pode ser utilizada a tecnologia Coblation® durante o procedimento.', className: 'throat' },
+  { icon: 'surgery-tool', title: 'Cirurgia Otorrinolaringológica', text: 'Avaliação de problemas do nariz, seios da face, garganta e ouvido que podem precisar de tratamento cirúrgico. Cada caso é analisado individualmente para definir se a cirurgia é necessária e qual é a opção mais adequada.', className: 'kids' },
+  { icon: 'ear-nose-throat', title: 'Otorrinolaringologia Geral', text: 'Atendimento para adultos e crianças com problemas como rinite, sinusite, nariz entupido, infecções de ouvido, dores ou alterações na garganta e outras condições relacionadas ao ouvido, nariz e garganta.', className: 'surgery' },
+] as const
+
+const examChapters = [
+  {
+    eyebrow: 'Nariz, garganta e voz',
+    title: 'Exames Otorrinolaringológicos',
+    intro: [],
+    image: '/images/procedimentos-videoendoscopia-nasossinusal-sao-luis.webp',
+    imageAlt: 'Dr. Evaldo realiza videoendoscopia nasossinusal durante atendimento',
+    imagePosition: '75% 32%',
+    items: [
+      ['Videoendoscopia Nasossinusal', 'Exame realizado com uma pequena câmera que permite visualizar por dentro do nariz e avaliar regiões que não podem ser vistas facilmente em um exame comum. Ajuda a investigar problemas como obstrução nasal, sinusite e outras alterações nasais.'],
+      ['Videolaringoscopia', 'Exame realizado com uma pequena câmera para observar a garganta, a laringe e as cordas vocais. É utilizado para investigar sintomas como rouquidão, alterações na voz, tosse persistente, engasgos e desconfortos na garganta.'],
+    ],
+  },
+  {
+    eyebrow: 'Equilíbrio e otoneurologia',
+    title: 'Exames Otoneurológicos',
+    intro: [],
+    image: '/images/procedimentos-avaliacao-otoneurologica-sao-luis.webp',
+    imageAlt: 'Dr. Evaldo realiza avaliação otoneurológica em paciente em São Luís',
+    imagePosition: '48% center',
+    items: [
+      ['Videonistagmoscopia Infravermelha', 'Exame que observa os movimentos dos olhos para ajudar a identificar alterações relacionadas à tontura e à vertigem. Ele permite avaliar como o sistema responsável pelo equilíbrio está funcionando.'],
+      ['VHIT – Video Head Impulse Test', 'Exame que avalia como os olhos e o ouvido interno trabalham juntos para manter a visão estável durante os movimentos da cabeça. Ele ajuda a identificar alterações no sistema responsável pelo equilíbrio.'],
+      ['Posturografia Computadorizada', 'Exame que avalia como o seu corpo mantém o equilíbrio em diferentes situações. Ele ajuda a identificar dificuldades de equilíbrio e também pode auxiliar na escolha do tratamento ou da reabilitação mais adequada.'],
+    ],
+  },
+  {
+    eyebrow: 'Tratamentos no consultório',
+    title: 'Procedimentos Ambulatoriais',
+    intro: [],
+    image: '/images/procedimentos-manobra-epley-vppb-ampliada.webp',
+    imageAlt: 'Dr. Evaldo realiza manobra de Epley para vertigem posicional em paciente',
+    imagePosition: '60% center',
+    items: [
+      ['Manobras de Reposicionamento para Vertigem Posicional (VPPB)', 'São movimentos realizados pelo médico para tratar um tipo específico de vertigem que costuma surgir ao mudar a posição da cabeça, como ao deitar, levantar ou virar na cama. As manobras ajudam a reposicionar pequenas partículas dentro do ouvido que podem estar causando a tontura.'],
+      ['Aplicação Intratimpânica de Medicamentos', 'Procedimento em que o medicamento é aplicado diretamente no ouvido através do tímpano, permitindo que ele atue mais próximo da região que precisa ser tratada. Pode ser indicado em situações específicas, como alguns casos de perda auditiva súbita, doença de Ménière e outras alterações do ouvido interno.'],
+    ],
+  },
+] as const
+
+const coblationChapters = [
+  {
+    eyebrow: 'Tecnologia para amígdalas e adenoide',
+    title: 'Coblation®: Tecnologia Moderna para Cirurgias de Amígdalas e Adenoide',
+    intro: [
+      'A Coblation® é uma tecnologia utilizada em procedimentos de otorrinolaringologia para tratar tecidos das amígdalas e da adenoide. O método utiliza energia de radiofrequência combinada com uma solução salina, formando um campo de plasma capaz de atuar de maneira controlada na área tratada.',
+      'Por trabalhar em temperaturas mais baixas do que algumas técnicas convencionais, a Coblation® foi desenvolvida para proporcionar maior precisão e reduzir a propagação de calor nos tecidos próximos. Ela pode ser utilizada em procedimentos como amigdalectomia, adenoidectomia e adenotonsilectomia, conforme a indicação médica.',
+      'A cirurgia pode ser considerada em casos de amígdalas ou adenoide aumentadas, amigdalite recorrente, ronco, dificuldade para respirar, respiração pela boca e apneia obstrutiva do sono. A avaliação individualizada é essencial para definir se há indicação cirúrgica e qual tratamento é mais adequado.',
+      'O Dr. Evaldo atua em otorrinolaringologia e avalia pacientes que desejam conhecer a técnica Coblation® em São Luís, incluindo quem busca cirurgia de amígdalas, cirurgia de adenoide ou investigação de ronco e problemas respiratórios durante o sono.',
+      'Agende uma consulta para saber se essa tecnologia pode ser indicada para o seu caso.',
+    ],
+    image: '/images/procedimentos-coblation-amigdalas-adenoide-sao-luis.webp',
+    imageAlt: 'Dr. Evaldo, otorrinolaringologista em São Luís, com instrumento utilizado em procedimentos de Coblation®',
+    imagePosition: '50% 35%',
+    video: {
+      mp4: '/videos/coblation-dr-evaldo.mp4',
+      liteMp4: '/videos/coblation-dr-evaldo-mobile.mp4',
+      poster: '/videos/coblation-dr-evaldo-poster.webp',
+    },
+    items: [],
+  },
+] as const
+
+const surgeryChapters = [
+  {
+    eyebrow: 'Respiração nasal',
+    title: 'Cirurgias Otorrinolaringológicas',
+    intro: [],
+    image: '/images/procedimentos-ambiente-cirurgico.webp',
+    imageAlt: 'Dr. Evaldo realiza cirurgia em ambiente cirúrgico',
+    imagePosition: '50% 38%',
+    items: [
+      ['Septoplastia e Cirurgia dos Cornetos Nasais', 'A septoplastia e a cirurgia dos cornetos nasais são procedimentos que podem melhorar a respiração pelo nariz. A septoplastia corrige o desvio do septo, estrutura que separa os dois lados do nariz. Já a cirurgia dos cornetos nasais reduz estruturas aumentadas no interior do nariz que dificultam a passagem do ar.'],
+      ['Cirurgia Endoscópica Nasossinusal', 'Cirurgia realizada por dentro do nariz, com o auxílio de uma pequena câmera, sem necessidade de cortes externos na maioria dos casos. Pode ser indicada para tratar problemas como sinusite crônica, pólipos nasais e outras alterações que causam obstrução ou inflamação persistente.'],
+    ],
+  },
+  {
+    eyebrow: 'Ouvido médio',
+    title: 'Timpanotomia e Timpanoplastia',
+    intro: ['Cirurgias realizadas para tratar diferentes alterações do ouvido médio e da membrana do tímpano.'],
+    image: '/images/procedimentos-timpanotomia-timpanoplastia-sao-luis.webp',
+    imageAlt: 'Dr. Evaldo realiza cirurgia otológica com auxílio de microscópio',
+    imagePosition: '70% center',
+    items: [
+      ['Timpanotomia com Colocação de Tubos de Ventilação', 'Procedimento que ajuda a melhorar a ventilação do ouvido médio e a drenagem de líquidos acumulados atrás do tímpano. Pode ser utilizado principalmente em casos de otites recorrentes ou de persistência de secreção no ouvido.'],
+      ['Timpanoplastia', 'Cirurgia indicada para reparar perfurações ou lesões da membrana do tímpano, buscando restaurar sua integridade, proteger o ouvido médio e contribuir para a melhora da audição.'],
+    ],
+  },
+  {
+    eyebrow: 'Garganta, amígdalas e voz',
+    title: 'Cirurgias da Garganta e da Laringe',
+    intro: [],
+    image: '/images/procedimentos-cirurgia-otorrinolaringologica-maranhao.webp',
+    imageAlt: 'Procedimento cirúrgico de otorrinolaringologia realizado pelo Dr. Evaldo',
+    imagePosition: '50% 34%',
+    items: [
+      ['Microcirurgia da Laringe', 'Cirurgia realizada para avaliar e tratar alterações na laringe e nas cordas vocais, como pólipos, cistos e outras lesões. O procedimento busca remover ou tratar essas alterações preservando ao máximo a voz e o funcionamento das cordas vocais.'],
+    ],
+  },
 ] as const
 
 const locations = [
   {
     name: 'Executive Lake Center',
     subtitle: 'Clínica Rhinus',
-    logo: '/logos/clinica-rhinus.png',
+    logo: '/logos/locais-logo-clinica-rhinus.png',
     logoAlt: 'Logotipo da Clínica Rhinus',
     address: 'R. das Andirobas, 10 – sala 405\nJardim Renascença, São Luís – MA\nCEP 65075-040',
     reference: 'Próximo à Lagoa da Jansen.',
@@ -34,7 +163,7 @@ const locations = [
   {
     name: 'Unidade Medical Center Jaracaty',
     subtitle: 'UDI Hospital',
-    logo: '/logos/udi.svg',
+    logo: '/logos/locais-logo-udi-hospital.svg',
     logoAlt: 'Logotipo da UDI Hospital',
     address: 'Av. Professor Carlos Cunha, 1\nMedical Center Jaracaty – 2º andar\nJaracaty, São Luís – MA · CEP 65076-820',
     reference: '',
@@ -43,38 +172,29 @@ const locations = [
   },
 ] as const
 
-function NoseIcon() {
-  return <span className="nose-icon" aria-hidden="true"><img src="/images/icone-nariz.svg" alt="" /></span>
+function DizzinessIcon() {
+  return <img className="dizziness-icon" src="/images/especialidades-icone-tontura.svg" alt="" aria-hidden="true" />
 }
 
-function DizzinessIcon() {
-  return <img className="dizziness-icon" src="/images/icone-tontura-cabeca.svg" alt="" aria-hidden="true" />
+function OtoneurologyExamIcon() {
+  return <img className="otoneurology-exam-icon" src="/images/especialidades-icone-exames-otoneurologicos.svg" alt="" aria-hidden="true" />
+}
+
+function EarNoseThroatIcon() {
+  return <img className="ear-nose-throat-icon" src="/images/especialidades-icone-ouvido-nariz-garganta.svg" alt="" aria-hidden="true" />
+}
+
+function SurgeryToolIcon() {
+  return <img className="surgery-tool-icon" src="/images/especialidades-icone-cirurgia-otorrino.svg" alt="" aria-hidden="true" />
 }
 
 function ThroatIcon() {
-  return <img className="throat-icon" src="/images/icone-dor-garganta.svg" alt="" aria-hidden="true" />
-}
-
-function BabyIcon() {
-  return <img className="baby-icon" src="/images/icone-bebe-azul.svg" alt="" aria-hidden="true" />
+  return <img className="throat-icon" src="/images/especialidades-icone-garganta.svg" alt="" aria-hidden="true" />
 }
 
 function InstagramIcon() {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z" /><path d="M17.5 6.5h.01" /></svg>
 }
-
-const symptoms = [
-  'Dificuldade para respirar pelo nariz', 'Rinite ou sinusite recorrente', 'Dores de ouvido',
-  'Zumbido', 'Redução da audição', 'Tonturas ou alterações de equilíbrio',
-  'Rouquidão persistente', 'Dor ou dificuldade para engolir', 'Ronco ou alterações do sono',
-]
-
-const differentials = [
-  { icon: HeartHandshake, title: 'Escuta cuidadosa', text: 'A consulta começa com atenção às suas queixas, dúvidas e histórico de saúde.' },
-  { icon: Stethoscope, title: 'Explicações claras', text: 'Informações acessíveis sobre sintomas, exames e possibilidades de acompanhamento.' },
-  { icon: UserRoundCheck, title: 'Cuidado individualizado', text: 'Cada conduta é definida conforme as necessidades e características do paciente.' },
-  { icon: ShieldCheck, title: 'Formação especializada', text: 'Experiência direcionada ao cuidado do ouvido, nariz, garganta, respiração, audição e equilíbrio.' },
-]
 
 const patientReviews = [
   {
@@ -157,7 +277,7 @@ function PatientReviewsCarousel() {
           <span className="review-avatar" aria-hidden="true">{name.charAt(0)}</span>
           <h3>{name}</h3>
         </div>
-        <blockquote>“{text}”</blockquote>
+        <blockquote>“{sh(text)}”</blockquote>
         <footer><span>{date} · {location}</span><a href={siteConfig.contact.doctoralia} target="_blank" rel="noreferrer">Doctoralia <ArrowRight size={15} /></a></footer>
       </article>)}
     </div>
@@ -170,21 +290,964 @@ function PatientReviewsCarousel() {
 }
 
 const faqs = [
-  ['Quando devo procurar um otorrinolaringologista?', 'Quando houver sintomas persistentes ou recorrentes relacionados à audição, nariz, garganta, voz, equilíbrio, respiração ou sono. A avaliação médica ajuda a compreender cada caso.'],
-  ['Quais regiões do corpo são avaliadas pelo otorrino?', 'O otorrinolaringologista avalia principalmente ouvidos, nariz e garganta, além de estruturas relacionadas da cabeça e do pescoço.'],
-  ['Como posso agendar uma consulta?', 'Use um dos botões de agendamento desta página para falar com a equipe pelo WhatsApp e consultar a disponibilidade.'],
-  ['Onde ficam os locais de atendimento?', 'O atendimento é realizado no Executive Lake Center, no Jardim Renascença, e na Unidade Medical Center Jaracaty, no UDI Hospital, em São Luís — MA.'],
-  ['Quais informações devo levar para a consulta?', 'Leve um documento de identificação e, se tiver, exames anteriores, receitas em uso e anotações sobre os sintomas que deseja relatar.'],
-  ['O atendimento é particular ou aceita convênio?', 'Essa informação ainda será confirmada. Consulte diretamente a equipe antes de agendar.'],
+  ['Quando devo procurar um otorrinolaringologista ou uma avaliação em Otoneurologia?', 'A avaliação otorrinolaringológica é indicada diante de sintomas persistentes ou recorrentes relacionados ao ouvido, audição, nariz, garganta, voz, respiração ou sono. Para casos de tontura, vertigem, desequilíbrio, zumbido, perda auditiva ou sensação de ouvido tampado, uma avaliação em Otoneurologia pode ajudar a investigar a origem dos sintomas e direcionar o tratamento.'],
+  ['Quais são as principais causas de tontura e vertigem?', 'Tontura e vertigem podem ter diferentes causas e nem sempre significam “labirintite”. Entre as possibilidades estão alterações como VPPB, doença de Ménière, hipofunções vestibulares, migrânea vestibular e tontura postural-perceptual persistente (TPPP). Condições neurológicas e outros problemas clínicos também podem causar sintomas semelhantes, por isso a avaliação individualizada é importante.'],
+  ['Quais exames podem ser realizados na investigação da tontura e do equilíbrio?', 'Os exames são definidos de acordo com a avaliação clínica de cada paciente. Dependendo do caso, podem ser utilizados exames como videonistagmoscopia infravermelha, Video Head Impulse Test (vHIT), avaliações auditivas e outros testes específicos da função vestibular.'],
+  ['Zumbido tem tratamento?', 'Sim, existem diferentes formas de acompanhamento e tratamento, dependendo da causa e das características do zumbido. Ele pode estar relacionado a condições auditivas ou não auditivas, por isso a avaliação busca identificar possíveis fatores associados e seu impacto na qualidade de vida para definir a abordagem mais adequada.'],
+  ['Quando a cirurgia das amígdalas e adenoide é indicada e o que é Coblation®?', 'A cirurgia pode ser indicada em casos de amígdalas ou adenoide aumentadas, obstrução respiratória, alterações respiratórias durante o sono ou determinadas infecções recorrentes. Em alguns casos, pode ser utilizada a tecnologia Coblation®️, que emprega radiofrequência associada a uma solução salina para remoção ou redução dos tecidos em temperaturas relativamente baixas. A indicação da cirurgia e da técnica utilizada depende da avaliação de cada paciente.'],
+  ['Como funciona o atendimento, agendamento e formas de pagamento?', 'O atendimento otorrinolaringológico contempla adultos e crianças, com avaliação direcionada às necessidades de cada faixa etária. O agendamento pode ser realizado diretamente pelo WhatsApp, onde a equipe informa os locais e horários disponíveis. As modalidades de atendimento particular ou por convênio podem variar de acordo com o local e devem ser consultadas diretamente com a equipe.'],
 ] as const
 
-function WhatsAppLink({ children, className = 'button primary', source, message }: { children: ReactNode; className?: string; source: string; message?: string }) {
+const instagramPosts = [
+  {
+    title: 'Nem toda tontura é labirintite',
+    description: `Essa palavra virou um rótulo para quase qualquer tontura…
+Mas, na medicina, labirintite verdadeira é rara.
+
+Na prática, o que mais aparece são outras causas, como:
+🔹 VPPB
+🔹 Enxaqueca vestibular
+🔹 Neurite vestibular`,
+    video: '/instagram/nem-toda-tontura-e-labirintite.mp4',
+    videoLite: '/instagram/nem-toda-tontura-e-labirintite-lite.mp4',
+    videoPoster: '/instagram/nem-toda-tontura-e-labirintite-poster.webp',
+    page: '/conteudos/labirintite-e-tontura.html',
+    videoAriaLabel: 'Vídeo explicando que nem toda tontura é labirintite',
+    url: 'https://www.instagram.com/reel/DVw1LcIgG8p/?utm_source=ig_web_copy_link&stkn=NTc4MTIwNjQ2YQ==',
+  },
+  {
+    title: '“Labirintite”? Você tem certeza?',
+    description: `🌀 “LABIRINTITE”? VOCÊ TEM CERTEZA?
+
+Você sente tontura ao levantar da cama?
+Sensação de cabeça pesada, desequilíbrio, vista escurecendo, insegurança ao andar ou um “barato” estranho na cabeça?
+
+⚠️ Pode não ser labirintite!
+
+Muita gente chama qualquer tontura de labirintite, mas isso é só um nome genérico. Na verdade, existem várias causas diferentes para esse problema, e cada uma exige um tratamento específico.`,
+    url: 'https://www.instagram.com/p/DWCqMoSEe74/',
+    image: '/instagram/tontura-nao-e-labirintite.webp',
+    imageAlt: 'Publicação do Dr. Evaldo explicando que nem toda tontura é labirintite',
+    page: '/conteudos/labirintite-e-tontura.html',
+  },
+  {
+    title: 'Tontura NÃO é tudo “labirintite”',
+    description: `Existe uma causa MUITO comum e pouco diagnosticada:
+👉 Enxaqueca Vestibular
+
+📌 Pode dar:
+• tontura
+• enjoo 🤢
+• sensibilidade à luz 💡
+• e às vezes NEM vem com dor de cabeça
+
+⏱️ Crises de minutos a horas
+⚠️ Piora com estresse, sono ruim e jejum
+
+Resultado? A tontura continua — e você perde tempo.
+
+💬 Já passou por isso? Comenta aqui
+📲 Envia pra quem vive com tontura`,
+    video: '/instagram/enxaqueca-vestibular.mp4',
+    videoLite: '/instagram/enxaqueca-vestibular-lite.mp4',
+    videoPoster: '/instagram/enxaqueca-vestibular-poster.webp',
+    page: '/conteudos/enxaqueca-vestibular.html',
+    videoAriaLabel: 'Vídeo explicando os sintomas da enxaqueca vestibular',
+    url: 'https://www.instagram.com/reel/DWhkB1zgHo6/',
+  },
+  {
+    title: 'O ouvido não serve apenas para ouvir',
+    description: `Dentro dele existe uma estrutura chamada labirinto, responsável por perceber movimento, aceleração e a posição da cabeça.
+
+Esse sistema trabalha junto com a visão e os sensores do corpo (pés, pernas e coluna) para manter o equilíbrio.
+
+Quando essas informações não se entendem, o resultado pode ser:
+
+⚠️ tontura
+⚠️ instabilidade
+⚠️ sensação de chão mole
+⚠️ cabeça “flutuando”`,
+    video: '/instagram/ouvido-equilibrio-labirinto.mp4',
+    videoLite: '/instagram/ouvido-equilibrio-labirinto-lite.mp4',
+    videoPoster: '/instagram/ouvido-equilibrio-labirinto-poster.webp',
+    page: '/conteudos/ouvido-interno-e-equilibrio.html',
+    videoAriaLabel: 'Vídeo explicando como o ouvido e o labirinto participam do equilíbrio',
+    url: 'https://www.instagram.com/reel/DVexR90gPy8/',
+  },
+  {
+    title: 'Tontura no supermercado',
+    description: `Você sente tontura ou mal-estar ao entrar em supermercados, shoppings ou locais muito iluminados?
+Essa sensação comum pode não ser “labirintite” como muitos pensam… Pode ser enxaqueca vestibular, também conhecida como a enxaqueca do labirinto.
+
+📍Luzes fluorescentes, corredores longos, muitos estímulos visuais e sons podem desencadear crises de tontura, visão embaralhada ou sensação de desequilíbrio — mesmo sem dor de cabeça!`,
+    url: 'https://www.instagram.com/p/DVrTUEAkQu3/',
+    image: '/instagram/tontura-supermercado.webp',
+    imageAlt: 'Publicação do Dr. Evaldo sobre episódios de tontura no supermercado',
+    page: '/conteudos/enxaqueca-vestibular.html',
+  },
+  {
+    title: 'Se sua tontura não melhora, pare agora',
+    description: `Você pode estar tomando Labirin, Betaserc ou similares há meses…
+👉 e isso não resolve a maioria das tonturas
+
+🚨 O erro não é o remédio. É tratar sem diagnóstico certo.`,
+    video: '/instagram/se-sua-tontura-nao-melhora.mp4',
+    videoLite: '/instagram/se-sua-tontura-nao-melhora-lite.mp4',
+    videoPoster: '/instagram/se-sua-tontura-nao-melhora-poster.webp',
+    page: '/conteudos/tontura-e-diagnostico.html',
+    videoAriaLabel: 'Vídeo alertando sobre o tratamento de tontura sem diagnóstico correto',
+    url: 'https://www.instagram.com/reel/DXhreRuEdB5/',
+  },
+] as const
+
+type VideoNetworkTier = 'fast' | 'medium' | 'constrained'
+type VideoPriority = 'active' | 'next' | 'none'
+type VideoStatus = 'idle' | 'preparing' | 'playing' | 'waiting' | 'delayed' | 'error'
+
+type NavigatorWithConnection = Navigator & {
+  connection?: {
+    effectiveType?: string
+    saveData?: boolean
+    addEventListener?: (type: 'change', listener: () => void) => void
+    removeEventListener?: (type: 'change', listener: () => void) => void
+  }
+}
+
+const readVideoNetworkTier = (): VideoNetworkTier => {
+  if (typeof navigator === 'undefined') return 'medium'
+  const connection = (navigator as NavigatorWithConnection).connection
+  if (connection?.saveData || connection?.effectiveType === 'slow-2g' || connection?.effectiveType === '2g') return 'constrained'
+  if (connection?.effectiveType === '3g') return 'medium'
+  return 'fast'
+}
+
+function useVideoNetworkTier() {
+  const [tier, setTier] = useState<VideoNetworkTier>('medium')
+
+  useEffect(() => {
+    const connection = (navigator as NavigatorWithConnection).connection
+    const updateTier = () => setTier(readVideoNetworkTier())
+    updateTier()
+    if (!connection?.addEventListener) return
+    connection.addEventListener('change', updateTier)
+    return () => connection.removeEventListener?.('change', updateTier)
+  }, [])
+
+  return tier
+}
+
+const videoPreloadMargin = (tier: VideoNetworkTier) => tier === 'fast' ? '1000px 0px' : tier === 'medium' ? '650px 0px' : '0px'
+
+function InstagramVideo({ src, liteSrc, poster, ariaLabel, tabIndex, priority, sectionNear, networkTier, playbackId, activePlaybackId, onPlaybackStart, onPlaybackPause, autoplay = true }: { src: string; liteSrc: string; poster: string; ariaLabel?: string; tabIndex?: number; priority: VideoPriority; sectionNear: boolean; networkTier: VideoNetworkTier; playbackId: string; activePlaybackId: string | null; onPlaybackStart: (playbackId: string) => void; onPlaybackPause: (playbackId: string) => void; autoplay?: boolean }) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const activePlaybackIdRef = useRef(activePlaybackId)
+  activePlaybackIdRef.current = activePlaybackId
+  const playTimerRef = useRef<number | null>(null)
+  const prepareTimerRef = useRef<number | null>(null)
+  const manuallyPausedRef = useRef(false)
+  const playAfterLoadRef = useRef(false)
+  const hasStartedPlaybackRef = useRef(false)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [manuallyRequested, setManuallyRequested] = useState(false)
+  const [showPoster, setShowPoster] = useState(true)
+  const [status, setStatus] = useState<VideoStatus>('idle')
+  const [retryKey, setRetryKey] = useState(0)
+  const mayPreload = sectionNear && networkTier !== 'constrained' && priority !== 'none'
+  const hasSource = manuallyRequested || mayPreload
+  const selectedSrc = manuallyRequested && networkTier === 'constrained' ? liteSrc : src
+  const requestSrc = retryKey === 0 ? selectedSrc : `${selectedSrc}${selectedSrc.includes('?') ? '&' : '?'}retry=${retryKey}`
+  const preload = manuallyRequested ? 'auto' : priority === 'active' && networkTier === 'fast' ? 'auto' : mayPreload ? 'metadata' : 'none'
+
+  const resetToPoster = useCallback(() => {
+    const video = videoRef.current
+    playAfterLoadRef.current = false
+    hasStartedPlaybackRef.current = false
+    if (playTimerRef.current !== null) {
+      window.clearTimeout(playTimerRef.current)
+      playTimerRef.current = null
+    }
+    if (prepareTimerRef.current !== null) {
+      window.clearTimeout(prepareTimerRef.current)
+      prepareTimerRef.current = null
+    }
+    if (video) {
+      if (!video.paused) video.pause()
+      if (video.readyState > 0) video.currentTime = 0
+    }
+    setIsPlaying(false)
+    setShowPoster(true)
+    setStatus('idle')
+  }, [])
+
+  useEffect(() => {
+    if (activePlaybackId === playbackId) return
+    resetToPoster()
+  }, [activePlaybackId, playbackId, resetToPoster])
+
+  useEffect(() => {
+    if (priority !== 'none') return
+    resetToPoster()
+    onPlaybackPause(playbackId)
+    setManuallyRequested(false)
+  }, [priority, onPlaybackPause, playbackId, resetToPoster])
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video || !hasSource) return
+    video.load()
+    if (playAfterLoadRef.current) void video.play().catch(() => undefined)
+  }, [hasSource, retryKey, selectedSrc])
+
+  useEffect(() => {
+    const video = videoRef.current
+    const track = video?.closest('.instagram-track')
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const mobileScreen = window.matchMedia('(max-width: 899px)')
+    let isVisible = false
+    let lastTrackScrollLeft = track?.scrollLeft ?? 0
+
+    const clearPlayTimer = () => {
+      if (playTimerRef.current === null) return
+      window.clearTimeout(playTimerRef.current)
+      playTimerRef.current = null
+    }
+
+    const clearPrepareTimer = () => {
+      if (prepareTimerRef.current === null) return
+      window.clearTimeout(prepareTimerRef.current)
+      prepareTimerRef.current = null
+    }
+
+    const schedulePlayback = () => {
+      clearPlayTimer()
+      if (!autoplay || !video || !hasSource || networkTier === 'constrained' || !mobileScreen.matches || !isVisible || document.hidden || reducedMotion.matches || manuallyPausedRef.current) return
+      playTimerRef.current = window.setTimeout(() => {
+        const otherVideoActive = activePlaybackIdRef.current !== null && activePlaybackIdRef.current !== playbackId
+        if (otherVideoActive || !mobileScreen.matches || !isVisible || document.hidden || reducedMotion.matches || manuallyPausedRef.current) return
+        onPlaybackStart(playbackId)
+        void video.play().catch(() => undefined)
+      }, 7000)
+    }
+
+    const resetToThumbnail = () => {
+      resetToPoster()
+      onPlaybackPause(playbackId)
+    }
+
+    const handleHorizontalMovement = () => {
+      if (!track || Math.abs(track.scrollLeft - lastTrackScrollLeft) < 1) return
+      lastTrackScrollLeft = track.scrollLeft
+      manuallyPausedRef.current = false
+      resetToThumbnail()
+      schedulePlayback()
+    }
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        resetToThumbnail()
+        clearPlayTimer()
+        return
+      }
+      schedulePlayback()
+    }
+
+    const handleScreenChange = () => {
+      if (!mobileScreen.matches) resetToThumbnail()
+      schedulePlayback()
+    }
+
+    if (!video) return
+    const observer = new IntersectionObserver(([entry]) => {
+      const wasVisible = isVisible
+      isVisible = entry.isIntersecting && entry.intersectionRatio >= .6
+      if (!entry.isIntersecting || (wasVisible && !isVisible)) {
+        manuallyPausedRef.current = false
+        resetToThumbnail()
+        clearPlayTimer()
+      } else if (!wasVisible) {
+        schedulePlayback()
+      }
+    }, { threshold: [0, .6] })
+
+    observer.observe(video)
+    track?.addEventListener('scroll', handleHorizontalMovement, { passive: true })
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    mobileScreen.addEventListener('change', handleScreenChange)
+    reducedMotion.addEventListener('change', schedulePlayback)
+
+    return () => {
+      observer.disconnect()
+      track?.removeEventListener('scroll', handleHorizontalMovement)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      mobileScreen.removeEventListener('change', handleScreenChange)
+      reducedMotion.removeEventListener('change', schedulePlayback)
+      clearPlayTimer()
+      clearPrepareTimer()
+      video.pause()
+    }
+  }, [selectedSrc, hasSource, networkTier, autoplay, onPlaybackPause, onPlaybackStart, playbackId, resetToPoster])
+
+  const startPrepareTimer = () => {
+    if (prepareTimerRef.current !== null) window.clearTimeout(prepareTimerRef.current)
+    prepareTimerRef.current = window.setTimeout(() => {
+      setShowPoster(true)
+      setStatus((current) => current === 'preparing' || current === 'waiting' ? 'delayed' : current)
+    }, 15000)
+  }
+
+  const requestPlayback = () => {
+    onPlaybackStart(playbackId)
+    playAfterLoadRef.current = true
+    manuallyPausedRef.current = false
+    setStatus('preparing')
+    startPrepareTimer()
+    if (!hasSource) {
+      setManuallyRequested(true)
+      return
+    }
+    void videoRef.current?.play().catch(() => undefined)
+  }
+
+  const retryPlayback = () => {
+    onPlaybackStart(playbackId)
+    setStatus('preparing')
+    setShowPoster(true)
+    playAfterLoadRef.current = true
+    startPrepareTimer()
+    setManuallyRequested(true)
+    setRetryKey((value) => value + 1)
+  }
+
+  const handlePlayClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    event.stopPropagation()
+    if (playTimerRef.current !== null) {
+      window.clearTimeout(playTimerRef.current)
+      playTimerRef.current = null
+    }
+    const video = videoRef.current
+    if (status === 'error' || status === 'delayed') {
+      retryPlayback()
+      return
+    }
+    if (!video || video.paused) {
+      requestPlayback()
+      return
+    }
+    manuallyPausedRef.current = true
+    resetToPoster()
+    onPlaybackPause(playbackId)
+  }
+
+  const handlePlaying = () => {
+    onPlaybackStart(playbackId)
+    playAfterLoadRef.current = false
+    hasStartedPlaybackRef.current = true
+    if (prepareTimerRef.current !== null) window.clearTimeout(prepareTimerRef.current)
+    prepareTimerRef.current = null
+    setIsPlaying(true)
+    setShowPoster(false)
+    setStatus('playing')
+  }
+
+  return <>
+    {hasSource && <video
+      key={requestSrc}
+      ref={videoRef}
+      aria-label={ariaLabel}
+      muted
+      loop
+      playsInline
+      preload={preload}
+      poster={poster}
+      onCanPlay={() => { if (playAfterLoadRef.current) void videoRef.current?.play().catch(() => undefined) }}
+      onClick={() => {
+        if (!videoRef.current || videoRef.current.paused) return
+        manuallyPausedRef.current = true
+        resetToPoster()
+        onPlaybackPause(playbackId)
+      }}
+      onPlaying={handlePlaying}
+      onPause={() => {
+        if (!hasStartedPlaybackRef.current) return
+        resetToPoster()
+        onPlaybackPause(playbackId)
+      }}
+      onWaiting={() => {
+        if (showPoster) return
+        setStatus('waiting')
+        startPrepareTimer()
+      }}
+      onError={() => { setStatus('error'); setIsPlaying(false); setShowPoster(true) }}
+    ><source src={requestSrc} type="video/mp4" /></video>}
+    <img className={`instagram-video-poster${showPoster ? '' : ' is-hidden'}`} src={poster} alt="" width="540" height="960" loading="lazy" decoding="async" aria-hidden="true" />
+    {(status === 'preparing' || status === 'waiting') && <div className="instagram-video-status" role="status">Preparando vídeo…</div>}
+    {(status === 'delayed' || status === 'error') && <button type="button" className="instagram-video-retry" onClick={handlePlayClick}>{status === 'delayed' ? 'Conexão lenta. Tentar novamente' : 'Não foi possível carregar. Tentar novamente'}</button>}
+    {(showPoster || !isPlaying) && <button type="button" className={`instagram-video-play${status === 'preparing' || status === 'waiting' ? ' is-loading' : ''}`} tabIndex={tabIndex} aria-label="Reproduzir vídeo" onPointerDown={(event) => event.stopPropagation()} onClick={handlePlayClick}><Play fill="currentColor" /></button>}
+  </>
+}
+
+function InstagramCarousel() {
+  const networkTier = useVideoNetworkTier()
+  const [activePlaybackId, setActivePlaybackId] = useState<string | null>(null)
+  const handlePlaybackPause = useCallback((playbackId: string) => {
+    setActivePlaybackId((current) => current === playbackId ? null : current)
+  }, [])
+  const cloneCount = Math.min(instagramPosts.length, 3)
+  const firstRealIndex = cloneCount
+  const lastRealIndex = cloneCount + instagramPosts.length - 1
+  const firstTrailingCloneIndex = lastRealIndex + 1
+  const lastTrackIndex = lastRealIndex + cloneCount
+  const trackRef = useRef<HTMLDivElement>(null)
+  const currentTrackIndexRef = useRef(firstRealIndex)
+  const scrollEndTimerRef = useRef<number | null>(null)
+  const hintPlayedRef = useRef(false)
+  const dragStateRef = useRef({ active: false, pointerId: -1, startX: 0, scrollLeft: 0, moved: false })
+  const suppressClickRef = useRef(false)
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [sectionNear, setSectionNear] = useState(false)
+  const carouselPosts = [
+    ...instagramPosts.slice(-cloneCount).map((post, index) => ({ post, key: `clone-before-${index}`, isClone: true, originalIndex: instagramPosts.length - cloneCount + index })),
+    ...instagramPosts.map((post, index) => ({ post, key: post.url, isClone: false, originalIndex: index })),
+    ...instagramPosts.slice(0, cloneCount).map((post, index) => ({ post, key: `clone-after-${index}`, isClone: true, originalIndex: index })),
+  ]
+  const videoPriority = (postIndex: number): VideoPriority => {
+    if (postIndex === currentIndex) return 'active'
+    if (networkTier === 'fast' && postIndex === (currentIndex + 1) % instagramPosts.length) return 'next'
+    return 'none'
+  }
+
+  const centerCard = (trackIndex: number, behavior: ScrollBehavior = 'smooth') => {
+    const track = trackRef.current
+    const nextTrackIndex = Math.max(0, Math.min(trackIndex, lastTrackIndex))
+    const card = track?.querySelectorAll<HTMLElement>('.instagram-card')[nextTrackIndex]
+    if (!track || !card) return
+    const nextIndex = (nextTrackIndex - firstRealIndex + instagramPosts.length) % instagramPosts.length
+    currentTrackIndexRef.current = nextTrackIndex
+    setCurrentIndex(nextIndex)
+    const left = card.offsetLeft - (track.clientWidth - card.offsetWidth) / 2
+    if (behavior === 'auto') {
+      const inlineScrollBehavior = track.style.scrollBehavior
+      track.style.scrollBehavior = 'auto'
+      track.scrollLeft = left
+      track.style.scrollBehavior = inlineScrollBehavior
+      return
+    }
+    track.scrollTo({ left, behavior })
+  }
+
+  const updateClosestCard = (shouldCenter = false) => {
+    const track = trackRef.current
+    const cards = Array.from(track?.querySelectorAll<HTMLElement>('.instagram-card') ?? [])
+    if (!track || !cards.length) return
+    const trackCenter = track.scrollLeft + track.clientWidth / 2
+    const closestTrackIndex = cards.reduce((closest, card, index) => {
+      const cardCenter = card.offsetLeft + card.offsetWidth / 2
+      return Math.abs(cardCenter - trackCenter) < closest.distance
+        ? { index, distance: Math.abs(cardCenter - trackCenter) }
+        : closest
+    }, { index: firstRealIndex, distance: Number.POSITIVE_INFINITY }).index
+    if (shouldCenter) {
+      centerCard(closestTrackIndex)
+      return
+    }
+    if (closestTrackIndex < firstRealIndex) {
+      centerCard(closestTrackIndex + instagramPosts.length, 'auto')
+      return
+    }
+    if (closestTrackIndex >= firstTrailingCloneIndex) {
+      centerCard(closestTrackIndex - instagramPosts.length, 'auto')
+      return
+    }
+    currentTrackIndexRef.current = closestTrackIndex
+    setCurrentIndex(closestTrackIndex - firstRealIndex)
+  }
+
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track) return
+    centerCard(firstRealIndex, 'auto')
+    const resizeObserver = new ResizeObserver(() => centerCard(currentTrackIndexRef.current, 'auto'))
+    resizeObserver.observe(track)
+    return () => resizeObserver.disconnect()
+  }, [])
+
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track) return
+    setSectionNear(false)
+    const observer = new IntersectionObserver(([entry]) => setSectionNear(entry.isIntersecting), {
+      threshold: 0.01,
+      rootMargin: videoPreloadMargin(networkTier),
+    })
+    observer.observe(track)
+    return () => observer.disconnect()
+  }, [networkTier])
+
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting || hintPlayedRef.current) return
+      hintPlayedRef.current = true
+      observer.disconnect()
+      track.animate([
+        { transform: 'translateX(0)' },
+        { transform: 'translateX(-20px)', offset: .48 },
+        { transform: 'translateX(0)' },
+      ], { duration: 800, easing: 'cubic-bezier(.22, 1, .36, 1)' })
+    }, { threshold: .35 })
+    observer.observe(track)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => () => {
+    if (scrollEndTimerRef.current !== null) window.clearTimeout(scrollEndTimerRef.current)
+  }, [])
+
+  const handleScroll = () => {
+    if (scrollEndTimerRef.current !== null) window.clearTimeout(scrollEndTimerRef.current)
+    scrollEndTimerRef.current = window.setTimeout(() => updateClosestCard(), 140)
+  }
+
+  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== 'mouse' || event.button !== 0) return
+    const track = trackRef.current
+    if (!track) return
+    dragStateRef.current = { active: true, pointerId: event.pointerId, startX: event.clientX, scrollLeft: track.scrollLeft, moved: false }
+    track.setPointerCapture(event.pointerId)
+    track.classList.add('is-dragging')
+  }
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    const track = trackRef.current
+    const drag = dragStateRef.current
+    if (!track || !drag.active || event.pointerId !== drag.pointerId) return
+    const distance = event.clientX - drag.startX
+    if (Math.abs(distance) > 4) drag.moved = true
+    if (!drag.moved) return
+    event.preventDefault()
+    track.scrollLeft = drag.scrollLeft - distance
+  }
+
+  const finishPointerDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    const track = trackRef.current
+    const drag = dragStateRef.current
+    if (!track || !drag.active || event.pointerId !== drag.pointerId) return
+    drag.active = false
+    track.classList.remove('is-dragging')
+    if (track.hasPointerCapture(event.pointerId)) track.releasePointerCapture(event.pointerId)
+    if (drag.moved) {
+      suppressClickRef.current = true
+      updateClosestCard(true)
+      window.setTimeout(() => { suppressClickRef.current = false }, 0)
+    }
+  }
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return
+    event.preventDefault()
+    centerCard(currentTrackIndexRef.current + (event.key === 'ArrowRight' ? 1 : -1))
+  }
+
+  return <>
+    <div
+      className="instagram-track"
+      ref={trackRef}
+      role="region"
+      aria-roledescription="carrossel"
+      aria-label="Publicações do Instagram do Dr. Evaldo. Deslize horizontalmente ou use os controles para navegar."
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      onScroll={handleScroll}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={finishPointerDrag}
+      onPointerCancel={finishPointerDrag}
+      onClickCapture={(event) => {
+        if (!suppressClickRef.current) return
+        event.preventDefault()
+        event.stopPropagation()
+      }}
+    >
+      {carouselPosts.map(({ post, key, isClone, originalIndex }) => <article className={`instagram-card${isClone ? '' : ' reveal'}`} aria-hidden={isClone || undefined} aria-label={isClone ? undefined : `Publicação ${originalIndex + 1} de ${instagramPosts.length}`} style={{ '--delay': `${(originalIndex % 4) * 70}ms` } as React.CSSProperties} key={key}>
+        {'video' in post ? <div className="instagram-card__media"><InstagramVideo src={post.video} liteSrc={post.videoLite} poster={post.videoPoster} ariaLabel={post.videoAriaLabel} tabIndex={isClone ? -1 : undefined} priority={isClone ? 'none' : videoPriority(originalIndex)} sectionNear={sectionNear} networkTier={networkTier} playbackId={key} activePlaybackId={activePlaybackId} onPlaybackStart={setActivePlaybackId} onPlaybackPause={handlePlaybackPause} autoplay={!isClone} /></div> : <a className="instagram-card__media" href={post.url} target="_blank" rel="noreferrer" tabIndex={isClone ? -1 : undefined} aria-label={`Abrir no Instagram: ${post.title}`} onClick={() => trackEvent('click_instagram_post', { post: String(originalIndex + 1) })}>
+        {'image' in post ? <img src={post.image} alt={isClone ? '' : post.imageAlt} width="1080" height="1350" loading="lazy" /> : <span className="instagram-card__pending">
+          <span className="instagram-card__play"><Play fill="currentColor" /></span>
+          <span>Vídeo em atualização</span>
+          <small>O card já está pronto para receber a mídia.</small>
+        </span>}
+      </a>}
+      <div className="instagram-card__body">
+        <h3><a href={post.page} tabIndex={isClone ? -1 : undefined}>{post.title}</a></h3>
+        <p>{post.description}</p>
+        <a href={post.url} target="_blank" rel="noreferrer" tabIndex={isClone ? -1 : undefined} onClick={() => trackEvent('click_instagram_post', { post: String(originalIndex + 1) })}>Ler mais <ArrowRight size={17} /></a>
+      </div>
+    </article>)}
+    </div>
+    <div className="instagram-carousel-controls" aria-label="Navegação das publicações">
+      <button type="button" aria-label="Ver publicação anterior" onClick={() => centerCard(currentTrackIndexRef.current - 1)}><ChevronLeft /></button>
+      <span aria-live="polite">{currentIndex + 1} de {instagramPosts.length}</span>
+      <button type="button" aria-label="Ver próxima publicação" onClick={() => centerCard(currentTrackIndexRef.current + 1)}><ChevronRight /></button>
+    </div>
+  </>
+}
+
+function WhatsAppLink({ children, className = 'button primary', source, message, ...props }: { children: ReactNode; className?: string; source: string; message?: string; 'aria-label'?: string; title?: string }) {
   return (
-    <a className={className} href={whatsappUrl(message)} target="_blank" rel="noreferrer"
+    <a className={className} href={whatsappUrl(message)} target="_blank" rel="noreferrer" {...props}
       onClick={() => trackEvent(siteConfig.contact.whatsapp ? 'click_whatsapp' : 'click_doctoralia', { source })}>
       {children}
     </a>
   )
+}
+
+function WhatsAppIcon() {
+  return <svg className="whatsapp-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+    <path d="M16 3.5a12.4 12.4 0 0 0-10.7 19L3.8 28.5l6.2-1.5A12.5 12.5 0 1 0 16 3.5Zm0 22.4a10 10 0 0 1-5.1-1.4l-.4-.2-3.7.9 1-3.6-.3-.4A10 10 0 1 1 16 25.9Z" />
+    <path d="M21.5 18.1c-.3-.2-1.8-.9-2.1-1s-.5-.2-.7.2c-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1a8.2 8.2 0 0 1-2.4-1.5 9 9 0 0 1-1.7-2.1c-.2-.3 0-.5.1-.7l.5-.6c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.6l-.9-2.1c-.2-.5-.5-.4-.7-.4h-.6c-.2 0-.5.1-.7.3-.2.3-1 1-1 2.4s1 2.8 1.1 3c.1.2 2 3.1 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4Z" />
+  </svg>
+}
+
+type NarrativeChapter = {
+  readonly eyebrow: string
+  readonly title: string
+  readonly intro: readonly string[]
+  readonly image: string
+  readonly imageAlt: string
+  readonly imagePosition: string
+  readonly video?: {
+    readonly mp4: string
+    readonly liteMp4: string
+    readonly poster: string
+  }
+  readonly items: readonly (readonly [string, string])[]
+}
+
+function LazyProcedureVideo({ src, liteSrc, poster, ariaLabel, objectPosition, active, preloadOnDesktopSelector, preloadOnMobileSelector }: { src: string; liteSrc: string; poster: string; ariaLabel: string; objectPosition?: string; active: boolean; preloadOnDesktopSelector?: string; preloadOnMobileSelector?: string }) {
+  const networkTier = useVideoNetworkTier()
+  const shellRef = useRef<HTMLDivElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const delayTimerRef = useRef<number | null>(null)
+  const hasPlayedRef = useRef(false)
+  const [near, setNear] = useState(false)
+  const [desktopReady, setDesktopReady] = useState(false)
+  const [mobileReady, setMobileReady] = useState(false)
+  const [mobileScreen, setMobileScreen] = useState(false)
+  const [visible, setVisible] = useState(false)
+  const [manual, setManual] = useState(false)
+  const [showPoster, setShowPoster] = useState(true)
+  const [status, setStatus] = useState<VideoStatus>('idle')
+  const [retryKey, setRetryKey] = useState(0)
+  const triggerReady = mobileScreen ? mobileReady : desktopReady
+  const hasSource = manual || ((near || triggerReady) && networkTier !== 'constrained')
+  const selectedSrc = mobileScreen || networkTier !== 'fast' ? liteSrc : src
+  const requestSrc = retryKey === 0 ? selectedSrc : `${selectedSrc}${selectedSrc.includes('?') ? '&' : '?'}retry=${retryKey}`
+
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 899px)')
+    const updateScreen = () => setMobileScreen(query.matches)
+    updateScreen()
+    query.addEventListener('change', updateScreen)
+    return () => query.removeEventListener('change', updateScreen)
+  }, [])
+
+  useEffect(() => {
+    const mobileTarget = preloadOnMobileSelector ? document.querySelector(preloadOnMobileSelector) : null
+    const desktopTarget = preloadOnDesktopSelector ? document.querySelector(preloadOnDesktopSelector) : null
+    const mobileObserver = mobileTarget && new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && window.matchMedia('(max-width: 899px)').matches) setMobileReady(true)
+    }, { threshold: 0.12 })
+    const desktopObserver = desktopTarget && new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && window.matchMedia('(min-width: 900px)').matches) setDesktopReady(true)
+    }, { threshold: 0.12 })
+    if (mobileObserver) mobileObserver.observe(mobileTarget)
+    if (desktopObserver) desktopObserver.observe(desktopTarget)
+    return () => {
+      mobileObserver?.disconnect()
+      desktopObserver?.disconnect()
+    }
+  }, [preloadOnDesktopSelector, preloadOnMobileSelector])
+
+  useEffect(() => {
+    const shell = shellRef.current
+    if (!shell) return
+    const preloadObserver = new IntersectionObserver(([entry]) => setNear(entry.isIntersecting), {
+      threshold: 0.01,
+      rootMargin: videoPreloadMargin(networkTier),
+    })
+    const visibilityObserver = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting && entry.intersectionRatio >= .35), { threshold: [0, .35] })
+    preloadObserver.observe(shell)
+    visibilityObserver.observe(shell)
+    return () => {
+      preloadObserver.disconnect()
+      visibilityObserver.disconnect()
+    }
+  }, [networkTier])
+
+  const attemptAutomaticPlayback = () => {
+    const video = videoRef.current
+    if (!video || video.ended || !visible || networkTier === 'constrained' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    void video.play().catch(() => undefined)
+  }
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video || !hasSource) return
+    if (manual && video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      void video.play().catch(() => undefined)
+      return
+    }
+    if (video.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) attemptAutomaticPlayback()
+  }, [hasSource, manual, networkTier, requestSrc, visible])
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video || visible) return
+    video.pause()
+    if (!hasPlayedRef.current) setShowPoster(true)
+    setStatus('idle')
+  }, [visible])
+
+  useEffect(() => () => {
+    if (delayTimerRef.current !== null) window.clearTimeout(delayTimerRef.current)
+  }, [])
+
+  const startDelayTimer = () => {
+    if (delayTimerRef.current !== null) window.clearTimeout(delayTimerRef.current)
+    delayTimerRef.current = window.setTimeout(() => {
+      setShowPoster(true)
+      setStatus((current) => current === 'preparing' || current === 'waiting' ? 'delayed' : current)
+    }, 15000)
+  }
+
+  const requestPlayback = () => {
+    setManual(true)
+    setStatus('preparing')
+    startDelayTimer()
+    if (hasSource) void videoRef.current?.play().catch(() => undefined)
+  }
+
+  const retryPlayback = () => {
+    setShowPoster(true)
+    setStatus('preparing')
+    setManual(true)
+    startDelayTimer()
+    setRetryKey((value) => value + 1)
+  }
+
+  const handlePlaying = () => {
+    hasPlayedRef.current = true
+    if (delayTimerRef.current !== null) window.clearTimeout(delayTimerRef.current)
+    delayTimerRef.current = null
+    setStatus('playing')
+    const video = videoRef.current
+    if (video?.requestVideoFrameCallback) {
+      video.requestVideoFrameCallback(() => setShowPoster(false))
+      return
+    }
+    window.requestAnimationFrame(() => setShowPoster(false))
+  }
+
+  return <div ref={shellRef} className={`procedure-narrative__image procedure-video-shell${active ? ' is-active' : ''}`}>
+    {hasSource && <video
+      key={requestSrc}
+      aria-label={ariaLabel}
+      ref={videoRef}
+      muted
+      loop
+      playsInline
+      preload={manual || triggerReady || networkTier === 'fast' ? 'auto' : 'metadata'}
+      poster={poster}
+      style={{ objectPosition }}
+      onCanPlay={() => {
+        if (manual) {
+          void videoRef.current?.play().catch(() => undefined)
+          return
+        }
+        attemptAutomaticPlayback()
+      }}
+      onPlaying={handlePlaying}
+      onWaiting={() => {
+        if (showPoster) return
+        setStatus('waiting')
+        startDelayTimer()
+      }}
+      onError={() => { setShowPoster(true); setStatus('error') }}
+    ><source src={requestSrc} type="video/mp4" /></video>}
+    <img className={`procedure-video-poster${showPoster ? '' : ' is-hidden'}`} src={poster} alt="" loading="lazy" decoding="async" style={{ objectPosition }} aria-hidden="true" />
+    {(status === 'preparing' || status === 'waiting') && <div className="procedure-video-status" role="status"><span className="video-spinner" />Preparando vídeo…</div>}
+    {(status === 'delayed' || status === 'error') && <button type="button" className="procedure-video-retry" onClick={retryPlayback}>{status === 'delayed' ? 'Conexão lenta. Tentar novamente' : 'Não foi possível carregar. Tentar novamente'}</button>}
+    {status === 'idle' && showPoster && <button type="button" className="procedure-video-play" aria-label="Reproduzir vídeo" onClick={requestPlayback}><Play fill="currentColor" /></button>}
+  </div>
+}
+
+function ProcedureNarrative({ id, variant, chapters, message, preloadVideoOnDesktop, preloadVideoOnMobile }: {
+  id: string
+  variant: 'exams' | 'surgeries'
+  chapters: readonly NarrativeChapter[]
+  message: string
+  preloadVideoOnDesktop?: string
+  preloadVideoOnMobile?: string
+}) {
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const layout = section.querySelector<HTMLElement>('.procedure-narrative__layout')
+    const stage = section.querySelector<HTMLElement>('.procedure-narrative__stage')
+    const figure = section.querySelector<HTMLElement>('.procedure-narrative__figure')
+    const chapterElements = Array.from(section.querySelectorAll<HTMLElement>('.procedure-narrative__chapter'))
+    const imageElements = Array.from(section.querySelectorAll<HTMLElement>('.procedure-narrative__image'))
+    if (!layout || !stage || !figure || chapterElements.length < 2) return
+
+    // Tablets from 768px use the two-column sticky layout; narrower screens read chapter by chapter.
+    const desktopQuery = window.matchMedia('(min-width: 768px)')
+    let activeIndex = 0
+    let animationFrame = 0
+    let measuredWidth = window.innerWidth
+    const getViewportHeight = () => window.visualViewport?.height ?? window.innerHeight
+    let measuredHeight = getViewportHeight()
+    const clamp = (value: number) => Math.max(0, Math.min(1, value))
+
+    const measure = () => {
+      const compact = !desktopQuery.matches
+      section.classList.toggle('is-flow', compact)
+      section.classList.toggle('is-compact-flow', compact)
+    }
+
+    const paint = () => {
+      animationFrame = 0
+      const desktop = desktopQuery.matches
+      const compactFlow = section.classList.contains('is-compact-flow')
+      const sectionRect = section.getBoundingClientRect()
+      const sectionStyle = getComputedStyle(section)
+      const paddingTop = Number.parseFloat(sectionStyle.paddingTop) || 0
+      const paddingBottom = Number.parseFloat(sectionStyle.paddingBottom) || 0
+      const stickyElement = desktop ? stage : layout
+      const stickyTop = Number.parseFloat(getComputedStyle(stickyElement).top) || 0
+      const range = Math.max(1, section.offsetHeight - paddingTop - paddingBottom - stickyElement.offsetHeight)
+      const progress = clamp((stickyTop - (sectionRect.top + paddingTop)) / range)
+
+      if (compactFlow) {
+        const viewportHeight = getViewportHeight()
+        const revealLine = viewportHeight * .72
+        chapterElements.forEach((chapter) => {
+          const figureBottom = chapter.querySelector('.procedure-narrative__inline-figure')?.getBoundingClientRect().bottom ?? chapter.getBoundingClientRect().top
+          const items = Array.from(chapter.querySelectorAll<HTMLElement>('.procedure-narrative__items li'))
+          const lastItemBottom = items.at(-1)?.getBoundingClientRect().bottom ?? figureBottom
+          const chapterProgress = clamp((revealLine - figureBottom) / Math.max(1, lastItemBottom - figureBottom))
+          chapter.style.setProperty('--chapter-progress', chapterProgress.toFixed(3))
+          items.forEach((item) => item.classList.toggle('is-reached', item.getBoundingClientRect().top <= revealLine))
+        })
+      }
+
+      let nextIndex = 0
+      const readingLine = getViewportHeight() * (compactFlow ? .38 : .56)
+      chapterElements.forEach((chapter, index) => {
+        if (chapter.getBoundingClientRect().top <= readingLine) nextIndex = index
+      })
+
+      const reveal = desktop
+        ? progress
+        : clamp((getViewportHeight() - figure.getBoundingClientRect().top) / (getViewportHeight() * .62))
+      section.style.setProperty('--narrative-progress', progress.toFixed(3))
+      figure.style.setProperty('--narrative-reveal', reveal.toFixed(3))
+
+      if (nextIndex === activeIndex && section.dataset.ready === 'true') return
+      activeIndex = nextIndex
+      section.dataset.ready = 'true'
+      chapterElements.forEach((chapter, index) => {
+        chapter.classList.toggle('is-active', index === activeIndex)
+        chapter.classList.toggle('is-read', index < activeIndex)
+      })
+      imageElements.forEach((image, index) => image.classList.toggle('is-active', index === activeIndex))
+    }
+
+    const schedulePaint = () => {
+      if (!animationFrame) animationFrame = window.requestAnimationFrame(paint)
+    }
+    const remeasure = () => {
+      measure()
+      paint()
+    }
+    const onResize = () => {
+      const viewportHeight = getViewportHeight()
+      if (window.innerWidth === measuredWidth && viewportHeight === measuredHeight) {
+        schedulePaint()
+        return
+      }
+      measuredWidth = window.innerWidth
+      measuredHeight = viewportHeight
+      remeasure()
+    }
+
+    section.classList.add('is-cold', 'is-enhanced')
+    measure()
+    paint()
+    window.addEventListener('scroll', schedulePaint, { passive: true })
+    window.addEventListener('resize', onResize, { passive: true })
+    window.visualViewport?.addEventListener('resize', onResize, { passive: true })
+    desktopQuery.addEventListener('change', remeasure)
+    window.requestAnimationFrame(() => window.requestAnimationFrame(() => section.classList.remove('is-cold')))
+
+    return () => {
+      window.removeEventListener('scroll', schedulePaint)
+      window.removeEventListener('resize', onResize)
+      window.visualViewport?.removeEventListener('resize', onResize)
+      desktopQuery.removeEventListener('change', remeasure)
+      if (animationFrame) window.cancelAnimationFrame(animationFrame)
+    }
+  }, [chapters.length])
+
+  const narrativeStyle = {
+    '--narrative-scenes': chapters.length,
+    ...(variant === 'surgeries' ? { '--compact-photo-height': 'calc(var(--compact-photo-size) * 1.25)' } : {}),
+  } as React.CSSProperties
+
+  return <section ref={sectionRef} className={`section procedure-narrative procedure-narrative--${variant}`} id={id} aria-labelledby={`${id}-title`} style={narrativeStyle}>
+    <div className="container">
+      <div className="procedure-narrative__layout">
+        <div className="procedure-narrative__stage">
+          {chapters.length === 1 && <div className="procedure-narrative__media-title" aria-hidden="true">{chapters[0].title}</div>}
+          <figure className="procedure-narrative__figure">
+            {chapters.map((chapter, index) => chapter.video ? <LazyProcedureVideo
+              key={`${chapter.title}-${chapter.video.mp4}`}
+              src={chapter.video.mp4}
+              liteSrc={chapter.video.liteMp4}
+              poster={chapter.video.poster}
+              ariaLabel={chapter.imageAlt}
+              objectPosition={chapter.imagePosition}
+              active={index === 0}
+              preloadOnDesktopSelector={preloadVideoOnDesktop}
+              preloadOnMobileSelector={preloadVideoOnMobile}
+            /> : <picture className={`procedure-narrative__image ${index === 0 ? 'is-active' : ''}`} key={`${chapter.title}-${chapter.image}`}>
+              <img src={chapter.image} alt={chapter.imageAlt} width={variant === 'exams' ? 1440 : 1006} height={variant === 'exams' ? 1080 : 1788} loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />
+            </picture>)}
+          </figure>
+        </div>
+
+        <div className="procedure-narrative__chapters">
+          {chapters.map((chapter, index) => <article className={`procedure-narrative__chapter ${index === 0 ? 'is-active' : ''}`} key={chapter.title}>
+            <figure className="procedure-narrative__inline-figure" aria-hidden="true" style={variant === 'surgeries' ? { aspectRatio: '4 / 5' } : undefined}>
+              <img src={chapter.image} alt="" loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />
+            </figure>
+            {index === 0 ? <h2 id={`${id}-title`}>{chapter.title}</h2> : <h3>{chapter.title}</h3>}
+            {chapter.intro.length > 0 && <div className="procedure-narrative__intro">{chapter.intro.map((paragraph) => <p key={paragraph}>{sh(paragraph)}</p>)}</div>}
+            {chapter.items.length > 0 && <ul className="procedure-narrative__items">
+              {chapter.items.map(([name, description]) => <li key={name}><strong>{name}</strong><span>{sh(description)}</span></li>)}
+            </ul>}
+          </article>)}
+        </div>
+      </div>
+
+      <div className="procedure-narrative__footer">
+        <WhatsAppLink source={variant === 'exams' ? 'exam-procedures' : 'surgeries'} message={message}>{variant === 'exams' ? 'Tirar dúvidas sobre exames' : 'Tirar dúvidas sobre cirurgias'} <MessageCircle size={19} /></WhatsAppLink>
+      </div>
+    </div>
+  </section>
 }
 
 function LocationsSection() {
@@ -301,7 +1364,7 @@ function FAQItem({ question, answer, index, open, onToggle }: { question: string
     <h3><button type="button" aria-expanded={open} aria-controls={contentId} onClick={() => { onToggle(); if (!open) trackEvent('open_faq', { question }) }}>
       <span>{question}</span><ChevronDown aria-hidden="true" />
     </button></h3>
-    <div id={contentId} className="faq-answer" role="region" aria-hidden={!open}><p>{answer}</p></div>
+    <div id={contentId} className="faq-answer" role="region" aria-hidden={!open}><p>{sh(answer)}</p></div>
   </div>
 }
 
@@ -336,7 +1399,7 @@ function MobileStickyCTA() {
   }, [])
 
   if (heroVisible || contactVisible || footerVisible) return null
-  return <div className="mobile-cta-bar"><WhatsAppLink source="mobile-sticky"><MessageCircle /> <span>Agendar pelo WhatsApp</span></WhatsAppLink></div>
+  return <div className="mobile-cta-bar"><WhatsAppLink className="floating-whatsapp" source="mobile-sticky" aria-label="Agendar pelo WhatsApp" title="Agendar pelo WhatsApp"><WhatsAppIcon /><span className="sr-only">Agendar pelo WhatsApp</span></WhatsAppLink></div>
 }
 
 export default function App() {
@@ -348,6 +1411,22 @@ export default function App() {
     return () => observer.disconnect()
   }, [])
 
+  useEffect(() => {
+    let frame = 0
+    let lastWidth = window.innerWidth
+    const schedule = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(tuneJustification)
+    }
+    const onResize = () => {
+      if (window.innerWidth !== lastWidth) { lastWidth = window.innerWidth; schedule() }
+    }
+    schedule()
+    document.fonts?.ready.then(schedule)
+    window.addEventListener('resize', onResize)
+    return () => { cancelAnimationFrame(frame); window.removeEventListener('resize', onResize) }
+  }, [])
+
   return <>
     <Header />
     <main id="conteudo">
@@ -357,8 +1436,8 @@ export default function App() {
           <div className="hero-copy reveal visible">
             <span className="eyebrow"><MapPin size={15} /> Otorrinolaringologista em São Luís</span>
             <div className="hero-doctor"><strong>Dr. Evaldo César Macau</strong><span>CRM-MA 10415 · RQE 3698</span></div>
-            <h1>Cuidado especializado para <em>ouvido, nariz e garganta</em></h1>
-            <p>Avaliação de dor de ouvido, zumbido, perda auditiva, rinite, sinusite, tontura e vertigem, com escuta atenta para adultos e crianças.</p>
+            <h1>Cuidado Especializado para <em>Tontura, Zumbido, Audição, Ouvido, Nariz e Garganta</em></h1>
+            <p>Avaliação especializada de tontura, vertigem, desequilíbrio, zumbido e perda auditiva, além das principais doenças do ouvido, nariz e garganta, em adultos e crianças.</p>
             <div className="hero-actions">
               <WhatsAppLink source="hero">Agendar consulta pelo WhatsApp <MessageCircle size={19} /></WhatsAppLink>
               <a className="hero-location-link" href="#locais"><MapPin size={18} /> Ver locais de atendimento <ArrowRight size={18} /></a>
@@ -366,8 +1445,8 @@ export default function App() {
             <div className="hero-proof">
               <div className="hero-trust"><span><ShieldCheck size={18} /> Cuidado responsável</span><span><HeartHandshake size={18} /> Atendimento humanizado</span></div>
               <div className="hero-certifications" aria-label="Certificações profissionais">
-                <img className="hero-residency-seal" src="/images/credentials/selo-residencia-medica-nota-a.webp" alt="Residência Médica Nota A — UNICAMP" width="1254" height="1254" loading="lazy" />
-                <img className="hero-aborl-seal" src="/images/credentials/aborl-titulo-especialista.webp" alt="Título de Especialista — ABORL-CCF" width="2048" height="788" loading="lazy" />
+                <img className="hero-residency-seal" src="/images/inicio-selo-residencia-unicamp-nota-a.webp" alt="Residência Médica Nota A — UNICAMP" width="1254" height="1254" loading="lazy" />
+                <img className="hero-aborl-seal" src="/images/inicio-selo-titulo-especialista-aborl.webp" alt="Título de Especialista — ABORL-CCF" width="2048" height="788" loading="lazy" />
               </div>
             </div>
           </div>
@@ -383,48 +1462,57 @@ export default function App() {
 
       <section className="section specialties" id="especialidades">
         <div className="container">
-          <SectionTitle eyebrow="Ouvidos, nariz e garganta" title="Áreas de atendimento" text="Avaliação especializada para adultos e crianças, respeitando as necessidades de cada fase da vida." centered />
+          <SectionTitle eyebrow="Ouvidos, nariz e garganta" title="Áreas de Atendimento" text="Avaliação especializada para adultos e crianças, respeitando as necessidades de cada fase da vida." centered />
           <div className="specialty-grid">
             {specialties.map(({ icon: Icon, title, text, className }, i) => <article className={`specialty-card ${className} reveal`} style={{ '--delay': `${i * 90}ms` } as React.CSSProperties} key={title}>
-              <div className="specialty-icon">{Icon === 'nose' ? <NoseIcon /> : Icon === 'dizziness' ? <DizzinessIcon /> : Icon === 'throat' ? <ThroatIcon /> : Icon === 'baby' ? <BabyIcon /> : <Icon strokeWidth={1.7} />}</div><span className="card-number">0{i + 1}</span><h3>{title}</h3><p>{text}</p><a href="#sintomas">Saiba mais <ArrowRight size={18} /></a>
+              <div className="specialty-icon">{Icon === 'ear-nose-throat' ? <EarNoseThroatIcon /> : Icon === 'surgery-tool' ? <SurgeryToolIcon /> : Icon === 'otoneurology-exam' ? <OtoneurologyExamIcon /> : Icon === 'dizziness' ? <DizzinessIcon /> : Icon === 'throat' ? <ThroatIcon /> : <Icon strokeWidth={1.7} />}</div><span className="card-number">0{i + 1}</span><h3>{title}</h3><p>{sh(text)}</p><a href={className === 'throat' ? '#procedimentos' : '#contato'}>{className === 'throat' ? 'Conheça a técnica Coblation®' : 'Agende uma consulta'} <ArrowRight size={18} /></a>
             </article>)}
           </div>
           <div className="center-action reveal"><WhatsAppLink source="after-specialties">Quero agendar uma avaliação <MessageCircle size={19} /></WhatsAppLink></div>
         </div>
       </section>
 
-      <section className="section quality-life">
-        <div className="container quality-grid">
-          <div className="quality-heading reveal"><span className="eyebrow">Saúde e bem-estar</span><h2>Cuidar da sua saúde também é cuidar da sua qualidade de vida</h2></div>
-          <div className="quality-copy reveal">
-            <p>Dificuldades para respirar, dores no ouvido, infecções recorrentes, tontura, zumbido e alterações na audição podem afetar o sono, a comunicação e o bem-estar.</p>
-            <p>A avaliação com um otorrinolaringologista ajuda a investigar esses sintomas e identificar a conduta mais adequada para cada caso.</p>
-            <p>Aqui, cada paciente é recebido com atenção, respeito e informações claras durante todas as etapas do atendimento.</p>
-            <WhatsAppLink source="quality-life">Quero agendar uma avaliação <ArrowRight size={19} /></WhatsAppLink>
-          </div>
-        </div>
-      </section>
+      <ProcedureNarrative
+        id="procedimentos"
+        variant="surgeries"
+        chapters={coblationChapters}
+        message="Olá! Gostaria de informações sobre a técnica Coblation® para cirurgia de amígdalas e adenoide."
+        preloadVideoOnDesktop="#especialidades"
+        preloadVideoOnMobile=".specialty-card.balance"
+      />
+
+      <ProcedureNarrative
+        id="exames"
+        variant="exams"
+        chapters={examChapters}
+        message="Olá! Gostaria de informações sobre exames e procedimentos otorrinolaringológicos."
+      />
+
+      <ProcedureNarrative
+        id="cirurgias"
+        variant="surgeries"
+        chapters={surgeryChapters}
+        message="Olá! Gostaria de informações sobre cirurgias otorrinolaringológicas."
+      />
 
       <section className="section about" id="sobre">
         <div className="container about-grid">
           <div className="about-visual reveal">
-            <div className="about-image"><img src={siteConfig.assets.about} alt="Dr. Evaldo César Macau com equipamento de avaliação otorrinolaringológica" width="1080" height="1620" loading="lazy" /></div>
-            <div className="about-card"><Stethoscope size={24} /><div><strong>Otorrinolaringologia</strong><span>Ouvidos · Nariz · Garganta</span></div></div>
+            <div className="about-image"><img src={siteConfig.assets.about} alt="Retrato profissional do Dr. Evaldo César Macau" width="1080" height="1620" loading="lazy" /></div>
             <span className="about-dot dot-a" /><span className="about-dot dot-b" />
           </div>
           <div className="about-copy reveal">
             <span className="eyebrow">Sobre o especialista</span>
             <h2>Conheça o Dr. Evaldo Macau</h2>
-            <p>Sou médico otorrinolaringologista, graduado em Medicina pela Universidade Federal do Maranhão — UFMA, com residência médica em Otorrinolaringologia pela Universidade Estadual de Campinas — UNICAMP.</p>
-            <p>Possuo Título de Especialista em Otorrinolaringologia pela ABORL-CCF e realizei estágio especializado em Otoneurologia na Universidade de Lisboa, em Portugal.</p>
+            <p>{sh('Sou médico otorrinolaringologista, graduado em Medicina pela Universidade Federal do Maranhão (UFMA), com Residência Médica em Otorrinolaringologia pela Universidade Estadual de Campinas (UNICAMP) e Título de Especialista pela ABORL-CCF.')}</p>
+            <p>{sh('Minha atuação é dedicada especialmente à Otoneurologia, com foco na investigação e tratamento de tontura, vertigem, desequilíbrio, zumbido e alterações do ouvido interno, além da atuação em cirurgia otorrinolaringológica, incluindo procedimentos de amígdalas e adenoide com tecnologia Coblation, quando indicada.')}</p>
             <details className="about-more">
               <summary>Ver trajetória e abordagem completas</summary>
               <div>
-                <p>Atuo no atendimento de adultos e crianças, realizando consultas, exames e avaliações cirúrgicas. Tenho dedicação especial às cirurgias nasais e faríngeas na infância e ao acompanhamento de pacientes com tontura, vertigem, perda auditiva e zumbido.</p>
-                <p>Procuro explicar cada etapa de maneira clara e oferecer um atendimento acolhedor e individualizado. Seja bem-vindo.</p>
+                <p>{sh('Realizei aperfeiçoamento em Otoneurologia na Universidade de Lisboa, em Portugal, complementando minha formação na avaliação especializada dos distúrbios do equilíbrio e da audição.')}</p>
               </div>
             </details>
-            <ul className="check-list"><li><Check /> CRM-MA 10415</li><li><Check /> RQE 3698</li><li><Check /> Atendimento para adultos e crianças</li></ul>
+            <ul className="check-list"><li><Check /> CRM-MA 10415 | RQE 3698</li><li><Check /> Título de Especialista pela ABORL-CCF</li><li><Check /> Otorrinolaringologia e Otoneurologia</li></ul>
             <WhatsAppLink source="about">Agendar uma consulta <ArrowRight size={19} /></WhatsAppLink>
           </div>
         </div>
@@ -432,58 +1520,35 @@ export default function App() {
 
       <section className="section credentials">
         <div className="container credentials-grid">
-          <div className="credentials-intro reveal"><span className="eyebrow">Formação e experiência</span><h2>Conhecimento técnico a serviço de um cuidado próximo</h2><p>Formação médica e atuação profissional dedicadas à Otorrinolaringologia.</p></div>
+          <div className="credentials-intro reveal"><span className="eyebrow">Formação e experiência</span><h2>Formação e atuação especializada em Otorrinolaringologia</h2><p>Formação médica e atuação profissional dedicadas à Otorrinolaringologia, com ênfase em Otoneurologia e cirurgia.</p></div>
           <ul className="credential-list reveal">
-            <li><Check /><span>Graduação em Medicina pela Universidade Federal do Maranhão — UFMA</span></li>
-            <li><Check /><span>Residência Médica em Otorrinolaringologia pela UNICAMP</span></li>
-            <li><Check /><span>Título de Especialista em Otorrinolaringologia pela ABORL-CCF</span></li>
-            <li><Check /><span>Estágio especializado em Otoneurologia pela Universidade de Lisboa</span></li>
-            <li><Check /><span>Médico assistente do Hospital Universitário da UFMA</span></li>
-            <li><Check /><span>Integrante do corpo clínico da Clínica Rhinus</span></li>
+            <li><Check /><div><h3>Graduação em Medicina</h3><p>Universidade Federal do Maranhão (UFMA)</p></div></li>
+            <li><Check /><div><h3>Residência Médica em Otorrinolaringologia</h3><p>Universidade Estadual de Campinas (UNICAMP)</p></div></li>
+            <li><Check /><div><h3>Título de Especialista em Otorrinolaringologia</h3><p>ABORL-CCF</p></div></li>
+            <li><Check /><div><h3>Aperfeiçoamento em Otoneurologia</h3><p>Universidade de Lisboa, Portugal</p></div></li>
+            <li><Check /><div><h3>Atuação profissional</h3><p>Médico assistente do Hospital Universitário da UFMA (HU-UFMA) e responsável pelo Ambulatório de Otoneurologia</p></div></li>
           </ul>
         </div>
       </section>
 
-      <section className="section all-ages">
-        <div className="container all-ages-grid">
-          <div className="all-ages-image reveal"><img src={siteConfig.assets.clinical} alt="Dr. Evaldo durante avaliação otorrinolaringológica" width="1080" height="1620" loading="lazy" /></div>
-          <div className="all-ages-copy reveal"><span className="eyebrow">Todas as fases da vida</span><h2>Atendimento para adultos e crianças</h2><p>Cada fase da vida apresenta necessidades diferentes.</p><p>Nas crianças, alterações nas amígdalas, adenoides, respiração e audição podem interferir no sono, na fala e no desenvolvimento.</p><p>Nos adultos, sintomas como sinusite, obstrução nasal, zumbido, tontura e perda auditiva também precisam ser investigados com atenção.</p><p>O atendimento é realizado com linguagem acessível e participação do paciente e da família nas decisões.</p></div>
+      <section className="section instagram-feed" id="conteudos">
+        <div className="container">
+          <div className="instagram-heading reveal">
+            <div>
+              <span className="eyebrow"><InstagramIcon /> Conteúdos e orientações</span>
+              <h2>Informação para cuidar melhor da sua saúde</h2>
+              <p>Confira conteúdos sobre sintomas, prevenção, exames, tratamentos e cuidados em otorrinolaringologia e otoneurologia.</p>
+            </div>
+            <a className="instagram-profile-link" href={siteConfig.contact.instagram} target="_blank" rel="noreferrer" onClick={() => trackEvent('click_instagram', { source: 'content-section' })}>
+              <InstagramIcon /> Ver perfil no Instagram <ArrowRight size={18} />
+            </a>
+          </div>
+
+          <InstagramCarousel />
         </div>
       </section>
 
       <LocationsSection />
-
-      <section className="section symptoms" id="sintomas">
-        <div className="container symptoms-grid">
-          <div className="symptoms-intro reveal">
-            <span className="eyebrow">Observe os sinais</span><h2>Quando procurar um otorrinolaringologista?</h2>
-            <p>Alguns sintomas podem indicar que é hora de conversar com um médico de ouvido, nariz e garganta.</p>
-            <div className="medical-note"><CircleAlert /><p>Estas informações possuem caráter educativo e não substituem uma avaliação médica.</p></div>
-          </div>
-          <ul className="symptom-list">
-            {symptoms.map((symptom, i) => <li className="reveal" style={{ '--delay': `${(i % 3) * 70}ms` } as React.CSSProperties} key={symptom}><span>{String(i + 1).padStart(2, '0')}</span><p>{symptom}</p><Check /></li>)}
-          </ul>
-        </div>
-      </section>
-
-      <section className="section differentials">
-        <div className="container">
-          <SectionTitle eyebrow="Confiança em cada etapa" title="Um atendimento baseado em confiança" text="Da conversa inicial às orientações, cada etapa é pensada para que você se sinta bem informado." centered />
-          <div className="differential-grid">{differentials.map(({ icon: Icon, title, text }, i) => <article className="differential-card reveal" style={{ '--delay': `${i * 70}ms` } as React.CSSProperties} key={title}><Icon /><h3>{title}</h3><p>{text}</p></article>)}</div>
-        </div>
-      </section>
-
-      <section className="section journey">
-        <div className="container">
-          <SectionTitle eyebrow="Simples e direto" title="Como funciona o agendamento" centered />
-          <div className="journey-grid">
-            {[['01', MessageCircle, 'Entre em contato', 'Clique no botão e acesse o canal de agendamento.'], ['02', Clock3, 'Escolha o melhor horário', 'Confirme a disponibilidade diretamente com a equipe.'], ['03', CalendarCheck, 'Compareça à consulta', 'Receba as orientações necessárias para o atendimento.']].map(([number, Icon, title, text], i) => {
-              const StepIcon = Icon as typeof MessageCircle
-              return <article className="journey-step reveal" style={{ '--delay': `${i * 100}ms` } as React.CSSProperties} key={title as string}><span className="step-number">{number as string}</span><div className="step-icon"><StepIcon /></div><h3>{title as string}</h3><p>{text as string}</p></article>
-            })}
-          </div>
-        </div>
-      </section>
 
       <section className="section reviews">
         <div className="container reviews-card reveal">
@@ -502,7 +1567,7 @@ export default function App() {
 
       <section className="section contact" id="contato">
         <div className="container contact-card reveal">
-          <div className="contact-copy"><span className="eyebrow light">Agende sua consulta</span><h2>Dê o primeiro passo para cuidar da sua saúde</h2><p>Se você apresenta dificuldade para respirar, crises frequentes de sinusite, dores no ouvido, zumbido, tontura, perda auditiva, ronco ou problemas recorrentes nas amígdalas, procure uma avaliação especializada.</p><p>Entre em contato para consultar a disponibilidade e agendar seu atendimento.</p><WhatsAppLink className="button white" source="contact">Consultar disponibilidade <MessageCircle size={19} /></WhatsAppLink><div className="contact-doctor-id"><strong>Dr. Evaldo César Macau</strong><span>Otorrinolaringologista · CRM-MA 10415 · RQE 3698</span></div></div>
+          <div className="contact-copy"><span className="eyebrow light">Agende sua consulta</span><h2>Dê o primeiro passo para cuidar da sua saúde</h2><p>{sh('Se você apresenta dificuldade para respirar, crises frequentes de sinusite, dores no ouvido, zumbido, tontura, perda auditiva, ronco ou problemas recorrentes nas amígdalas, procure uma avaliação especializada.')}</p><p>{sh('Entre em contato para consultar a disponibilidade e agendar seu atendimento.')}</p><WhatsAppLink className="button white" source="contact">Consultar disponibilidade <MessageCircle size={19} /></WhatsAppLink><div className="contact-doctor-id"><strong>Dr. Evaldo César Macau</strong><span>Otorrinolaringologista · CRM-MA 10415 · RQE 3698</span></div></div>
           <div className="contact-info">
             <div><MapPin /><span><small>{siteConfig.location.clinic}</small><strong>{contactText.address}</strong></span></div>
             <a href="tel:+5598991433929"><PhoneCall /><span><small>Telefone</small><strong>{contactText.phone}</strong></span></a>
@@ -517,9 +1582,9 @@ export default function App() {
       <div className="container footer-grid">
         <div className="footer-brand"><img src={siteConfig.assets.logoDark} alt="Dr. Evaldo César Macau" width="344" height="82" /><p>Otorrinolaringologia com atenção, clareza e cuidado para adultos e crianças.</p><p><strong>CRM-MA 10415 · RQE 3698</strong></p></div>
         <div><h2>Navegação</h2>{navItems.map(([label, href]) => <a key={href} href={href}>{label}</a>)}</div>
-        <div><h2>Contato</h2><a href={whatsappUrl()} target="_blank" rel="noreferrer"><MessageCircle /> Agendamento online</a>{siteConfig.contact.instagram ? <a href={siteConfig.contact.instagram} target="_blank" rel="noreferrer"><InstagramIcon /> Instagram</a> : <span className="placeholder-link"><InstagramIcon /> Instagram a configurar</span>}<a href="#privacidade">Política de Privacidade</a></div>
+        <div><h2>Contato</h2><a href={whatsappUrl()} target="_blank" rel="noreferrer"><MessageCircle /> Agendamento online</a>{siteConfig.contact.instagram ? <a href={siteConfig.contact.instagram} target="_blank" rel="noreferrer"><InstagramIcon /> Instagram</a> : <span className="placeholder-link"><InstagramIcon /> Instagram a configurar</span>}<a href="/privacidade.html">Política de Privacidade</a></div>
       </div>
-      <div className="container footer-bottom" id="privacidade"><p>© {new Date().getFullYear()} Dr. Evaldo César Macau. Todos os direitos reservados.</p><p>As informações deste site são educativas e não substituem consulta médica.</p></div>
+      <div className="container footer-bottom"><p>© {new Date().getFullYear()} Dr. Evaldo César Macau. Todos os direitos reservados.</p><p>As informações deste site são educativas e não substituem consulta médica.</p></div>
     </footer>
     <MobileStickyCTA />
   </>

@@ -3,6 +3,7 @@ dist/
 .vite/
 *.tsbuildinfo
 vite-dev*.log
+vite-local*.log
 .wrangler/
 .dev.vars
 worker-configuration.d.ts
