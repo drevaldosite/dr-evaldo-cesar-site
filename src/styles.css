@@ -229,6 +229,7 @@ main { display: flex; flex-direction: column; }
 .credentials-intro h2 { margin: 14px 0; font-size: clamp(1.75rem, 7vw, 2.15rem); line-height: 1.12; }
 .credential-list { display: grid; gap: 10px; list-style: none; margin: 0; padding: 0; }
 .credential-list li { display: grid; grid-template-columns: 30px 1fr; align-items: center; gap: 11px; padding: 14px; color: #32415a; border: 1px solid var(--line); border-radius: 15px; background: var(--pale); font-size: .86rem; font-weight: 700; line-height: 1.5; }
+.credential-list p { text-align: left; }
 .credential-list svg { width: 26px; height: 26px; padding: 6px; color: #fff; background: var(--cyan); border-radius: 50%; }
 .instagram-feed { order: 9; background: var(--pale); }
 .instagram-heading { display: grid; gap: 24px; margin-bottom: 32px; }
@@ -369,49 +370,7 @@ main { display: flex; flex-direction: column; }
 .reveal.visible { opacity: 1; transform: none; }
 @keyframes float { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
 
-@media (max-width: 899px) {
-  .procedure-narrative.is-enhanced {
-    --narrative-gap: 16px;
-    --narrative-photo-size: clamp(216px, 66vw, 248px);
-  }
-  .procedure-narrative.is-enhanced.is-flow .procedure-narrative__layout {
-    gap: var(--narrative-gap);
-  }
-  .procedure-narrative.is-enhanced.is-flow .procedure-narrative__stage {
-    display: flex;
-    justify-content: center;
-  }
-  .procedure-narrative.is-enhanced.is-flow .procedure-narrative__figure {
-    width: var(--narrative-photo-size);
-    aspect-ratio: 1 / 1;
-    border-radius: 20px;
-  }
-  .procedure-narrative.is-enhanced:not(.is-flow) .procedure-narrative__layout {
-    position: sticky;
-    z-index: 2;
-    top: 14px;
-    gap: var(--narrative-gap);
-  }
-  .procedure-narrative.is-enhanced:not(.is-flow) .procedure-narrative__stage { display: flex; justify-content: center; }
-  .procedure-narrative.is-enhanced:not(.is-flow) .procedure-narrative__figure { width: var(--narrative-photo-size); aspect-ratio: 1 / 1; border-radius: 20px; }
-  .procedure-narrative--surgeries.is-enhanced .procedure-narrative__figure { aspect-ratio: 4 / 5; }
-  .procedure-narrative.is-enhanced:not(.is-flow) .procedure-narrative__chapters { height: var(--narrative-copy-height, 420px); padding-left: 21px; }
-  .procedure-narrative.is-enhanced:not(.is-flow) .procedure-narrative__chapter { position: absolute; inset: 0 0 0 21px; padding: 0 0 76px; opacity: 0; visibility: hidden; transform: translateY(14px); pointer-events: none; }
-  .procedure-narrative.is-enhanced:not(.is-flow) .procedure-narrative__chapter.is-active { opacity: 1; visibility: visible; transform: none; transition: opacity .22s cubic-bezier(.22,1,.36,1) .03s, transform .22s cubic-bezier(.22,1,.36,1) .03s; }
-  .procedure-narrative.is-enhanced:not(.is-flow) .procedure-narrative__chapter::before { display: none; }
-  .procedure-narrative.is-enhanced:not(.is-flow) .procedure-narrative__chapter .eyebrow { margin-bottom: 7px; }
-  .procedure-narrative.is-enhanced:not(.is-flow) .procedure-narrative__chapter h2,
-  .procedure-narrative.is-enhanced:not(.is-flow) .procedure-narrative__chapter h3 { margin-bottom: 12px; font-size: 1.52rem; line-height: 1.18; }
-  .procedure-narrative.is-enhanced:not(.is-flow) .procedure-narrative__intro { margin-bottom: 16px; font-size: .96rem; line-height: 1.6; }
-  .procedure-narrative.is-enhanced:not(.is-flow) .procedure-narrative__items li { gap: 4px; padding: 10px 0; }
-  .procedure-narrative.is-enhanced:not(.is-flow) .procedure-narrative__items strong { font-size: .92rem; line-height: 1.45; }
-  .procedure-narrative.is-enhanced:not(.is-flow) .procedure-narrative__items span { font-size: .88rem; line-height: 1.6; }
-  .procedure-narrative.is-enhanced:not(.is-flow) .procedure-narrative__footer { margin-top: calc(var(--narrative-scenes) * 42svh); }
-
-  .procedure-narrative.is-measuring .procedure-narrative__chapters { height: auto !important; }
-  .procedure-narrative.is-measuring .procedure-narrative__chapter { position: relative !important; inset: auto !important; opacity: 1 !important; visibility: visible !important; transform: none !important; padding-bottom: 76px; }
-
-  .procedure-narrative.is-flow .procedure-narrative__layout { position: static; }
+@media (max-width: 767px) {
   .procedure-narrative.is-flow .procedure-narrative__chapter { opacity: 1; visibility: visible; transform: none; }
   .procedure-narrative.is-flow .procedure-narrative__chapter.is-read { opacity: 1; }
   .procedure-narrative.is-flow .procedure-narrative__chapters::after { transform: none; }
@@ -530,15 +489,68 @@ main { display: flex; flex-direction: column; }
 /* Tablets keep the mobile reading order, but surface the primary actions before
    the portrait so an appointment does not require scrolling past the image. */
 @media (min-width: 600px) and (max-width: 899px) {
-  .hero { padding-bottom: 64px; }
-  .hero-actions { order: 5; margin-top: 24px; }
-  .hero-visual { order: 6; width: min(100%, 500px); margin-top: 30px; }
-  .hero-proof { order: 7; }
-  .portrait-shape { height: clamp(390px, 66vw, 500px); }
+  .hero { padding: 112px 0 64px; }
+  .hero-doctor strong { font-size: 1.1rem; }
+  .hero-doctor span { font-size: .9rem; }
+  .hero-copy h1 { margin-bottom: 18px; font-size: clamp(2.5rem, 5.8vw, 3.1rem); line-height: 1.06; }
+  .hero-copy > p { max-width: 60ch; font-size: 1.06rem; }
+  .hero-actions { order: 5; flex-wrap: wrap; justify-content: flex-start; gap: 12px; margin-top: 4px; }
+  .hero-actions .button { width: auto; min-width: 0; }
+  .hero-location-link { min-height: 52px; padding: 0 20px; border: 1px solid rgba(0,27,98,.14); border-radius: 14px; background: rgba(255,255,255,.75); }
+  .hero-visual { order: 6; width: min(100%, 500px); margin-top: 36px; }
+  .hero-proof { order: 7; display: grid; justify-items: center; }
+  .hero-trust { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 26px; font-size: .82rem; }
+  .portrait-shape { height: clamp(420px, 66vw, 540px); }
   .hero-certifications { margin-inline: auto; }
-  .section { padding: 78px 0; }
-  .specialty-card { min-height: 360px; }
+
+  .section { padding: 80px 0; }
+  .section-title h2, .about-copy h2, .faq-intro h2, .credentials-intro h2,
+  .instagram-heading h2, .reviews-card h2, .contact-copy h2 { font-size: clamp(2.15rem, 5vw, 2.6rem); }
+  .section-title p { font-size: 1rem; }
+  .specialty-card { min-height: 0; padding: 26px 24px 28px; }
+  .specialty-card h3 { font-size: 1.28rem; }
   .center-action .button { width: auto; }
+
+  .about-copy > .button { align-self: flex-start; width: auto; }
+  .procedure-narrative__footer { justify-items: start; }
+  .procedure-narrative__footer .button { width: auto; }
+  .credential-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .credential-list li { align-items: start; }
+  .credential-list li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+  .reviews-card { padding: 40px; }
+  .contact-card { gap: 34px; }
+  .contact-copy .button { width: auto; }
+}
+
+/* Portrait tablets (iPad mini, iPad Air, Galaxy Tab): side-by-side layouts where
+   a single column would leave long, sparse stacks. */
+@media (min-width: 768px) and (max-width: 899px) {
+  .about-grid { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); align-items: center; gap: 40px; }
+  .about-copy { display: block; }
+  .about-visual { order: initial; margin-bottom: 0; }
+  .about-image { height: 500px; }
+  .about-card { right: -10px; max-width: 230px; }
+  .about-copy > .button { width: auto; }
+  .locations-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .location-card { padding: 26px; }
+}
+
+/* Procedure chapters switch to the two-column sticky layout on tablets. */
+@media (min-width: 768px) {
+  .procedure-narrative__layout { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); align-items: start; gap: clamp(48px, 6vw, 88px); }
+  .procedure-narrative__stage { position: sticky; top: 30px; align-self: start; }
+  .procedure-narrative__figure { aspect-ratio: 4 / 5; max-height: calc(100svh - 48px); }
+  /* Give the first surgery photo a little more upward framing on desktop. */
+  .procedure-narrative--surgeries .procedure-narrative__stage picture:first-of-type img { object-position: 50% 45% !important; }
+  .procedure-narrative.is-enhanced .procedure-narrative__figure { clip-path: inset(calc((1 - var(--narrative-reveal)) * 7%) calc((1 - var(--narrative-reveal)) * 5.5%) round calc(13px + (1 - var(--narrative-reveal)) * 15px)); }
+  .procedure-narrative__chapter { min-height: 64svh; display: flex; flex-direction: column; justify-content: center; padding-bottom: 0; }
+  .procedure-narrative__chapter h2, .procedure-narrative__chapter h3 { max-width: 24ch; font-size: clamp(2.15rem, 3.6vw, 3.2rem); }
+  .procedure-narrative__intro { font-size: 1.04rem; }
+  .procedure-narrative__items strong { font-size: .98rem; }
+  .procedure-narrative__items span { font-size: .94rem; }
+  .procedure-narrative__footer { display: flex; justify-content: flex-end; align-items: center; margin-top: 44px; }
+  .procedure-narrative__footer .button { width: auto; white-space: nowrap; }
 }
 
 @media (min-width: 900px) {
@@ -602,19 +614,6 @@ main { display: flex; flex-direction: column; }
   .about-image { height: 620px; }
   .about-more summary { display: none; }
   .about-more > div { display: block !important; padding-top: 0; }
-  .procedure-narrative__layout { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); align-items: start; gap: clamp(48px, 6vw, 88px); }
-  .procedure-narrative__stage { position: sticky; top: 30px; align-self: start; }
-  .procedure-narrative__figure { aspect-ratio: 4 / 5; }
-  /* Give the first surgery photo a little more upward framing on desktop. */
-  .procedure-narrative--surgeries .procedure-narrative__stage picture:first-of-type img { object-position: 50% 45% !important; }
-  .procedure-narrative.is-enhanced .procedure-narrative__figure { clip-path: inset(calc((1 - var(--narrative-reveal)) * 7%) calc((1 - var(--narrative-reveal)) * 5.5%) round calc(13px + (1 - var(--narrative-reveal)) * 15px)); }
-  .procedure-narrative__chapter { min-height: 64svh; display: flex; flex-direction: column; justify-content: center; padding-bottom: 0; }
-  .procedure-narrative__chapter h2, .procedure-narrative__chapter h3 { max-width: 24ch; font-size: clamp(2.15rem, 3.6vw, 3.2rem); }
-  .procedure-narrative__intro { font-size: 1.04rem; }
-  .procedure-narrative__items strong { font-size: .98rem; }
-  .procedure-narrative__items span { font-size: .94rem; }
-  .procedure-narrative__footer { display: flex; justify-content: flex-end; align-items: center; margin-top: 44px; }
-  .procedure-narrative__footer .button { width: auto; white-space: nowrap; }
   .credentials-grid { grid-template-columns: 1fr 1fr; align-items: center; gap: 80px; }
   .instagram-heading { grid-template-columns: 1fr auto; align-items: end; margin-bottom: 42px; }
   .instagram-track { --instagram-card-width: 342px; width: 100%; gap: 22px; margin-left: 0; padding: 3px calc((100% - var(--instagram-card-width)) / 2) 28px; scroll-padding-inline: calc((100% - var(--instagram-card-width)) / 2); }
@@ -644,6 +643,32 @@ main { display: flex; flex-direction: column; }
   .footer-bottom p:last-child { text-align: right; }
 }
 
+/* Carousels bleed to the screen edges on tablets, including large ones in landscape. */
+@media (max-width: 1399px) {
+  .instagram-track { --instagram-card-width: min(76vw, 320px); width: 100vw; margin-left: calc(50% - 50vw); padding-inline: calc((100vw - var(--instagram-card-width)) / 2); scroll-padding-inline: calc((100vw - var(--instagram-card-width)) / 2); }
+}
+
+/* The sticky procedure layout needs a gentler split than desktop on tablets. */
+@media (min-width: 768px) and (max-width: 1149px) {
+  .procedure-narrative__layout { --narrative-gap: clamp(32px, 4.5vw, 44px); container-type: inline-size; grid-template-columns: minmax(0, .86fr) minmax(0, 1.14fr); gap: var(--narrative-gap); }
+  /* Keep the sticky photo vertically centred: half of (43% of the free width × 5/4). */
+  .procedure-narrative__stage { top: max(24px, calc(50svh - (100cqw - var(--narrative-gap)) * .26875)); }
+  .procedure-narrative__chapter { min-height: 56svh; }
+  .procedure-narrative__chapter h2, .procedure-narrative__chapter h3 { font-size: clamp(2rem, 3.8vw, 2.6rem); }
+}
+
+/* Portrait tablets keep the desktop scroll scene, but the viewport is much taller
+   than the column is wide: give the photo a wider column, a taller crop, and keep
+   it vertically centred while the chapters scroll so neither column looks empty. */
+@media (min-width: 768px) and (max-width: 1149px) and (orientation: portrait) {
+  .procedure-narrative__layout { --narrative-gap: clamp(28px, 4vw, 44px); grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
+  .procedure-narrative__figure { aspect-ratio: 3 / 4; }
+  /* Half the figure height: column width (45% of the free width) × 4/3 ÷ 2. */
+  .procedure-narrative__stage { top: max(24px, calc(50svh - (100cqw - var(--narrative-gap)) * .3)); }
+  .procedure-narrative__chapter { min-height: 46svh; padding-block: 28px; }
+  .procedure-narrative__chapter h2, .procedure-narrative__chapter h3 { font-size: clamp(1.85rem, 3.7vw, 2.5rem); }
+}
+
 @media (min-width: 900px) and (max-width: 1149px) {
   .desktop-nav, .nav-cta.button { display: none; }
   .menu-toggle { display: grid; }
@@ -658,8 +683,8 @@ main { display: flex; flex-direction: column; }
   .hero-copy h1 { font-size: clamp(2.7rem, 5vw, 3.2rem); line-height: 1.08; }
   .hero-copy h1 em { display: inline; }
   .hero-copy > p { max-width: 48ch; font-size: 1rem; }
-  .hero-actions { gap: 8px; }
-  .hero-actions .button { padding-inline: 16px; }
+  .hero-actions { flex-wrap: wrap; gap: 10px; }
+  .hero-actions .button, .hero-location-link { padding-inline: 18px; white-space: nowrap; }
   .hero-visual { width: min(100%, 440px); padding: 0; }
   .portrait-shape { height: 535px; border-radius: 42% 42% 26px 26px; }
   .floating-card, .floating-badge { display: none; }
@@ -668,13 +693,22 @@ main { display: flex; flex-direction: column; }
 
   .specialty-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .specialty-card { min-height: 350px; }
-  .procedure-narrative__layout { grid-template-columns: minmax(280px, .86fr) minmax(0, 1.14fr); gap: 38px; }
-  .procedure-narrative__chapter { min-height: 56svh; }
   .credentials-grid, .faq-grid { gap: 48px; }
   .about-grid { gap: 50px; }
   .about-image { height: 520px; }
   .contact-card { grid-template-columns: 1fr; gap: 34px; padding: 46px; }
   .reviews-card { padding: 44px; }
+  .location-actions { grid-template-columns: 1fr; }
+}
+
+/* Large tablets in landscape (iPad Air/Pro 11" and 12.9") share the desktop
+   navigation, but the hero column is too narrow for the full desktop headline. */
+@media (min-width: 1150px) and (max-width: 1399px) {
+  .hero-copy h1 { font-size: clamp(3.1rem, 4.2vw, 3.6rem); }
+  .hero-copy h1 em { display: inline; }
+  .hero-actions { flex-wrap: wrap; gap: 10px; }
+  .hero-actions .button, .hero-location-link { white-space: nowrap; }
+  .location-actions { grid-template-columns: 1fr; }
 }
 
 @media (min-width: 1280px) {

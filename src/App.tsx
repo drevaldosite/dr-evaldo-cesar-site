@@ -1103,7 +1103,8 @@ function ProcedureNarrative({ id, variant, chapters, message, preloadVideoOnDesk
     const imageElements = Array.from(section.querySelectorAll<HTMLElement>('.procedure-narrative__image'))
     if (!layout || !stage || !figure || chapterElements.length < 2) return
 
-    const desktopQuery = window.matchMedia('(min-width: 900px)')
+    // Tablets from 768px use the two-column sticky layout; narrower screens read chapter by chapter.
+    const desktopQuery = window.matchMedia('(min-width: 768px)')
     let activeIndex = 0
     let animationFrame = 0
     let measuredWidth = window.innerWidth
@@ -1112,36 +1113,14 @@ function ProcedureNarrative({ id, variant, chapters, message, preloadVideoOnDesk
     const clamp = (value: number) => Math.max(0, Math.min(1, value))
 
     const measure = () => {
-      if (desktopQuery.matches) {
-        section.style.removeProperty('--narrative-copy-height')
-        section.classList.remove('is-flow', 'is-compact-flow')
-        return
-      }
-
-      if (window.innerWidth < 600) {
-        section.style.removeProperty('--narrative-copy-height')
-        section.classList.add('is-flow', 'is-compact-flow')
-        return
-      }
-
-      section.classList.remove('is-compact-flow')
-      section.classList.add('is-measuring')
-      const tallestChapter = Math.max(...chapterElements.map((chapter) => chapter.offsetHeight))
-      section.classList.remove('is-measuring')
-      section.style.setProperty('--narrative-copy-height', `${Math.ceil(tallestChapter)}px`)
-
-      const stickyTop = Number.parseFloat(getComputedStyle(layout).top) || 16
-      const gap = Number.parseFloat(getComputedStyle(layout).rowGap) || 16
-      const minimumPhoto = 124
-      const mobileCtaClearance = 78
-      const fits = stickyTop + minimumPhoto + gap + tallestChapter + mobileCtaClearance <= getViewportHeight()
-      section.classList.toggle('is-flow', !fits)
+      const compact = !desktopQuery.matches
+      section.classList.toggle('is-flow', compact)
+      section.classList.toggle('is-compact-flow', compact)
     }
 
     const paint = () => {
       animationFrame = 0
       const desktop = desktopQuery.matches
-      const flowing = section.classList.contains('is-flow')
       const compactFlow = section.classList.contains('is-compact-flow')
       const sectionRect = section.getBoundingClientRect()
       const sectionStyle = getComputedStyle(section)
@@ -1166,18 +1145,10 @@ function ProcedureNarrative({ id, variant, chapters, message, preloadVideoOnDesk
       }
 
       let nextIndex = 0
-      if (desktop || flowing) {
-        const viewportHeight = getViewportHeight()
-        const readingLine = viewportHeight * (section.classList.contains('is-compact-flow') ? .38 : .56)
-        chapterElements.forEach((chapter, index) => {
-          if (chapter.getBoundingClientRect().top <= readingLine) nextIndex = index
-        })
-      } else {
-        const rawScene = progress * chapterElements.length
-        if (rawScene >= activeIndex + 1.1) nextIndex = Math.min(chapterElements.length - 1, activeIndex + 1)
-        else if (rawScene < activeIndex - .1) nextIndex = Math.max(0, activeIndex - 1)
-        else nextIndex = activeIndex
-      }
+      const readingLine = getViewportHeight() * (compactFlow ? .38 : .56)
+      chapterElements.forEach((chapter, index) => {
+        if (chapter.getBoundingClientRect().top <= readingLine) nextIndex = index
+      })
 
       const reveal = desktop
         ? progress
