@@ -1445,8 +1445,26 @@ export default function App() {
             <div className="hero-proof">
               <div className="hero-trust"><span><ShieldCheck size={18} /> Cuidado responsável</span><span><HeartHandshake size={18} /> Atendimento humanizado</span></div>
               <div className="hero-certifications" aria-label="Certificações profissionais">
-                <img className="hero-residency-seal" src="/images/inicio-selo-residencia-unicamp-nota-a.webp" alt="Residência Médica Nota A — UNICAMP" width="1254" height="1254" loading="lazy" />
-                <img className="hero-aborl-seal" src="/images/inicio-selo-titulo-especialista-aborl.webp" alt="Título de Especialista — ABORL-CCF" width="2048" height="788" loading="lazy" />
+                <img
+                  className="hero-residency-seal"
+                  src="/images/inicio-selo-residencia-unicamp-nota-a.webp"
+                  srcSet="/images/inicio-selo-residencia-unicamp-nota-a-80.webp 80w, /images/inicio-selo-residencia-unicamp-nota-a-160.webp 160w, /images/inicio-selo-residencia-unicamp-nota-a.webp 220w"
+                  sizes="(min-width: 1150px) 110px, (min-width: 900px) 88px, 80px"
+                  alt="Residência Médica Nota A — UNICAMP"
+                  width="220"
+                  height="218"
+                  loading="lazy"
+                />
+                <img
+                  className="hero-aborl-seal"
+                  src="/images/inicio-selo-titulo-especialista-aborl.webp"
+                  srcSet="/images/inicio-selo-titulo-especialista-aborl-240.webp 240w, /images/inicio-selo-titulo-especialista-aborl.webp 480w"
+                  sizes="240px"
+                  alt="Título de Especialista — ABORL-CCF"
+                  width="480"
+                  height="185"
+                  loading="lazy"
+                />
               </div>
             </div>
           </div>

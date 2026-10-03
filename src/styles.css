@@ -180,8 +180,8 @@ main { display: flex; flex-direction: column; }
 
 .procedure-narrative.is-enhanced .procedure-narrative__image { transform: scale(1.02); transition: opacity .36s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1); }
 .procedure-narrative.is-enhanced .procedure-narrative__image.is-active { transform: scale(calc(1 + (1 - var(--narrative-reveal)) * .04)); }
-.procedure-narrative.is-enhanced .procedure-narrative__chapter { opacity: .18; transform: translateY(8px); transition: opacity .36s cubic-bezier(.22,1,.36,1), transform .36s cubic-bezier(.22,1,.36,1); }
-.procedure-narrative.is-enhanced .procedure-narrative__chapter.is-read { opacity: .38; transform: none; }
+.procedure-narrative.is-enhanced .procedure-narrative__chapter { opacity: 1; transform: translateY(8px); transition: transform .36s cubic-bezier(.22,1,.36,1); }
+.procedure-narrative.is-enhanced .procedure-narrative__chapter.is-read { opacity: 1; transform: none; }
 .procedure-narrative.is-enhanced .procedure-narrative__chapter.is-active { opacity: 1; transform: none; }
 .procedure-narrative.is-cold .procedure-narrative__image, .procedure-narrative.is-cold .procedure-narrative__chapter { transition: none; }
 .procedure-video-shell { overflow: hidden; }

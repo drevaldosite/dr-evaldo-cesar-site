@@ -120,18 +120,10 @@
     var closeButton = dialog.querySelector('[data-consent-close]')
     if (closeButton) closeButton.addEventListener('click', closeDialog)
     document.body.appendChild(dialog)
-    dialog.querySelector('button').focus()
-  }
-
-  function addStyles() {
-    var style = document.createElement('style')
-    style.textContent =
-      '.analytics-consent{position:fixed;z-index:10000;right:16px;bottom:16px;left:16px;display:flex;align-items:center;justify-content:space-between;gap:20px;max-width:960px;margin:auto;padding:18px 20px;color:#102550;background:#fff;border:1px solid #dbe4f3;border-radius:18px;box-shadow:0 18px 60px rgba(0,27,98,.2);font-family:Arial,sans-serif}' +
-      '.analytics-consent__content{max-width:650px}.analytics-consent strong{display:block;margin-bottom:5px;color:#001b62;font-size:1rem}.analytics-consent p{margin:0 0 5px;line-height:1.45;font-size:.9rem}.analytics-consent a{color:#005bb7;font-size:.82rem;font-weight:700}' +
-      '.analytics-consent__actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px}.analytics-consent button,.analytics-consent-settings{min-height:42px;padding:10px 14px;border:1px solid #005bb7;border-radius:999px;color:#0050a4;background:#fff;font:700 .82rem Arial,sans-serif;cursor:pointer}.analytics-consent .analytics-consent__accept{color:#fff;background:#005bb7}.analytics-consent .analytics-consent__close{border-color:transparent}' +
-      '.analytics-consent-settings{position:fixed;z-index:9999;bottom:10px;left:10px;min-height:34px;padding:7px 11px;border:1px solid #dbe4f3;border-radius:999px;color:#40516f;background:rgba(255,255,255,.94);font:700 .72rem Arial,sans-serif;box-shadow:0 4px 14px rgba(0,27,98,.12);cursor:pointer}' +
-      '@media(max-width:700px){.analytics-consent{align-items:stretch;flex-direction:column}.analytics-consent__actions{justify-content:stretch}.analytics-consent__actions button{flex:1}}'
-    document.head.appendChild(style)
+    window.requestAnimationFrame(function () {
+      var firstButton = dialog.querySelector('button')
+      if (firstButton && document.body.contains(dialog)) firstButton.focus()
+    })
   }
 
   window.DrEvaldoAnalytics = {
@@ -147,7 +139,6 @@
   if (currentConsent === 'granted') loadAnalytics()
 
   function initializeConsentUi() {
-    addStyles()
     if (currentConsent) addPreferencesButton()
     else showPreferences()
   }
