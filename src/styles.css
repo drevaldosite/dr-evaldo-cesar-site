@@ -356,6 +356,8 @@ main { display: flex; flex-direction: column; }
 .footer-grid a:hover { color: #fff; }
 .footer-grid a svg, .placeholder-link svg { width: 16px; }
 .placeholder-link { opacity: .65; }
+.footer-privacy-settings { align-self: flex-start; min-height: 0; margin-top: 2px; padding: 0; color: #b8c5dc; border: 0; border-radius: 0; background: transparent; box-shadow: none; font-family: inherit; font-size: .875rem; font-weight: 400; line-height: inherit; }
+.footer-privacy-settings:hover { color: #fff; }
 .footer-bottom { display: grid; gap: 4px; margin-top: 38px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.09); }
 .footer-bottom p { margin: 0; font-size: .78rem; }
 .mobile-cta-bar { position: fixed; z-index: 80; right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); pointer-events: none; }
@@ -637,7 +639,7 @@ main { display: flex; flex-direction: column; }
   .contact-doctor-id span { font-size: .72rem; }
   .footer { margin-top: 80px; padding: 55px 0 20px; }
   .footer p { font-size: .8rem; }
-  .footer-grid a, .placeholder-link { min-height: 0; font-size: .79rem; }
+  .footer-grid a, .placeholder-link, .footer-privacy-settings { min-height: 0; font-size: .79rem; }
   .footer-bottom p { font-size: .67rem; }
   .footer-bottom { grid-template-columns: 1fr 1fr; }
   .footer-bottom p:last-child { text-align: right; }

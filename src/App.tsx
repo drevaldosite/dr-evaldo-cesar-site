@@ -4,7 +4,7 @@ import {
   Ear, HeartHandshake, MapPin, Menu, MessageCircle,
   PhoneCall, Play, ShieldCheck, Sparkles, X,
 } from 'lucide-react'
-import { contactText, siteConfig, trackEvent, whatsappUrl } from './config'
+import { contactText, showPrivacyPreferences, siteConfig, trackEvent, whatsappUrl } from './config'
 import { tuneJustification } from './justifyTune'
 
 const HYPHEN_VOWELS = 'aeiouáàâãéèêíïóòôõúüAEIOUÁÀÂÃÉÈÊÍÏÓÒÔÕÚÜ'
@@ -1600,7 +1600,7 @@ export default function App() {
       <div className="container footer-grid">
         <div className="footer-brand"><img src={siteConfig.assets.logoDark} alt="Dr. Evaldo César Macau" width="344" height="82" /><p>Otorrinolaringologia com atenção, clareza e cuidado para adultos e crianças.</p><p><strong>CRM-MA 10415 · RQE 3698</strong></p></div>
         <div><h2>Navegação</h2>{navItems.map(([label, href]) => <a key={href} href={href}>{label}</a>)}</div>
-        <div><h2>Contato</h2><WhatsAppLink className="" source="footer"><MessageCircle /> Agendamento online</WhatsAppLink>{siteConfig.contact.instagram ? <a href={siteConfig.contact.instagram} target="_blank" rel="noreferrer" onClick={() => trackEvent('click_instagram', { cta_source: 'footer' })}><InstagramIcon /> Instagram</a> : <span className="placeholder-link"><InstagramIcon /> Instagram a configurar</span>}<a href="/privacidade.html">Política de Privacidade</a></div>
+        <div><h2>Contato</h2><WhatsAppLink className="" source="footer"><MessageCircle /> Agendamento online</WhatsAppLink>{siteConfig.contact.instagram ? <a href={siteConfig.contact.instagram} target="_blank" rel="noreferrer" onClick={() => trackEvent('click_instagram', { cta_source: 'footer' })}><InstagramIcon /> Instagram</a> : <span className="placeholder-link"><InstagramIcon /> Instagram a configurar</span>}<a href="/privacidade.html">Política de Privacidade</a><button className="analytics-consent-settings footer-privacy-settings" type="button" onClick={showPrivacyPreferences}>Privacidade</button></div>
       </div>
       <div className="container footer-bottom"><p>© {new Date().getFullYear()} Dr. Evaldo César Macau. Todos os direitos reservados.</p><p>As informações deste site são educativas e não substituem consulta médica.</p></div>
     </footer>

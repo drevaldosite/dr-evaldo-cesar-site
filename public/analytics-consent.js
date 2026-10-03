@@ -80,17 +80,6 @@
     if (dialog) dialog.remove()
   }
 
-  function addPreferencesButton() {
-    if (!currentConsent || document.getElementById('analytics-consent-settings')) return
-    var button = document.createElement('button')
-    button.id = 'analytics-consent-settings'
-    button.className = 'analytics-consent-settings'
-    button.type = 'button'
-    button.textContent = 'Privacidade'
-    button.addEventListener('click', showPreferences)
-    document.body.appendChild(button)
-  }
-
   function showPreferences() {
     if (document.getElementById('analytics-consent-dialog')) return
     var dialog = document.createElement('section')
@@ -114,7 +103,6 @@
       button.addEventListener('click', function () {
         saveConsent(button.getAttribute('data-consent'))
         closeDialog()
-        addPreferencesButton()
       })
     })
     var closeButton = dialog.querySelector('[data-consent-close]')
@@ -139,8 +127,7 @@
   if (currentConsent === 'granted') loadAnalytics()
 
   function initializeConsentUi() {
-    if (currentConsent) addPreferencesButton()
-    else showPreferences()
+    // Preferences stay available from the footer without interrupting the first visit.
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeConsentUi)
   else initializeConsentUi()

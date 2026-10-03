@@ -44,3 +44,12 @@ export function trackEvent(event: string, details: Record<string, string> = {}) 
   }
   win.DrEvaldoAnalytics?.trackEvent(event, details)
 }
+
+export function showPrivacyPreferences() {
+  const win = window as Window & {
+    DrEvaldoAnalytics?: {
+      showPreferences: () => void
+    }
+  }
+  win.DrEvaldoAnalytics?.showPreferences()
+}
