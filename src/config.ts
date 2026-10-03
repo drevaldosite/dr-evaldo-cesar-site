@@ -15,8 +15,13 @@ export const siteConfig = {
   },
   assets: {
     logoLight: '/logos/dr-evaldo-logo-cabecalho.webp',
+    logoLightSrcSet: '/logos/dr-evaldo-logo-cabecalho-200.webp 200w, /logos/dr-evaldo-logo-cabecalho-360.webp 360w, /logos/dr-evaldo-logo-cabecalho-480.webp 480w, /logos/dr-evaldo-logo-cabecalho.webp 720w',
+    logoLightSizes: '(min-width: 900px) 186px, 166px',
     logoDark: '/logos/dr-evaldo-logo-rodape.webp',
     hero: '/images/inicio-retrato-profissional-dr-evaldo.webp',
+    // Keep in sync with the hero preload in index.html.
+    heroSrcSet: '/images/inicio-retrato-profissional-dr-evaldo-400.webp 400w, /images/inicio-retrato-profissional-dr-evaldo-520.webp 520w, /images/inicio-retrato-profissional-dr-evaldo-680.webp 680w, /images/inicio-retrato-profissional-dr-evaldo.webp 854w',
+    heroSizes: '(min-width: 1150px) 508px, (min-width: 900px) 440px, (min-width: 600px) 500px, min(calc(100vw - 32px), 430px)',
     about: '/images/sobre-especialista-dr-evaldo.webp',
     clinical: '/images/atendimento-avaliacao-ouvido.webp',
   },

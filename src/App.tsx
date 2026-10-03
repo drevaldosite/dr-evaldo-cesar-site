@@ -1325,7 +1325,7 @@ function Header() {
     <header className="site-header" ref={headerRef}>
       <div className="container nav-wrap">
         <a className="brand" href="#inicio" aria-label="Dr. Evaldo César Macau — início">
-          <img src={siteConfig.assets.logoLight} alt="Dr. Evaldo César Macau, Otorrinolaringologista" width="344" height="82" />
+          <img src={siteConfig.assets.logoLight} srcSet={siteConfig.assets.logoLightSrcSet} sizes={siteConfig.assets.logoLightSizes} alt="Dr. Evaldo César Macau, Otorrinolaringologista" width="720" height="209" />
         </a>
         <nav className="desktop-nav" aria-label="Navegação principal">
           {navItems.map(([label, href]) => <a key={href} href={href}>{label}</a>)}
@@ -1469,7 +1469,7 @@ export default function App() {
             </div>
           </div>
           <div className="hero-visual reveal visible">
-            <div className="portrait-shape"><div className="portrait-ring" /><img src={siteConfig.assets.hero} alt="Retrato profissional do Dr. Evaldo César Macau" width="1080" height="1620" fetchPriority="high" /></div>
+            <div className="portrait-shape"><div className="portrait-ring" /><img src={siteConfig.assets.hero} srcSet={siteConfig.assets.heroSrcSet} sizes={siteConfig.assets.heroSizes} alt="Retrato profissional do Dr. Evaldo César Macau" width="854" height="1280" fetchPriority="high" /></div>
             <div className="floating-card card-one"><span className="icon-box"><HeartHandshake size={21} /></span><span><strong>Escuta com atenção</strong><small>Atendimento humanizado</small></span></div>
             <div className="floating-card card-two"><span className="icon-box"><CalendarCheck size={21} /></span><span><strong>Agende pelo WhatsApp</strong><small>Contato direto com a equipe</small></span></div>
             <div className="floating-badge"><Sparkles size={16} /> Cuidado especializado</div>
