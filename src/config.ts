@@ -35,7 +35,11 @@ export function whatsappUrl(message = 'Olá! Gostaria de informações para agen
 }
 
 export function trackEvent(event: string, details: Record<string, string> = {}) {
-  const win = window as Window & { dataLayer?: unknown[] }
+  const win = window as Window & {
+    dataLayer?: unknown[]
+    gtag?: (...args: unknown[]) => void
+  }
   win.dataLayer = win.dataLayer || []
   win.dataLayer.push({ event, ...details })
+  win.gtag?.('event', event, details)
 }
