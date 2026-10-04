@@ -48,8 +48,11 @@ export function trackEvent(event: string, details: Record<string, string> = {}) 
       showPreferences: () => void
       trackEvent: (eventName: string, parameters?: Record<string, string>) => void
     }
+    va?: (command: 'event', payload: { name: string, data?: Record<string, string> }) => void
   }
+  // GA4 só recebe o evento com consentimento; o Vercel Web Analytics é anônimo e sem cookies.
   win.DrEvaldoAnalytics?.trackEvent(event, details)
+  win.va?.('event', { name: event, data: Object.fromEntries(Object.entries(details).map(([key, value]) => [key, value.slice(0, 255)])) })
 }
 
 export function showPrivacyPreferences() {
