@@ -1458,7 +1458,7 @@ export default function App() {
                 <img
                   className="hero-aborl-seal"
                   src="/images/inicio-selo-titulo-especialista-aborl.webp"
-                  srcSet="/images/inicio-selo-titulo-especialista-aborl-240.webp 240w, /images/inicio-selo-titulo-especialista-aborl.webp 480w"
+                  srcSet="/images/inicio-selo-titulo-especialista-aborl-240.webp 240w, /images/inicio-selo-titulo-especialista-aborl-360.webp 360w, /images/inicio-selo-titulo-especialista-aborl.webp 480w"
                   sizes="240px"
                   alt="Título de Especialista — ABORL-CCF"
                   width="480"
