@@ -231,8 +231,7 @@ Se o placeholder exato `<div id="root"></div>` desaparecer de `index.html`, o pr
 │   ├── robots.txt
 │   └── sitemap.xml
 ├── tsconfig*.json
-├── vite.config.ts
-└── wrangler.jsonc                    # configuração Cloudflare incompleta no estado atual
+└── vite.config.ts
 ```
 
 ### 5.5 Responsabilidades dos arquivos centrais
@@ -483,23 +482,11 @@ Para novas mudanças, partir do estado mais recente de `develop`, isolar o traba
 9. Entre `73ba992` e `e3ad210`, o fluxo de vídeo foi otimizado para rede, mobile, controles, poster, formato MP4 e carregamento/reprodução mais estáveis.
 10. Em `34ddbb5`, a política de privacidade recebeu sua versão completa atual.
 
-### 13.3 Estado da configuração Cloudflare
+### 13.3 Hospedagem e deploy
 
-`wrangler.jsonc` declara:
+O site é publicado na **Vercel** (projeto `dr-evaldo-cesar-site`, vinculado em `.vercel/project.json`; as respostas HTTP de produção trazem `Server: Vercel`). O deploy é disparado por push no GitHub; não há workflow CI/CD nem script de deploy versionados.
 
-- worker de produção `dr-evaldo-worker`;
-- ambiente staging `dr-evaldo-worker-staging`;
-- `compatibility_date` de 13 de agosto de 2026;
-- observabilidade habilitada;
-- variável `ENVIRONMENT` para produção e staging.
-
-Porém, há três lacunas objetivas:
-
-- `main` aponta para `src/index.ts`, arquivo inexistente;
-- `wrangler` não está declarado nas dependências e não existe script de deploy em `package.json`;
-- não há workflow CI/CD versionado.
-
-Logo, `wrangler.jsonc` não constitui, sozinho, um fluxo de deploy reproduzível. Não afirmar que `npm run build` publica o site. Antes de qualquer publicação, é necessário confirmar a plataforma realmente usada e corrigir/documentar o entrypoint e os comandos correspondentes.
+O `wrangler.jsonc` (Cloudflare Workers) que existia desde o commit inicial nunca foi usado — apontava para um `src/index.ts` inexistente e o `wrangler` não era dependência —, e foi removido junto com o `worker-configuration.d.ts` gerado por ele.
 
 ## 14. Histórico completo das ações registradas em `develop`
 
