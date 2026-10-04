@@ -39,6 +39,13 @@ const navItems = [
   ['Locais', '#locais'], ['Dúvidas', '#duvidas'], ['Contato', '#contato'],
 ] as const
 
+// O rodapé lista todas as seções; o menu do cabeçalho continua enxuto.
+const footerNavItems = [
+  ['Início', '#inicio'], ['Especialidades', '#especialidades'], ['Procedimentos', '#procedimentos'], ['Exames', '#exames'],
+  ['Cirurgias', '#cirurgias'], ['Sobre', '#sobre'], ['Conteúdos', '#conteudos'], ['Locais', '#locais'], ['Dúvidas', '#duvidas'],
+  ['Contato', '#contato'],
+] as const
+
 const specialties = [
   { icon: 'dizziness', title: 'Otoneurologia: Tontura, Vertigem e Equilíbrio', text: 'Avaliação para pessoas que sentem tontura, vertigem, sensação de desequilíbrio ou instabilidade. A consulta busca entender a causa desses sintomas e, quando necessário, podem ser solicitados exames específicos do equilíbrio.', className: 'nose' },
   { icon: Ear, title: 'Zumbido e Alterações Auditivas', text: 'Avaliação de sintomas como zumbido, diminuição da audição, sensação de ouvido tampado ou pressão no ouvido. O objetivo é investigar o que pode estar causando essas alterações e orientar o tratamento adequado.', className: 'ear' },
@@ -160,7 +167,8 @@ const locations = [
   {
     name: 'Executive Lake Center',
     subtitle: 'Clínica Rhinus',
-    logo: '/logos/locais-logo-clinica-rhinus.png',
+    logo: '/logos/locais-logo-clinica-rhinus.webp',
+    logoSize: [380, 148],
     logoAlt: 'Logotipo da Clínica Rhinus',
     address: 'R. das Andirobas, 10 – sala 405\nJardim Renascença, São Luís – MA\nCEP 65075-040',
     reference: 'Próximo à Lagoa da Jansen.',
@@ -171,6 +179,7 @@ const locations = [
     name: 'Unidade Medical Center Jaracaty',
     subtitle: 'UDI Hospital',
     logo: '/logos/locais-logo-udi-hospital.svg',
+    logoSize: [1191, 694],
     logoAlt: 'Logotipo da UDI Hospital',
     address: 'Av. Professor Carlos Cunha, 1\nMedical Center Jaracaty – 2º andar\nJaracaty, São Luís – MA · CEP 65076-820',
     reference: '',
@@ -289,7 +298,7 @@ function PatientReviewsCarousel() {
       {patientReviews.map(({ name, date, location, text }) => <article className="patient-review" key={`${name}-${date}`}>
         <div className="patient-review-header">
           <span className="review-avatar" aria-hidden="true">{name.charAt(0)}</span>
-          <h3>{name}</h3>
+          <p className="patient-review__name">{name}</p>
         </div>
         <blockquote>“{sh(text)}”</blockquote>
         <footer><span>{date} · {location}</span><a href={siteConfig.contact.doctoralia} target="_blank" rel="noreferrer">Doctoralia <ArrowRight size={15} /></a></footer>
@@ -701,6 +710,37 @@ function InstagramVideo({ src, liteSrc, poster, ariaLabel, tabIndex, priority, s
   </>
 }
 
+type InstagramPost = (typeof instagramPosts)[number]
+
+// Largura do card: min(76vw, 320px) até 1399px e 342px acima (styles.css).
+const instagramImageSizes = '(min-width: 1400px) 342px, min(76vw, 320px)'
+const instagramImageSrcSet = (image: string) => [480, 720].map((width) => `${image.replace(/\.webp$/, `-${width}.webp`)} ${width}w`).concat(`${image} 1080w`).join(', ')
+
+function InstagramPendingMedia() {
+  return <span className="instagram-card__pending">
+    <span className="instagram-card__play"><Play fill="currentColor" /></span>
+    <span>Vídeo em atualização</span>
+    <small>O card já está pronto para receber a mídia.</small>
+  </span>
+}
+
+// Cópias do loop infinito: só visual, sem heading, links, botões ou vídeo (não duplicam conteúdo no HTML).
+function InstagramCloneCard({ post }: { post: InstagramPost }) {
+  return <>
+    <div className="instagram-card__media">
+      {'video' in post ? <>
+        <img className="instagram-video-poster" src={post.videoPoster} alt="" width="540" height="960" loading="lazy" decoding="async" />
+        <span className="instagram-video-play"><Play fill="currentColor" /></span>
+      </> : 'image' in post ? <img src={post.image} srcSet={instagramImageSrcSet(post.image)} sizes={instagramImageSizes} alt="" width="1080" height="1350" loading="lazy" decoding="async" /> : <InstagramPendingMedia />}
+    </div>
+    <div className="instagram-card__body">
+      <p className="instagram-card__title">{post.title}</p>
+      <p>{post.description}</p>
+      <span className="instagram-card__cta">Ler mais <ArrowRight size={17} /></span>
+    </div>
+  </>
+}
+
 function InstagramCarousel() {
   const networkTier = useVideoNetworkTier()
   const [activePlaybackId, setActivePlaybackId] = useState<string | null>(null)
@@ -888,18 +928,16 @@ function InstagramCarousel() {
       }}
     >
       {carouselPosts.map(({ post, key, isClone, originalIndex }) => <article className={`instagram-card${isClone ? '' : ' reveal'}`} aria-hidden={isClone || undefined} aria-label={isClone ? undefined : `Publicação ${originalIndex + 1} de ${instagramPosts.length}`} style={{ '--delay': `${(originalIndex % 4) * 70}ms` } as React.CSSProperties} key={key}>
-        {'video' in post ? <div className="instagram-card__media"><InstagramVideo src={post.video} liteSrc={post.videoLite} poster={post.videoPoster} ariaLabel={post.videoAriaLabel} tabIndex={isClone ? -1 : undefined} priority={isClone ? 'none' : videoPriority(originalIndex)} sectionNear={sectionNear} networkTier={networkTier} playbackId={key} activePlaybackId={activePlaybackId} onPlaybackStart={setActivePlaybackId} onPlaybackPause={handlePlaybackPause} autoplay={!isClone} /></div> : <a className="instagram-card__media" href={post.url} target="_blank" rel="noreferrer" tabIndex={isClone ? -1 : undefined} aria-label={`Abrir no Instagram: ${post.title}`} onClick={() => trackEvent('click_instagram_post', { post_index: String(originalIndex + 1) })}>
-        {'image' in post ? <img src={post.image} alt={isClone ? '' : post.imageAlt} width="1080" height="1350" loading="lazy" /> : <span className="instagram-card__pending">
-          <span className="instagram-card__play"><Play fill="currentColor" /></span>
-          <span>Vídeo em atualização</span>
-          <small>O card já está pronto para receber a mídia.</small>
-        </span>}
+        {isClone ? <InstagramCloneCard post={post} /> : <>
+        {'video' in post ? <div className="instagram-card__media"><InstagramVideo src={post.video} liteSrc={post.videoLite} poster={post.videoPoster} ariaLabel={post.videoAriaLabel} priority={videoPriority(originalIndex)} sectionNear={sectionNear} networkTier={networkTier} playbackId={key} activePlaybackId={activePlaybackId} onPlaybackStart={setActivePlaybackId} onPlaybackPause={handlePlaybackPause} /></div> : <a className="instagram-card__media" href={post.url} target="_blank" rel="noreferrer" aria-label={`Abrir no Instagram: ${post.title}`} onClick={() => trackEvent('click_instagram_post', { post_index: String(originalIndex + 1) })}>
+        {'image' in post ? <img src={post.image} srcSet={instagramImageSrcSet(post.image)} sizes={instagramImageSizes} alt={post.imageAlt} width="1080" height="1350" loading="lazy" decoding="async" /> : <InstagramPendingMedia />}
       </a>}
       <div className="instagram-card__body">
-        <h3><a href={post.page} tabIndex={isClone ? -1 : undefined}>{post.title}</a></h3>
+        <h3><a href={post.page}>{post.title}</a></h3>
         <p>{post.description}</p>
-        <a href={post.url} target="_blank" rel="noreferrer" tabIndex={isClone ? -1 : undefined} onClick={() => trackEvent('click_instagram_post', { post_index: String(originalIndex + 1) })}>Ler mais <ArrowRight size={17} /></a>
+        <a href={post.url} target="_blank" rel="noreferrer" onClick={() => trackEvent('click_instagram_post', { post_index: String(originalIndex + 1) })}>Ler mais <ArrowRight size={17} /></a>
       </div>
+      </>}
     </article>)}
     </div>
     <div className="instagram-carousel-controls" aria-label="Navegação das publicações">
@@ -1303,7 +1341,7 @@ function LocationsSection() {
       <SectionTitle eyebrow="Onde encontrar" title="Locais de atendimento" text="Escolha a unidade mais conveniente e entre em contato para agendar sua consulta com o Dr. Evaldo César Macau." centered id="locations-title" />
       <div className="locations-grid">
         {locations.map((location, index) => <article className="location-card reveal" style={{ '--delay': `${index * 100}ms` } as React.CSSProperties} key={location.name}>
-          {location.logo && <img className="location-logo" src={location.logo} alt={location.logoAlt} />}
+          {location.logo && <img className="location-logo" src={location.logo} alt={location.logoAlt} width={location.logoSize[0]} height={location.logoSize[1]} loading="lazy" decoding="async" />}
           <h3>{location.name}</h3>
           {location.subtitle && <p className="location-subtitle">{location.subtitle}</p>}
           <address>{location.address}</address>
@@ -1645,8 +1683,8 @@ export default function App() {
 
     <footer className="footer">
       <div className="container footer-grid">
-        <div className="footer-brand"><img src={siteConfig.assets.logoDark} alt="Dr. Evaldo César Macau" width="344" height="82" /><p>Otorrinolaringologia com atenção, clareza e cuidado para adultos e crianças.</p><p><strong>CRM-MA 10415 · RQE 3698</strong></p></div>
-        <div><h2>Navegação</h2>{navItems.map(([label, href]) => <a key={href} href={href}>{label}</a>)}</div>
+        <div className="footer-brand"><img src={siteConfig.assets.logoDark} srcSet={siteConfig.assets.logoDarkSrcSet} sizes={siteConfig.assets.logoDarkSizes} alt="Dr. Evaldo César Macau" width="344" height="82" loading="lazy" decoding="async" /><p>Otorrinolaringologia com atenção, clareza e cuidado para adultos e crianças.</p><p><strong>CRM-MA 10415 · RQE 3698</strong></p></div>
+        <div><h2>Navegação</h2>{footerNavItems.map(([label, href]) => <a key={href} href={href}>{label}</a>)}</div>
         <div><h2>Contato</h2><WhatsAppLink className="" source="footer"><MessageCircle /> Agendamento online</WhatsAppLink>{siteConfig.contact.instagram ? <a href={siteConfig.contact.instagram} target="_blank" rel="noreferrer" onClick={() => trackEvent('click_instagram', { cta_source: 'footer' })}><InstagramIcon /> Instagram</a> : <span className="placeholder-link"><InstagramIcon /> Instagram a configurar</span>}<a href="/privacidade.html">Política de Privacidade</a><button className="analytics-consent-settings footer-privacy-settings" type="button" onClick={showPrivacyPreferences}>Privacidade</button></div>
       </div>
       <div className="container footer-bottom"><p>© {new Date().getFullYear()} Dr. Evaldo César Macau. Todos os direitos reservados.</p><p>As informações deste site são educativas e não substituem consulta médica.</p></div>

@@ -24,3 +24,11 @@ summary { line-height: 1.7; }
 .notice { padding: 16px 18px; border-radius: 12px; background: #e7f6fb; }
 details { margin: 12px 0; padding: 14px 16px; border: 1px solid #d7e0ee; border-radius: 12px; background: #fff; }
 summary { cursor: pointer; font-weight: 700; }
+.related { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid #d7e0ee; }
+.related h2 { margin-top: 0; font-size: 1.25rem; }
+.related ul { margin: 0; padding-left: 1.2rem; }
+.related li { margin: 6px 0; text-align: left; }
+.cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin: 1.75rem 0 2rem; }
+.cta a { font-weight: 700; }
+.cta .cta__primary { display: inline-flex; align-items: center; min-height: 48px; padding: 12px 20px; border-radius: 999px; color: #fff; background: #005bb7; text-decoration: none; }
+.cta .cta__primary:hover { background: #004a96; }
