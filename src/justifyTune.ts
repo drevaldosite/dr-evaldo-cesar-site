@@ -1,7 +1,7 @@
 // Ajuste fino da justificacao: para cada paragrafo, testa pequenas variacoes de
 // word-spacing/letter-spacing e mantem a que deixa os espacos entre palavras mais uniformes.
+// O paragrafo do hero fica de fora: ele ja usa o candidato padrao via CSS e nao deve mudar depois do LCP.
 const SELECTOR = [
-  '.hero-copy > p',
   '.section-title p',
   '.specialty-card p',
   '.procedure-narrative__intro p',
@@ -65,16 +65,58 @@ function tuneElement(el: HTMLElement): void {
   el.style.letterSpacing = best[1]
 }
 
-let run = 0
+type IdleHandle = number
+const requestIdle: (callback: () => void) => IdleHandle = typeof window !== 'undefined' && 'requestIdleCallback' in window
+  ? (callback) => window.requestIdleCallback(callback, { timeout: 1500 })
+  : (callback) => window.setTimeout(callback, 60)
+const cancelIdle: (handle: IdleHandle) => void = typeof window !== 'undefined' && 'cancelIdleCallback' in window
+  ? (handle) => window.cancelIdleCallback(handle)
+  : (handle) => window.clearTimeout(handle)
 
-// Processa poucos paragrafos por vez para nao travar a thread principal.
-export function tuneJustification(): void {
-  const token = ++run
-  const queue = Array.from(document.querySelectorAll<HTMLElement>(SELECTOR))
-  const step = () => {
-    if (token !== run) return
-    queue.splice(0, 4).forEach(tuneElement)
-    if (queue.length) setTimeout(step, 0)
+// Ajusta sob demanda: cada paragrafo so e medido quando se aproxima da tela, um por
+// callback ocioso, para que o ajuste nunca concorra com a primeira pintura nem com o scroll.
+export function startJustificationTuning(): () => void {
+  const queue: HTMLElement[] = []
+  let idleHandle: IdleHandle = 0
+  let observer: IntersectionObserver | null = null
+  let lastWidth = window.innerWidth
+
+  const pump = () => {
+    idleHandle = 0
+    const element = queue.shift()
+    if (element?.isConnected) tuneElement(element)
+    if (queue.length) idleHandle = requestIdle(pump)
   }
-  step()
+
+  const observe = () => {
+    observer?.disconnect()
+    queue.length = 0
+    if (idleHandle) { cancelIdle(idleHandle); idleHandle = 0 }
+    const current = new IntersectionObserver((entries) => {
+      if (current !== observer) return
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return
+        current.unobserve(entry.target)
+        queue.push(entry.target as HTMLElement)
+      })
+      if (queue.length && !idleHandle) idleHandle = requestIdle(pump)
+    }, { rootMargin: '100% 50%' })
+    observer = current
+    document.querySelectorAll<HTMLElement>(SELECTOR).forEach((element) => current.observe(element))
+  }
+
+  const onResize = () => {
+    if (window.innerWidth === lastWidth) return
+    lastWidth = window.innerWidth
+    observe()
+  }
+
+  observe()
+  window.addEventListener('resize', onResize, { passive: true })
+  return () => {
+    observer?.disconnect()
+    observer = null
+    if (idleHandle) cancelIdle(idleHandle)
+    window.removeEventListener('resize', onResize)
+  }
 }

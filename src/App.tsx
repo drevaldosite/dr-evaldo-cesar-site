@@ -5,7 +5,7 @@ import {
   PhoneCall, Play, ShieldCheck, Sparkles, X,
 } from 'lucide-react'
 import { contactText, showPrivacyPreferences, siteConfig, trackEvent, whatsappUrl } from './config'
-import { tuneJustification } from './justifyTune'
+import { startJustificationTuning } from './justifyTune'
 
 const HYPHEN_VOWELS = 'aeiouáàâãéèêíïóòôõúüAEIOUÁÀÂÃÉÈÊÍÏÓÒÔÕÚÜ'
 const isHyphenVowel = (c: string | undefined) => !!c && HYPHEN_VOWELS.includes(c)
@@ -54,6 +54,7 @@ const examChapters = [
     title: 'Exames Otorrinolaringológicos',
     intro: [],
     image: '/images/procedimentos-videoendoscopia-nasossinusal-sao-luis.webp',
+    imageSize: [1448, 1086],
     imageAlt: 'Dr. Evaldo realiza videoendoscopia nasossinusal durante atendimento',
     imagePosition: '75% 32%',
     items: [
@@ -66,6 +67,7 @@ const examChapters = [
     title: 'Exames Otoneurológicos',
     intro: [],
     image: '/images/procedimentos-avaliacao-otoneurologica-sao-luis.webp',
+    imageSize: [1448, 1086],
     imageAlt: 'Dr. Evaldo realiza avaliação otoneurológica em paciente em São Luís',
     imagePosition: '48% center',
     items: [
@@ -79,6 +81,7 @@ const examChapters = [
     title: 'Procedimentos Ambulatoriais',
     intro: [],
     image: '/images/procedimentos-manobra-epley-vppb-ampliada.webp',
+    imageSize: [1122, 1402],
     imageAlt: 'Dr. Evaldo realiza manobra de Epley para vertigem posicional em paciente',
     imagePosition: '60% center',
     items: [
@@ -100,6 +103,7 @@ const coblationChapters = [
       'Agende uma consulta para saber se essa tecnologia pode ser indicada para o seu caso.',
     ],
     image: '/images/procedimentos-coblation-amigdalas-adenoide-sao-luis.webp',
+    imageSize: [1025, 1535],
     imageAlt: 'Dr. Evaldo, otorrinolaringologista em São Luís, com instrumento utilizado em procedimentos de Coblation®',
     imagePosition: '50% 35%',
     video: {
@@ -117,6 +121,7 @@ const surgeryChapters = [
     title: 'Cirurgias Otorrinolaringológicas',
     intro: [],
     image: '/images/procedimentos-ambiente-cirurgico.webp',
+    imageSize: [1087, 1447],
     imageAlt: 'Dr. Evaldo realiza cirurgia em ambiente cirúrgico',
     imagePosition: '50% 38%',
     items: [
@@ -129,6 +134,7 @@ const surgeryChapters = [
     title: 'Timpanotomia e Timpanoplastia',
     intro: ['Cirurgias realizadas para tratar diferentes alterações do ouvido médio e da membrana do tímpano.'],
     image: '/images/procedimentos-timpanotomia-timpanoplastia-sao-luis.webp',
+    imageSize: [1280, 960],
     imageAlt: 'Dr. Evaldo realiza cirurgia otológica com auxílio de microscópio',
     imagePosition: '70% center',
     items: [
@@ -141,6 +147,7 @@ const surgeryChapters = [
     title: 'Cirurgias da Garganta e da Laringe',
     intro: [],
     image: '/images/procedimentos-cirurgia-otorrinolaringologica-maranhao.webp',
+    imageSize: [937, 1678],
     imageAlt: 'Procedimento cirúrgico de otorrinolaringologia realizado pelo Dr. Evaldo',
     imagePosition: '50% 34%',
     items: [
@@ -914,6 +921,7 @@ type NarrativeChapter = {
   readonly title: string
   readonly intro: readonly string[]
   readonly image: string
+  readonly imageSize: readonly [number, number]
   readonly imageAlt: string
   readonly imagePosition: string
   readonly video?: {
@@ -923,6 +931,14 @@ type NarrativeChapter = {
   }
   readonly items: readonly (readonly [string, string])[]
 }
+
+// Variantes geradas como `<nome>-480.webp`, `-720.webp` e `-960.webp` (apenas larguras menores que o original).
+const NARRATIVE_IMAGE_WIDTHS = [480, 720, 960]
+const narrativeImageSizes = '(min-width: 1150px) 460px, (min-width: 768px) 40vw, min(66vw, 300px)'
+const narrativeImageSrcSet = ({ image, imageSize: [width] }: NarrativeChapter) => [
+  ...NARRATIVE_IMAGE_WIDTHS.filter((variant) => variant < width - 100).map((variant) => `${image.replace(/\.webp$/, `-${variant}.webp`)} ${variant}w`),
+  `${image} ${width}w`,
+].join(', ')
 
 function LazyProcedureVideo({ src, liteSrc, poster, ariaLabel, objectPosition, active, preloadOnDesktopSelector, preloadOnMobileSelector }: { src: string; liteSrc: string; poster: string; ariaLabel: string; objectPosition?: string; active: boolean; preloadOnDesktopSelector?: string; preloadOnMobileSelector?: string }) {
   const networkTier = useVideoNetworkTier()
@@ -1166,12 +1182,16 @@ function ProcedureNarrative({ id, variant, chapters, message, preloadVideoOnDesk
       imageElements.forEach((image, index) => image.classList.toggle('is-active', index === activeIndex))
     }
 
+    // A medicao pesada (paint) so roda com a secao a ate uma tela de distancia.
+    let near = false
+    let warmed = false
+    let warmFrame = 0
     const schedulePaint = () => {
-      if (!animationFrame) animationFrame = window.requestAnimationFrame(paint)
+      if (near && !animationFrame) animationFrame = window.requestAnimationFrame(paint)
     }
     const remeasure = () => {
       measure()
-      paint()
+      if (near) paint()
     }
     const onResize = () => {
       const viewportHeight = getViewportHeight()
@@ -1184,16 +1204,33 @@ function ProcedureNarrative({ id, variant, chapters, message, preloadVideoOnDesk
       remeasure()
     }
 
+    const proximity = new IntersectionObserver(([entry]) => {
+      near = entry.isIntersecting
+      if (!near) return
+      if (animationFrame) {
+        window.cancelAnimationFrame(animationFrame)
+        animationFrame = 0
+      }
+      paint()
+      if (!warmed) {
+        warmed = true
+        warmFrame = window.requestAnimationFrame(() => {
+          warmFrame = window.requestAnimationFrame(() => section.classList.remove('is-cold'))
+        })
+      }
+    }, { rootMargin: '100% 0px' })
+
     section.classList.add('is-cold', 'is-enhanced')
     measure()
-    paint()
+    proximity.observe(section)
     window.addEventListener('scroll', schedulePaint, { passive: true })
     window.addEventListener('resize', onResize, { passive: true })
     window.visualViewport?.addEventListener('resize', onResize, { passive: true })
     desktopQuery.addEventListener('change', remeasure)
-    window.requestAnimationFrame(() => window.requestAnimationFrame(() => section.classList.remove('is-cold')))
 
     return () => {
+      proximity.disconnect()
+      if (warmFrame) window.cancelAnimationFrame(warmFrame)
       window.removeEventListener('scroll', schedulePaint)
       window.removeEventListener('resize', onResize)
       window.visualViewport?.removeEventListener('resize', onResize)
@@ -1224,7 +1261,7 @@ function ProcedureNarrative({ id, variant, chapters, message, preloadVideoOnDesk
               preloadOnDesktopSelector={preloadVideoOnDesktop}
               preloadOnMobileSelector={preloadVideoOnMobile}
             /> : <picture className={`procedure-narrative__image ${index === 0 ? 'is-active' : ''}`} key={`${chapter.title}-${chapter.image}`}>
-              <img src={chapter.image} alt={chapter.imageAlt} width={variant === 'exams' ? 1440 : 1006} height={variant === 'exams' ? 1080 : 1788} loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />
+              <img src={chapter.image} srcSet={narrativeImageSrcSet(chapter)} sizes={narrativeImageSizes} alt={chapter.imageAlt} width={chapter.imageSize[0]} height={chapter.imageSize[1]} loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />
             </picture>)}
           </figure>
         </div>
@@ -1232,7 +1269,7 @@ function ProcedureNarrative({ id, variant, chapters, message, preloadVideoOnDesk
         <div className="procedure-narrative__chapters">
           {chapters.map((chapter, index) => <article className={`procedure-narrative__chapter ${index === 0 ? 'is-active' : ''}`} key={chapter.title}>
             <figure className="procedure-narrative__inline-figure" aria-hidden="true" style={variant === 'surgeries' ? { aspectRatio: '4 / 5' } : undefined}>
-              <img src={chapter.image} alt="" loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />
+              <img src={chapter.image} srcSet={narrativeImageSrcSet(chapter)} sizes={narrativeImageSizes} alt="" width={chapter.imageSize[0]} height={chapter.imageSize[1]} loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />
             </figure>
             {index === 0 ? <h2 id={`${id}-title`}>{chapter.title}</h2> : <h3>{chapter.title}</h3>}
             {chapter.intro.length > 0 && <div className="procedure-narrative__intro">{chapter.intro.map((paragraph) => <p key={paragraph}>{sh(paragraph)}</p>)}</div>}
@@ -1412,19 +1449,19 @@ export default function App() {
   }, [])
 
   useEffect(() => {
+    // So depois das fontes e do primeiro frame: o ajuste mede o texto final e nao atrasa a pintura.
+    let cancelled = false
     let frame = 0
-    let lastWidth = window.innerWidth
-    const schedule = () => {
-      cancelAnimationFrame(frame)
-      frame = requestAnimationFrame(tuneJustification)
-    }
-    const onResize = () => {
-      if (window.innerWidth !== lastWidth) { lastWidth = window.innerWidth; schedule() }
-    }
-    schedule()
-    document.fonts?.ready.then(schedule)
-    window.addEventListener('resize', onResize)
-    return () => { cancelAnimationFrame(frame); window.removeEventListener('resize', onResize) }
+    let timer = 0
+    let stop: (() => void) | undefined
+    const fontsReady = document.fonts?.ready ?? Promise.resolve()
+    fontsReady.then(() => {
+      if (cancelled) return
+      frame = requestAnimationFrame(() => {
+        timer = window.setTimeout(() => { if (!cancelled) stop = startJustificationTuning() })
+      })
+    })
+    return () => { cancelled = true; cancelAnimationFrame(frame); clearTimeout(timer); stop?.() }
   }, [])
 
   return <>
