@@ -738,3 +738,43 @@ main { display: flex; flex-direction: column; }
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* Renderização sob demanda: seções abaixo do hero só são diagramadas/pintadas quando se aproximam
+   da tela. Sem isso, o primeiro quadro no celular espera a página inteira (~19 mil px) ficar pronta.
+   As alturas estimadas evitam saltos na barra de rolagem; `auto` passa a usar a altura real medida. */
+main > section:not(.hero), .footer { content-visibility: auto; contain-intrinsic-size: auto var(--cv-height, 1200px); }
+#especialidades { --cv-height: 2870px; }
+#procedimentos { --cv-height: 1690px; }
+#exames { --cv-height: 2880px; }
+#cirurgias { --cv-height: 2840px; }
+#sobre { --cv-height: 1390px; }
+.credentials { --cv-height: 1160px; }
+#conteudos, #locais { --cv-height: 1220px; }
+.reviews { --cv-height: 1340px; }
+#duvidas, #contato { --cv-height: 1070px; }
+.footer { --cv-height: 1180px; }
+@media (min-width: 768px) {
+  #especialidades { --cv-height: 1480px; }
+  #procedimentos { --cv-height: 1390px; }
+  #exames { --cv-height: 2080px; }
+  #cirurgias { --cv-height: 1850px; }
+  #sobre { --cv-height: 940px; }
+  .credentials, #locais { --cv-height: 850px; }
+  #conteudos, .reviews { --cv-height: 1250px; }
+  #duvidas, #contato { --cv-height: 1000px; }
+  .footer { --cv-height: 660px; }
+}
+@media (min-width: 1150px) {
+  #especialidades { --cv-height: 1320px; }
+  #procedimentos { --cv-height: 1140px; }
+  #exames, #cirurgias { --cv-height: 1990px; }
+  #sobre, #locais { --cv-height: 900px; }
+  .credentials { --cv-height: 840px; }
+  #conteudos { --cv-height: 1350px; }
+  .reviews { --cv-height: 1170px; }
+  #duvidas, #contato { --cv-height: 810px; }
+  .footer { --cv-height: 380px; }
+}
+@media print {
+  main > section:not(.hero), .footer { content-visibility: visible; contain-intrinsic-size: none; }
+}

@@ -233,6 +233,7 @@ const patientReviews = [
 function PatientReviewsCarousel() {
   const trackRef = useRef<HTMLDivElement>(null)
   const scrollEndTimerRef = useRef<number | null>(null)
+  const navigatedRef = useRef(false)
   const [cardsPerView, setCardsPerView] = useState(1)
   const [activePage, setActivePage] = useState(0)
   const pageCount = Math.ceil(patientReviews.length / cardsPerView)
@@ -253,14 +254,20 @@ function PatientReviewsCarousel() {
   }, [])
 
   useEffect(() => {
+    // Até a primeira navegação a trilha já está no início; medir antes forçaria layout da seção no carregamento.
+    if (!navigatedRef.current) return
     const track = trackRef.current
     const card = track?.querySelectorAll<HTMLElement>('.patient-review')[activePage * cardsPerView]
     if (!track || !card) return
     track.scrollTo({ left: card.offsetLeft - track.offsetLeft, behavior: 'smooth' })
   }, [activePage, cardsPerView])
 
-  const goToPage = (page: number) => setActivePage(Math.max(0, Math.min(page, pageCount - 1)))
+  const goToPage = (page: number) => {
+    navigatedRef.current = true
+    setActivePage(Math.max(0, Math.min(page, pageCount - 1)))
+  }
   const handleScroll = () => {
+    navigatedRef.current = true
     if (scrollEndTimerRef.current !== null) window.clearTimeout(scrollEndTimerRef.current)
     scrollEndTimerRef.current = window.setTimeout(() => {
       const track = trackRef.current
@@ -773,8 +780,11 @@ function InstagramCarousel() {
   useEffect(() => {
     const track = trackRef.current
     if (!track) return
-    centerCard(firstRealIndex, 'auto')
-    const resizeObserver = new ResizeObserver(() => centerCard(currentTrackIndexRef.current, 'auto'))
+    // A centralização inicial acontece na primeira medição do ResizeObserver, quando a seção
+    // é de fato renderizada (content-visibility), sem forçar layout durante a hidratação.
+    const resizeObserver = new ResizeObserver(([entry]) => {
+      if (entry.contentRect.width > 0) centerCard(currentTrackIndexRef.current, 'auto')
+    })
     resizeObserver.observe(track)
     return () => resizeObserver.disconnect()
   }, [])
