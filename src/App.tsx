@@ -982,7 +982,25 @@ type NarrativeChapter = {
 
 // Variantes geradas como `<nome>-480.webp`, `-720.webp` e `-960.webp` (apenas larguras menores que o original).
 const NARRATIVE_IMAGE_WIDTHS = [480, 720, 960]
-const narrativeImageSizes = '(min-width: 1150px) 460px, (min-width: 768px) 40vw, min(66vw, 300px)'
+// As molduras recortam a foto com `object-fit: cover`: uma foto mais larga que a moldura é exibida
+// mais larga que ela. O `sizes` precisa informar essa largura real, senão o navegador baixa uma
+// variante pequena e a amplia (foto desfocada).
+const coverScale = ([width, height]: readonly [number, number], frameRatio: number) => Math.max(1, width / height / frameRatio)
+const scaled = (value: number, scale: number) => Math.ceil(value * scale)
+// Moldura do palco: 4:5 a partir de 1150px, até 3:4 entre 768px e 1149px e 4:3 no layout simples do celular.
+const narrativeStageSizes = ({ imageSize }: NarrativeChapter) => {
+  const mobileScale = coverScale(imageSize, 4 / 3)
+  return [
+    `(min-width: 1150px) ${scaled(460, coverScale(imageSize, 4 / 5))}px`,
+    `(min-width: 768px) ${scaled(40, coverScale(imageSize, 3 / 4))}vw`,
+    mobileScale === 1 ? 'calc(100vw - 32px)' : `calc((100vw - 32px) * ${mobileScale.toFixed(3)})`,
+  ].join(', ')
+}
+// Foto dentro do capítulo no fluxo compacto do celular: quadrada nos exames e 4:5 nas cirurgias.
+const narrativeInlineSizes = ({ imageSize }: NarrativeChapter, frameRatio: number) => {
+  const scale = coverScale(imageSize, frameRatio)
+  return `min(${scaled(66, scale)}vw, ${scaled(300, scale)}px)`
+}
 const narrativeImageSrcSet = ({ image, imageSize: [width] }: NarrativeChapter) => [
   ...NARRATIVE_IMAGE_WIDTHS.filter((variant) => variant < width - 100).map((variant) => `${image.replace(/\.webp$/, `-${variant}.webp`)} ${variant}w`),
   `${image} ${width}w`,
@@ -1309,7 +1327,7 @@ function ProcedureNarrative({ id, variant, chapters, message, preloadVideoOnDesk
               preloadOnDesktopSelector={preloadVideoOnDesktop}
               preloadOnMobileSelector={preloadVideoOnMobile}
             /> : <picture className={`procedure-narrative__image ${index === 0 ? 'is-active' : ''}`} key={`${chapter.title}-${chapter.image}`}>
-              <img src={chapter.image} srcSet={narrativeImageSrcSet(chapter)} sizes={narrativeImageSizes} alt={chapter.imageAlt} width={chapter.imageSize[0]} height={chapter.imageSize[1]} loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />
+              <img src={chapter.image} srcSet={narrativeImageSrcSet(chapter)} sizes={narrativeStageSizes(chapter)} alt={chapter.imageAlt} width={chapter.imageSize[0]} height={chapter.imageSize[1]} loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />
             </picture>)}
           </figure>
         </div>
@@ -1317,7 +1335,7 @@ function ProcedureNarrative({ id, variant, chapters, message, preloadVideoOnDesk
         <div className="procedure-narrative__chapters">
           {chapters.map((chapter, index) => <article className={`procedure-narrative__chapter ${index === 0 ? 'is-active' : ''}`} key={chapter.title}>
             <figure className="procedure-narrative__inline-figure" aria-hidden="true" style={variant === 'surgeries' ? { aspectRatio: '4 / 5' } : undefined}>
-              <img src={chapter.image} srcSet={narrativeImageSrcSet(chapter)} sizes={narrativeImageSizes} alt="" width={chapter.imageSize[0]} height={chapter.imageSize[1]} loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />
+              <img src={chapter.image} srcSet={narrativeImageSrcSet(chapter)} sizes={narrativeInlineSizes(chapter, variant === 'surgeries' ? 4 / 5 : 1)} alt="" width={chapter.imageSize[0]} height={chapter.imageSize[1]} loading="lazy" decoding="async" style={{ objectPosition: chapter.imagePosition }} />
             </figure>
             {index === 0 ? <h2 id={`${id}-title`}>{chapter.title}</h2> : <h3>{chapter.title}</h3>}
             {chapter.intro.length > 0 && <div className="procedure-narrative__intro">{chapter.intro.map((paragraph) => <p key={paragraph}>{sh(paragraph)}</p>)}</div>}
