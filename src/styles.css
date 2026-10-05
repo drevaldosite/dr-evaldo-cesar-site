@@ -149,8 +149,11 @@ main { display: flex; flex-direction: column; }
 .card-number { position: absolute; z-index: 1; right: 27px; top: 28px; color: #b7c9df; font-size: .95rem; font-weight: 800; }
 .specialty-card h3 { margin: 25px 0 9px; font-size: 1.22rem; line-height: 1.35; }
 .specialty-card p { flex: 1; margin: 0; font-size: .91rem; line-height: 1.6; }
-.specialty-card a { display: none; gap: 8px; align-items: center; margin-top: 16px; color: var(--vivid); font-weight: 800; font-size: .88rem; }
+.specialty-card a { display: flex; gap: 8px; align-items: center; margin-top: 16px; color: var(--vivid); font-weight: 800; font-size: .88rem; }
 .specialty-card a svg { width: 17px; height: 17px; }
+@media (max-width: 899px) {
+  .specialty-card a { min-height: 44px; margin-top: 8px; }
+}
 .center-action { text-align: center; margin-top: 28px; }
 .center-action .button { width: 100%; }
 
@@ -626,7 +629,6 @@ main { display: flex; flex-direction: column; }
   .throat-icon { width: 46px; height: 46px; }
   .specialty-card h3 { margin: 25px 0 10px; font-size: 1.4rem; line-height: 1.3; }
   .specialty-card p { font-size: .91rem; line-height: 1.58; }
-  .specialty-card a { display: flex; }
   .about-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 85px; }
   .about-copy { display: block; }
   .about-visual { order: initial; margin-bottom: 0; }
