@@ -768,6 +768,9 @@ main > section:not(.hero), .footer { content-visibility: auto; contain-intrinsic
   #duvidas, #contato { --cv-height: 1000px; }
   .footer { --cv-height: 660px; }
 }
+@media (min-width: 768px) and (max-width: 899px) {
+  #especialidades { --cv-height: 1570px; }
+}
 @media (min-width: 1150px) {
   #especialidades { --cv-height: 1320px; }
   #procedimentos { --cv-height: 1140px; }
