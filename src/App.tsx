@@ -987,12 +987,13 @@ const NARRATIVE_IMAGE_WIDTHS = [480, 720, 960]
 // variante pequena e a amplia (foto desfocada).
 const coverScale = ([width, height]: readonly [number, number], frameRatio: number) => Math.max(1, width / height / frameRatio)
 const scaled = (value: number, scale: number) => Math.ceil(value * scale)
-// Moldura do palco: 4:5 a partir de 1150px, até 3:4 entre 768px e 1149px e 4:3 no layout simples do celular.
+// Moldura do palco: 4:5 a partir de 768px (3:4 entre 768px e 1149px em retrato) e 4:3 no layout simples do celular.
 const narrativeStageSizes = ({ imageSize }: NarrativeChapter) => {
   const mobileScale = coverScale(imageSize, 4 / 3)
   return [
     `(min-width: 1150px) ${scaled(460, coverScale(imageSize, 4 / 5))}px`,
-    `(min-width: 768px) ${scaled(40, coverScale(imageSize, 3 / 4))}vw`,
+    `(min-width: 768px) and (orientation: portrait) ${scaled(40, coverScale(imageSize, 3 / 4))}vw`,
+    `(min-width: 768px) ${scaled(40, coverScale(imageSize, 4 / 5))}vw`,
     mobileScale === 1 ? 'calc(100vw - 32px)' : `calc((100vw - 32px) * ${mobileScale.toFixed(3)})`,
   ].join(', ')
 }
