@@ -127,7 +127,8 @@
   if (currentConsent === 'granted') loadAnalytics()
 
   function initializeConsentUi() {
-    // Preferences stay available from the footer without interrupting the first visit.
+    // Ask on the first visit; afterwards the choice can be changed from the footer.
+    if (!currentConsent) showPreferences()
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeConsentUi)
   else initializeConsentUi()
